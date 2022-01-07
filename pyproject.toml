@@ -15,21 +15,21 @@ extend-exclude = '''
 '''
 
 [tool.coverage.run]
-source = ['easyCore']
+source = ['easyCrystallography']
 
 [tool.github.info]
 organization = 'easyScience'
-repo = 'easyCore'
+repo = 'easyCrystallography'
 
 [tool.poetry]
-name = "easyScienceCore"
+name = "easyCrystallography"
 version = "0.1.0"
 description = "Generic logic for easyScience libraries"
 license = "BSD-3-Clause"
 authors = ["Simon Ward"]
 readme = "README.md"
-homepage = "https://github.com/easyScience/easyCore"
-documentation = "https://github.com/easyScience/easyCore"
+homepage = "https://github.com/easyScience/easyCrystallography"
+documentation = "https://github.com/easyScience/easyCrystallography"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",  # Define that your audience are developers
@@ -38,18 +38,11 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
 ]
 include = ["CHANGELOG.md"]
-packages = [ { include = "easyCore" } ]
+packages = [ { include = "easyCrystallography" } ]
 
 [tool.poetry.dependencies]
 python = "^3.7" # "^3.8" generates error when installing PySide2 in easyAppGui
-numpy = "^1.19"
-pint = ">=0.17,<0.19"
-uncertainties = "^3.1"
-lmfit = "^1.0"
-bumps = "^0.8"
-asteval = "^0.9.23"
-DFO-LS = {version = "^1.2", optional = true}
-xarray = ">=0.16,<0.21"
+easyScienceCore = { git = "https://github.com/easyScience/easyCore.git", branch = "easyCrystallography_Split" }
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.2"

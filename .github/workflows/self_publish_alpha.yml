@@ -41,7 +41,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ./**/*.whl
         tag: ${{ steps.name.outputs.tag }}
-        body: This is an alpha build of easyCore (${{ steps.name.outputs.tag }})
+        body: This is an alpha build of easyCrystallography (${{ steps.name.outputs.tag }})
 
     - name: Generate HTML
       run: |
