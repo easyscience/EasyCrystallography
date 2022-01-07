@@ -191,7 +191,7 @@ def test_Site_as_dict(label, elm):
     s = Site.from_pars(label, elm)
     obtained = s.as_dict()
     expected = {
-        "@module": "easyCore.Elements.Basic.Site",
+        "@module": "easyCrystallography.Components.Site",
         "@class": "Site",
         "@version": "0.1.0",
         "@id": None,
@@ -311,7 +311,7 @@ def test_Site_as_dict(label, elm):
 @pytest.mark.parametrize("label, elm", site_details)
 def test_Site_from_dict(label, elm):
     d = {
-        "@module": "easyCore.Elements.Basic.Site",
+        "@module": "easyCrystallography.Components.Site",
         "@class": "Site",
         "@version": "0.1.0",
         "@id": None,
@@ -330,7 +330,7 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "specie": {
-            "@module": "easyCore.Elements.Basic.Specie",
+            "@module": "easyCrystallography.Components.Specie",
             "@class": "Specie",
             "@version": "0.1.0",
             "@id": None,
