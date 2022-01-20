@@ -830,7 +830,7 @@ class PeriodicLattice(Lattice):
         angle_beta: Parameter,
         angle_gamma: Parameter,
         spacegroup: SpaceGroup,
-        interface: Optional[Interface]
+        interface: Optional[Interface] = None
     ):
         super().__init__(
             length_a=length_a,
