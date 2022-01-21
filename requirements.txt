@@ -1,0 +1,1 @@
+easysciencecore @ git+https://github.com/easyscience/easycore.git@easyCrystallography_Split

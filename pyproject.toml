@@ -6,7 +6,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.black]
 line-length = 88
-target-version = ['py37']
+target-version = ['py38']
 include = '\.pyi?$'
 extend-exclude = '''
 # A regex preceded with ^/ will apply only to files and directories
@@ -24,7 +24,7 @@ repo = 'easyCrystallography'
 [tool.poetry]
 name = "easyCrystallography"
 version = "0.1.0"
-description = "Generic logic for easyScience libraries"
+description = "Crystallography in easyScience"
 license = "BSD-3-Clause"
 authors = ["Simon Ward"]
 readme = "README.md"
@@ -42,7 +42,7 @@ packages = [ { include = "easyCrystallography" } ]
 
 [tool.poetry.dependencies]
 python = "^3.7" # "^3.8" generates error when installing PySide2 in easyAppGui
-easyScienceCore = { git = 'https://github.com/easyScience/easyCore.git', rev = "easyCrystallography_Split" }
+easysciencecore = { git = 'https://github.com/easyScience/easyCore.git', rev = "easyCrystallography_Split" }
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.2"
