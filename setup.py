@@ -20,7 +20,7 @@ install_requires = [
     "numpy>=1.19,<2.0",
     "pint>=0.17,<0.19",
     "uncertainties>=3.1,<4.0",
-    "xarray>=0.16,<0.21",
+    "xarray>=0.16,<0.22",
 ]
 
 setup_kwargs = {
