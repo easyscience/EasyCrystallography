@@ -3,19 +3,19 @@
 [![CodeFactor][83]][84] [![Lines of code][81]](<>) [![Total lines][80]](<>) [![Files][82]](<>)
 
 
-<img height="80"><img src="https://raw.githubusercontent.com/easyScience/easyCore/master/resources/images/ec_logo.svg" height="65">
+<img height="80"><img src="https://raw.githubusercontent.com/easyScience/easyCrystallography/master/resources/images/ec_logo.svg" height="65">
 
-**easyCore** is the foundation of the *easyScience* universe, providing the building blocks for libraries and applications which aim to make scientific data simulation and analysis easier.
+**easyCrystallography** is a library that can be used for the generation and manipulation of crystal structures.
 
 ## Install
 
-**easyCore** can be downloaded using pip:
+**easyCrystallography** can be downloaded using pip:
 
-```pip install easysciencecore```
+```pip install easyCrystallography```
 
 Or direct from the repository:
 
-```pip install https://github.com/easyScience/easyCore```
+```pip install https://github.com/easyScience/easyCrystallography```
 
 ## Test
 
@@ -23,53 +23,55 @@ After installation, launch the test suite:
 
 ```python -m pytest```
 
-## Documentation
+[//]: # (## Documentation)
 
-Documentation can be found at:
+[//]: # ()
+[//]: # (Documentation can be found at:)
 
-[https://easyScience.github.io/easyCore](https://easyScience.github.io/easyCore)
+[//]: # ()
+[//]: # ([https://easyScience.github.io/easyCore]&#40;https://easyScience.github.io/easyCore&#41;)
 
 ## Contributing
 We absolutely welcome contributions. **easyCore** is maintained by the ESS and on a volunteer basis and thus we need to foster a community that can support user questions and develop new features to make this software a useful tool for all users while encouraging every member of the community to share their ideas.
 
 ## License
-While **easyCore** is under the BSD-3 license, DFO_LS is subject to the GPL license.
+While **easyCore** is under the BSD-3 license
 
 <!---CI Build Status--->
 
-[20]: https://github.com/easyScience/easyCore/workflows/CI%20using%20pip/badge.svg
+[20]: https://github.com/easyScience/easyCrystallography/workflows/CI%20using%20pip/badge.svg
 
-[21]: https://github.com/easyScience/easyCore/actions
+[21]: https://github.com/easyScience/easyCrystallography/actions
 
 
 <!---Release--->
 
-[32]: https://img.shields.io/pypi/v/easyScienceCore.svg
+[32]: https://img.shields.io/pypi/v/easyCrystallography.svg
 
-[33]: https://pypi.org/project/easyScienceCore
+[33]: https://pypi.org/project/easyCrystallography
 
 
 <!---License--->
 
-[50]: https://img.shields.io/github/license/easyScience/easyCore.svg
+[50]: https://img.shields.io/github/license/easyScience/easyCrystallography.svg
 
-[51]: https://github.com/easyScience/easyCore/blob/master/LICENSE.md
+[51]: https://github.com/easyScience/easyCrystallography/blob/master/LICENSE.md
 
 
 <!---Downloads--->
 
-[70]: https://img.shields.io/pypi/dm/easyScienceCore.svg
+[70]: https://img.shields.io/pypi/dm/easyCrystallography.svg
 
-[71]: https://pypi.org/project/easyScienceCore
+[71]: https://pypi.org/project/easyCrystallography
 
 <!---Code statistics--->
 
-[80]: https://tokei.rs/b1/github/easyScience/easyCore
+[80]: https://tokei.rs/b1/github/easyScience/easyCrystallography
 
-[81]: https://tokei.rs/b1/github/easyScience/easyCore?category=code
+[81]: https://tokei.rs/b1/github/easyScience/easyCrystallography?category=code
 
-[82]: https://tokei.rs/b1/github/easyScience/easyCore?category=files
+[82]: https://tokei.rs/b1/github/easyScience/easyCrystallography?category=files
 
-[83]: https://www.codefactor.io/repository/github/easyscience/easycore/badge
+[83]: https://www.codefactor.io/repository/github/easyscience/easyCrystallography/badge
 
-[84]: https://www.codefactor.io/repository/github/easyscience/easycore
+[84]: https://www.codefactor.io/repository/github/easyscience/easyCrystallography
