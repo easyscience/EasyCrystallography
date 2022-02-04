@@ -17,7 +17,7 @@ jobs:
       with:
         python-version: 3.8
 
-    - uses: Gr1N/setup-poetry@v4
+    - uses: Gr1N/setup-poetry@v7
     - name: Install and build
       run: |
         poetry version prerelease
@@ -41,7 +41,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ./**/*.whl
         tag: ${{ steps.name.outputs.tag }}
-        body: This is an alpha build of easyCore (${{ steps.name.outputs.tag }})
+        body: This is an alpha build of easyCrystallography (${{ steps.name.outputs.tag }})
 
     - name: Generate HTML
       run: |

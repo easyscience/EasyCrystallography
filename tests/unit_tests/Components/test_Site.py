@@ -5,6 +5,7 @@ from typing import List
 
 import pytest
 from copy import deepcopy
+import easyCore
 from easyCore import np
 from easyCrystallography.Components.Site import Site, PeriodicSite, Parameter, _SITE_DETAILS
 
@@ -191,14 +192,14 @@ def test_Site_as_dict(label, elm):
     s = Site.from_pars(label, elm)
     obtained = s.as_dict()
     expected = {
-        "@module": "easyCore.Elements.Basic.Site",
+        "@module": "easyCrystallography.Components.Site",
         "@class": "Site",
         "@version": "0.1.0",
         "@id": None,
         "label": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Descriptor",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "name": "label",
             "value": label,
@@ -225,9 +226,9 @@ def test_Site_as_dict(label, elm):
         #      'units':    'dimensionless',
         #  },
         "occupancy": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "name": "occupancy",
             "value": 1.0,
@@ -242,9 +243,9 @@ def test_Site_as_dict(label, elm):
             "enabled": True,
         },
         "fract_x": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "name": "fract_x",
             "value": 0.0,
@@ -259,9 +260,9 @@ def test_Site_as_dict(label, elm):
             "enabled": True,
         },
         "fract_y": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "name": "fract_y",
             "value": 0.0,
@@ -276,9 +277,9 @@ def test_Site_as_dict(label, elm):
             "enabled": True,
         },
         "fract_z": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "name": "fract_z",
             "value": 0.0,
@@ -311,14 +312,14 @@ def test_Site_as_dict(label, elm):
 @pytest.mark.parametrize("label, elm", site_details)
 def test_Site_from_dict(label, elm):
     d = {
-        "@module": "easyCore.Elements.Basic.Site",
+        "@module": "easyCrystallography.Components.Site",
         "@class": "Site",
         "@version": "0.1.0",
         "@id": None,
         "label": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Descriptor",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "name": "label",
             "value": label,
@@ -330,18 +331,18 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "specie": {
-            "@module": "easyCore.Elements.Basic.Specie",
+            "@module": "easyCrystallography.Components.Specie",
             "@class": "Specie",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "specie": elm,
             "value": elm,
             "units": "dimensionless",
         },
         "occupancy": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "name": "occupancy",
             "value": 1.0,
@@ -356,9 +357,9 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "fract_x": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "name": "fract_x",
             "value": 0.0,
@@ -373,9 +374,9 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "fract_y": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "name": "fract_y",
             "value": 0.0,
@@ -390,9 +391,9 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "fract_z": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "@id": None,
             "name": "fract_z",
             "value": 0.0,

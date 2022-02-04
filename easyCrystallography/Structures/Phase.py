@@ -11,11 +11,11 @@ from typing import Dict, Union, List, ClassVar
 from easyCore import np
 from easyCore.Objects.Base import BaseObj, Parameter, Descriptor
 from easyCore.Objects.Groups import BaseCollection
-from easyCore.Utils.io.cif import CifIO
 
 from easyCrystallography.Components.Lattice import Lattice, PeriodicLattice
 from easyCrystallography.Components.Site import Site, PeriodicSite, PeriodicAtoms, Atoms
 from easyCrystallography.Components.SpaceGroup import SpaceGroup
+from easyCrystallography.io.cif import CifIO
 
 
 class Phase(BaseObj):

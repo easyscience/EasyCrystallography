@@ -2,6 +2,7 @@ __author__ = "github.com/wardsimon"
 __version__ = "0.1.0"
 
 import pytest
+import easyCore
 from easyCore import np
 from numbers import Number
 from easyCrystallography.Components.Lattice import Lattice, Parameter, CELL_DETAILS
@@ -501,9 +502,9 @@ def make_dict(value) -> dict:
         "@class": "Lattice",
         "@version": "0.1.0",
         "length_a": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "name": "length_a",
             "value": float(value[0]),
             "error": 0.0,
@@ -517,9 +518,9 @@ def make_dict(value) -> dict:
             "enabled": True,
         },
         "length_b": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "name": "length_b",
             "value": float(value[1]),
             "error": 0.0,
@@ -533,9 +534,9 @@ def make_dict(value) -> dict:
             "enabled": True,
         },
         "length_c": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "name": "length_c",
             "value": float(value[2]),
             "error": 0.0,
@@ -549,9 +550,9 @@ def make_dict(value) -> dict:
             "enabled": True,
         },
         "angle_alpha": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "name": "angle_alpha",
             "value": float(value[3]),
             "error": 0.0,
@@ -565,9 +566,9 @@ def make_dict(value) -> dict:
             "enabled": True,
         },
         "angle_beta": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "name": "angle_beta",
             "value": float(value[4]),
             "error": 0.0,
@@ -581,9 +582,9 @@ def make_dict(value) -> dict:
             "enabled": True,
         },
         "angle_gamma": {
-            "@module": "easyCore.Objects.VariableClasses",
+            "@module": "easyCore.Objects.Variable",
             "@class": "Parameter",
-            "@version": "0.1.0",
+            "@version": easyCore.__version__,
             "name": "angle_gamma",
             "value": float(value[5]),
             "error": 0.0,
