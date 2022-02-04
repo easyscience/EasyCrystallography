@@ -6,7 +6,7 @@
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, ClassVar
 
 from easyCore import np
 from easyCore.Utils.io.star import StarEntry, StarSection, StarLoop
@@ -121,7 +121,7 @@ class AtomicDisplacement(BaseObj):
     @classmethod
     def from_string(cls, in_string: Union[str, StarLoop]) -> Tuple[List[str], List['AtomicDisplacement']]:
         # We assume the in_string is a loop
-        from easyCore.Elements.Basic.Site import Site
+        from easyCrystallography.Components.Site import Site
         if isinstance(in_string, StarLoop):
             loop = in_string
         else:
@@ -215,6 +215,13 @@ class AdpBase(BaseObj):
 
 class Anisotropic(AdpBase):
 
+    U_11: ClassVar[Parameter]
+    U_12: ClassVar[Parameter]
+    U_13: ClassVar[Parameter]
+    U_22: ClassVar[Parameter]
+    U_23: ClassVar[Parameter]
+    U_33: ClassVar[Parameter]
+
     def __init__(self,
                  U_11: Parameter, U_12: Parameter, U_13: Parameter,
                  U_22: Parameter, U_23: Parameter, U_33: Parameter,
@@ -245,6 +252,8 @@ class Anisotropic(AdpBase):
 
 class Isotropic(AdpBase):
 
+    Uiso: ClassVar[Parameter]
+
     def __init__(self, Uiso: Parameter, interface=None):
         super(Isotropic, self).__init__('Uiso', Uiso=Uiso)
         self.interface = interface
@@ -260,6 +269,13 @@ class Isotropic(AdpBase):
 
 
 class AnisotropicBij(AdpBase):
+
+    B_11: ClassVar[Parameter]
+    B_12: ClassVar[Parameter]
+    B_13: ClassVar[Parameter]
+    B_22: ClassVar[Parameter]
+    B_23: ClassVar[Parameter]
+    B_33: ClassVar[Parameter]
 
     def __init__(self,
                  B_11: Parameter, B_12: Parameter, B_13: Parameter,
@@ -290,6 +306,8 @@ class AnisotropicBij(AdpBase):
 
 
 class IsotropicB(AdpBase):
+
+    Biso: ClassVar[Parameter]
 
     def __init__(self, Biso: Parameter, interface=None):
         super(IsotropicB, self).__init__('Biso', Biso=Biso)
