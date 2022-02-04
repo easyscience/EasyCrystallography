@@ -3,7 +3,7 @@
 [![CodeFactor][83]][84] [![Lines of code][81]](<>) [![Total lines][80]](<>) [![Files][82]](<>)
 
 
-<img height="80"><img src="https://raw.githubusercontent.com/easyScience/easyCrystallography/master/resources/images/ec_logo.svg" height="65">
+<img height="80"><img src="https://raw.githubusercontent.com/easyScience/easyCrystallography/develop/resources/images/ec_logo.svg" height="65">
 
 **easyCrystallography** is a library that can be used for the generation and manipulation of crystal structures.
 
