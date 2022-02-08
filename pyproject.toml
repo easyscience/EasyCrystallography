@@ -23,7 +23,7 @@ repo = 'easyCrystallography'
 
 [tool.poetry]
 name = "easyCrystallography"
-version = "0.1.0"
+version = "0.1.1"
 description = "Crystallography in easyScience"
 license = "BSD-3-Clause"
 authors = ["Simon Ward"]
@@ -41,11 +41,11 @@ include = ["CHANGELOG.md"]
 packages = [ { include = "easyCrystallography" } ]
 
 [tool.poetry.dependencies]
-python = "^3.7" # "^3.8" generates error when installing PySide2 in easyAppGui
-easyScienceCore = '>=0.2.0'
+python = ">=3.7,<3.11" # "^3.8" generates error when installing PySide2 in easyAppGui
+easyScienceCore = '>=0.2.2'
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.2"
+pytest = "^7.0.0"
 pytest-cov = "^3.0.0"
 codecov = "^2.1.11"
 matplotlib = "^3.2.2"

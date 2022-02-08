@@ -1,7 +1,7 @@
 # [![License][50]][51] [![Release][32]][33] [![Downloads][70]][71] [![CI Build][20]][21] 
 
-[![CodeFactor][83]][84] [![Lines of code][81]](<>) [![Total lines][80]](<>) [![Files][82]](<>)
-
+[![CodeFactor][83]][84] [![Codecov][85]][86]
+[![Lines of code][81]](<>) [![Total lines][80]](<>) [![Files][82]](<>)
 
 <img height="80"><img src="https://raw.githubusercontent.com/easyScience/easyCrystallography/develop/resources/images/ec_logo.svg" height="65">
 
@@ -46,7 +46,7 @@ While **easyCore** is under the BSD-3 license
 
 <!---Release--->
 
-[32]: https://img.shields.io/pypi/v/easyCrystallography.svg
+[32]: https://img.shields.io/pypi/v/easysciencecore?color=green
 
 [33]: https://pypi.org/project/easyCrystallography
 
@@ -75,3 +75,7 @@ While **easyCore** is under the BSD-3 license
 [83]: https://www.codefactor.io/repository/github/easyscience/easyCrystallography/badge
 
 [84]: https://www.codefactor.io/repository/github/easyscience/easyCrystallography
+
+[85]: https://img.shields.io/codecov/c/github/easyScience/easyCrystallography?color=green
+
+[86]: https://app.codecov.io/gh/easyScience/easyCrystallography/
