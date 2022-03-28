@@ -29,8 +29,8 @@ from typing import (
 
 from easyCore import np, ureg
 from easyCore.Fitting.Constraints import ObjConstraint
-from easyCore.Objects.ObjectClasses import Parameter, BaseObj
-from easyCore.Utils.decorators import memoized
+from easyCore.Objects.Base import Parameter, BaseObj
+from easyCore.Utils.decorators import memoized, deprecated
 from easyCore.Utils.io.star import StarSection
 from .SpaceGroup import SpaceGroup
 
@@ -78,7 +78,7 @@ class Lattice(BaseObj):
         angle_alpha: Optional[Union[Parameter, float]] = None,
         angle_beta: Optional[Union[Parameter, float]] = None,
         angle_gamma: Optional[Union[Parameter, float]] = None,
-        interface: Optional[iF] = None,
+        interface: Optional[Interface] = None,
             **kwargs,
     ):
         super().__init__(
@@ -94,7 +94,7 @@ class Lattice(BaseObj):
         if length_a is not None:
             self.length_a = length_a
         if length_b is not None:
-            self.length_b = length_b
+            self.length_b = length_c
         if length_c is not None:
             self.length_c = length_c
 
@@ -108,7 +108,8 @@ class Lattice(BaseObj):
 
     # Class constructors
     @classmethod
-    def default(cls, interface: Optional[iF] = None) -> L:
+    @deprecated
+    def default(cls, interface: Optional[Interface] = None) -> L:
         """
         Default constructor for a crystallographic unit cell.
 
@@ -810,7 +811,7 @@ class PeriodicLattice(Lattice):
         angle_beta: Optional[Union[Parameter, float]] = None,
         angle_gamma: Optional[Union[Parameter, float]] = None,
         spacegroup: Optional[Union[SpaceGroup, str]] = None,
-        interface: Optional[iF] = None
+        interface: Optional[Interface] = None
     ):
         super().__init__(
             length_a=length_a,

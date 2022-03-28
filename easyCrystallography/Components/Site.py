@@ -7,7 +7,7 @@ from __future__ import annotations
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Union, ClassVar, TypeVar, Optional, Dict, TYPE_CHECKING
+from typing import List, Union, ClassVar, TypeVar, Optional
 
 from easyCore import np
 from easyCore.Objects.Variable import Descriptor, Parameter
@@ -71,7 +71,7 @@ class Site(BaseObj):
         fract_x: Optional[Union[float, Parameter]] = None,
         fract_y: Optional[Union[float, Parameter]] = None,
         fract_z: Optional[Union[float, Parameter]] = None,
-        interface: Optional[iF] = None,
+        interface: Optional = None,
         **kwargs,
     ):
 
@@ -103,8 +103,8 @@ class Site(BaseObj):
         self.interface = interface
 
     @classmethod
-    def default(cls, *args, interface: Optional[iF] = None, **kwargs):
-        return cls(*args, **kwargs, interface=interface)
+    def default(cls, interface=None):
+        return cls(interface=interface)
 
     @classmethod
     def from_pars(
@@ -199,7 +199,7 @@ class PeriodicSite(Site):
         self.lattice = lattice
 
     @staticmethod
-    def _from_site_kwargs(lattice: PeriodicLattice, site: S) -> Dict[str, float]:
+    def _from_site_kwargs(lattice, site):
         return {
             "lattice": lattice,
             "label": site.label,
@@ -212,7 +212,7 @@ class PeriodicSite(Site):
         }
 
     @classmethod
-    def from_site(cls, lattice: PeriodicLattice, site: S) -> S:
+    def from_site(cls, lattice: PeriodicLattice, site: S):
         kwargs = cls._from_site_kwargs(lattice, site)
         return cls(**kwargs)
 
@@ -238,7 +238,7 @@ class Atoms(BaseCollection):
 
     _SITE_CLASS = Site
 
-    def __init__(self, name: str, *args, interface: Optional[iF] = None, **kwargs):
+    def __init__(self, name: str, *args, interface=None, **kwargs):
         if not isinstance(name, str):
             raise TypeError("A `name` for this collection must be given in string form")
         super(Atoms, self).__init__(name, *args, **kwargs)
@@ -260,7 +260,7 @@ class Atoms(BaseCollection):
             key = self.atom_labels.index(key)
         return super(Atoms, self).__delitem__(key)
 
-    def append(self, item: S):
+    def append(self, item: Site):
         if not issubclass(type(item), Site):
             raise TypeError("Item must be a Site")
         if item.label.raw_value in self.atom_labels:
@@ -282,36 +282,8 @@ class Atoms(BaseCollection):
         return np.array([atom.occupancy.raw_value for atom in self])
 
     def to_star(self) -> List[StarLoop]:
-        adps = [hasattr(item, "adp") for item in self]
-        has_adp = any(adps)
-        main_loop = StarLoop(self, exclude=["adp", "msp"])
-        if not has_adp:
-            return [main_loop]
-        add_loops = []
-        adp_types = [item.adp.adp_type.raw_value for item in self]
-        if all(adp_types):
-            if adp_types[0] in ["Uiso", "Biso"]:
-                main_loop = main_loop.join(
-                    StarLoop.from_StarSections(
-                        [getattr(item, "adp").to_star(item.label) for item in self]
-                    ),
-                    "label",
-                )
-            else:
-                entries = []
-                for item in self:
-                    entries.append(item.adp.to_star(item.label))
-                add_loops.append(StarLoop.from_StarSections(entries))
-        else:
-            raise NotImplementedError("Multiple types of ADP are not supported")
-        has_msp = any([hasattr(item, "msp") for item in self])
-        if has_msp:
-            entries = []
-            for item in self:
-                if hasattr(item, "msp"):
-                    entries.append(item.msp.to_star(item.label))
-            add_loops.append(StarLoop.from_StarSections(entries))
-        loops = [main_loop, *add_loops]
+        main_loop = StarLoop(self, exclude=["adp"])
+        loops = [main_loop]
         return loops
 
     @classmethod
@@ -327,9 +299,7 @@ class PeriodicAtoms(Atoms):
 
     _SITE_CLASS = PeriodicSite
 
-    def __init__(self, name: str, *args,
-                 lattice: Optional[PeriodicLattice] = None,
-                 interface: Optional[iF] = None, **kwargs):
+    def __init__(self, name: str, *args, lattice=None, interface=None, **kwargs):
         args = list(args)
         if lattice is None:
             for item in args:
