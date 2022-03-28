@@ -82,13 +82,13 @@ class CifIO:
                 out_str += str(writer) + '\n'
         return out_str
 
-    def to_crystal_form(self, cif_index: int = 0):
+    def to_crystal_form(self, cif_index: int = 0, atoms_class=Atoms):
         if self._parser is None:
             raise AttributeError
         return self._parser._cif[cif_index]['header'].name, {
             'cell':       self._parser.get_lattice(cif_index=cif_index),
             'spacegroup': self._parser.get_symmetry(cif_index=cif_index),
-            'atoms':      self._parser.get_atoms(cif_index=cif_index)
+            'atoms':      self._parser.get_atoms(cif_index=cif_index, atoms_class=atoms_class)
         }
 
 
@@ -402,7 +402,7 @@ class CifParser:
                 else:
                     return None
 
-    def get_atoms(self, cif_index: int = 0):
+    def get_atoms(self, cif_index: int = 0, atoms_class=None):
         """
         Generate the an atoms list with adp if available
 
@@ -411,6 +411,8 @@ class CifParser:
         :return: Parsed atoms and adp
         :rtype: Atoms
         """
+        Atoms = atoms_class
+        Site = Atoms._SITE_CLASS
 
         if cif_index > self.number_of_cifs:
             raise AttributeError
@@ -507,7 +509,7 @@ class CifParser:
                             # Add to an atom
                             if current_atom_label in atoms.atom_labels:
                                 idx2 = atoms.atom_labels.index(current_atom_label)
-                                atoms[idx2].add_adp(adps)
+                                atoms[idx2].adp = adps
                         else:
                             raise AttributeError
                     break
@@ -515,7 +517,7 @@ class CifParser:
         if not found:
             for atom in atoms:
                 self.warnings.append('There is no ADP defined in the CIF')
-                atom.add_adp('Uiso')
+                # atom.adp('Uiso')
         return atoms
 
     def get_symmetry(self, cif_index: int = 0):

@@ -20,6 +20,9 @@ from easyCrystallography.io.cif import CifIO
 
 class Phase(BaseObj):
 
+    _SITE_CLASS = Site
+    _ATOMS_CLASS = Atoms
+
     cell = ClassVar[PeriodicLattice]
     _spacegroup = ClassVar[SpaceGroup]
     atoms = ClassVar[PeriodicAtoms]
@@ -297,6 +300,11 @@ class Phase(BaseObj):
 
 
 class Phases(BaseCollection):
+
+    _SITE_CLASS = Site
+    _ATOM_CLASS = Atoms
+    _PHASE_CLASS = Phase
+
     def __init__(self, name: str = "phases", *args, interface=None, **kwargs):
         """
         Generate a collection of crystals.
@@ -360,20 +368,20 @@ class Phases(BaseCollection):
 
     @classmethod
     def from_cif_str(cls, in_string: str):
-        _, crystals = cls._from_external(CifIO.from_cif_str, in_string)
+        _, crystals = cls._from_external(cls, CifIO.from_cif_str, in_string)
         return cls("Phases", *crystals)
 
     @classmethod
     def from_cif_file(cls, file_path: Path):
-        _, crystals = cls._from_external(CifIO.from_file, file_path)
+        _, crystals = cls._from_external(cls, CifIO.from_file, file_path)
         return cls("Phases", *crystals)
 
     @staticmethod
-    def _from_external(constructor, *args):
+    def _from_external(cls, constructor, *args):
         cif = constructor(*args)
         name = "FromCif"
         crystals = []
         for cif_index in range(cif._parser.number_of_cifs):
-            name, kwargs = cif.to_crystal_form(cif_index=cif_index)
-            crystals.append(Phase(name, **kwargs))
+            name, kwargs = cif.to_crystal_form(cif_index=cif_index, atoms_class=cls._ATOM_CLASS)
+            crystals.append(cls._PHASE_CLASS(name, **kwargs))
         return name, crystals
