@@ -31,7 +31,7 @@ from typing import (
 from easyCore import np, ureg
 from easyCore.Fitting.Constraints import ObjConstraint
 from easyCore.Objects.Base import Parameter, BaseObj
-from easyCore.Utils.decorators import memoized, deprecated
+from easyCore.Utils.decorators import memoized
 from easyCore.Utils.io.star import StarSection
 from easyCore.Utils.typing import Vector3Like
 
@@ -112,7 +112,6 @@ class Lattice(BaseObj):
 
     # Class constructors
     @classmethod
-    @deprecated
     def default(cls, interface: Optional[Interface] = None) -> L:
         """
         Default constructor for a crystallographic unit cell.
