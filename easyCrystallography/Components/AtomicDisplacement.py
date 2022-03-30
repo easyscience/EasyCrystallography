@@ -239,23 +239,22 @@ class AtomicDisplacement(BaseObj):
     adp_type: ClassVar[Descriptor]
     adp_class: ClassVar[Type[AdpBase]]
 
-    def __init__(self, adp_type: Descriptor, interface=None, **kwargs):
+    def __init__(self, adp_type: Union[Descriptor, str], interface=None, **kwargs):
+        if isinstance(adp_type, str):
+            adp_type = Descriptor('adp_type', adp_type)
         adp_class_name = adp_type.raw_value
         if adp_class_name in _AVAILABLE_ISO_TYPES.keys():
             adp_class = _AVAILABLE_ISO_TYPES[adp_class_name]
-            if kwargs:
-                if 'adp_class' in kwargs.keys():
-                    adp_class = kwargs['adp_class']
-                else:
-                    adp_class: BaseObj = adp_class.from_pars(interface=interface, **kwargs)
-            else:
-                adp_class: BaseObj = adp_class.default(interface=interface)
+            if "adp_class" in kwargs.keys():
+                adp_type.value = kwargs.pop("adp_class")
+                adp_class = _AVAILABLE_ISO_TYPES[adp_type.raw_value]
+            adp = adp_class(**kwargs, interface=interface)
         else:
-            raise AttributeError
+            raise AttributeError(f"{adp_class_name} is not a valid adp type")
         super(AtomicDisplacement, self).__init__('adp',
                                                  adp_type=adp_type,
-                                                 adp_class=adp_class)
-        for par in adp_class.get_parameters():
+                                                 adp_class=adp)
+        for par in adp.get_parameters():
             addProp(self, par.name, fget=self.__a_getter(par.name), fset=self.__a_setter(par.name))
         self.interface = interface
 
