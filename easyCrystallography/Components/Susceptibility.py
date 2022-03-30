@@ -59,7 +59,7 @@ class MSPBase(BaseObj):
         pass
 
 
-class Anisotropic(MSPBase):
+class Cani(MSPBase):
 
     chi_11: ClassVar[Parameter]
     chi_12: ClassVar[Parameter]
@@ -73,13 +73,13 @@ class Anisotropic(MSPBase):
                  chi_13: Optional[Union[float, Parameter]] = None, chi_22: Optional[Union[float, Parameter]] = None,
                  chi_23: Optional[Union[float, Parameter]] = None, chi_33: Optional[Union[float, Parameter]] = None,
                  interface=None):
-        super(Anisotropic, self).__init__('anisoU',
-                                          chi_11=Parameter('chi_11', **_ANIO_DETAILS['Uani']),
-                                          chi_12=Parameter('chi_12', **_ANIO_DETAILS['Uani']),
-                                          chi_13=Parameter('chi_13', **_ANIO_DETAILS['Uani']),
-                                          chi_22=Parameter('chi_22', **_ANIO_DETAILS['Uani']),
-                                          chi_23=Parameter('chi_23', **_ANIO_DETAILS['Uani']),
-                                          chi_33=Parameter('chi_33', **_ANIO_DETAILS['Uani']),
+        super(Cani, self).__init__('Cani',
+                                          chi_11=Parameter('chi_11', **_ANIO_DETAILS['Cani']),
+                                          chi_12=Parameter('chi_12', **_ANIO_DETAILS['Cani']),
+                                          chi_13=Parameter('chi_13', **_ANIO_DETAILS['Cani']),
+                                          chi_22=Parameter('chi_22', **_ANIO_DETAILS['Cani']),
+                                          chi_23=Parameter('chi_23', **_ANIO_DETAILS['Cani']),
+                                          chi_33=Parameter('chi_33', **_ANIO_DETAILS['Cani']),
                                           )
         if chi_11 is not None:
             self.chi_11 = chi_11
@@ -109,7 +109,7 @@ class Anisotropic(MSPBase):
 
 
 _AVAILABLE_ISO_TYPES = {
-    'chi': Anisotropic
+    'Cani': Cani
 }
 
 
@@ -118,23 +118,22 @@ class MagneticSusceptibility(BaseObj):
     msp_type: ClassVar[Descriptor]
     msp_class: ClassVar[Type[MSPBase]]
 
-    def __init__(self, msp_type: Descriptor, interface=None, **kwargs):
+    def __init__(self, msp_type: Union[Descriptor, str], interface: Optional = None, **kwargs):
+        if isinstance(msp_type, str):
+            msp_type = Descriptor('msp_type', msp_type)
         msp_class_name = msp_type.raw_value
         if msp_class_name in _AVAILABLE_ISO_TYPES.keys():
             msp_class = _AVAILABLE_ISO_TYPES[msp_class_name]
-            if kwargs:
-                if 'msp_type' in kwargs.keys():
-                    msp_class = kwargs['msp_class']
-                else:
-                    msp_class: BaseObj = msp_class.from_pars(interface=interface, **kwargs)
-            else:
-                msp_class: BaseObj = msp_class.default(interface=interface)
+            if "msp_class" in kwargs:
+                msp_type.value = kwargs.pop("msp_class")
+                msp_class = _AVAILABLE_ISO_TYPES[msp_type.raw_value]
+            msp = msp_class(**kwargs, interface=interface)
         else:
-            raise AttributeError
+            raise AttributeError(f"{msp_class_name} is not a valid magnetic susceptibility type")
         super(MagneticSusceptibility, self).__init__('msp',
                                                      msp_type=msp_type,
-                                                     msp_class=msp_class)
-        for par in msp_class.get_parameters():
+                                                     msp_class=msp)
+        for par in msp.get_parameters():
             addProp(self, par.name, fget=self.__a_getter(par.name), fset=self.__a_setter(par.name))
         self.interface = interface
 
