@@ -103,8 +103,8 @@ class Site(BaseObj):
         self.interface = interface
 
     @classmethod
-    def default(cls, interface=None):
-        return cls(interface=interface)
+    def default(cls, *args, interface: Optional = None, **kwargs):
+        return cls(*args, **kwargs, interface=interface)
 
     @classmethod
     def from_pars(
