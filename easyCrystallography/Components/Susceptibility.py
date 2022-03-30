@@ -20,7 +20,7 @@ _ANIO_DETAILS = {
         'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_adp_type.html',
         'value':       'Uani'
     },
-    'Uani':     {
+    'Cani':     {
         'description': 'Isotropic magnetic susceptibility parameter.',
         'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_aniso_U_.html',
         'value':       0.0,

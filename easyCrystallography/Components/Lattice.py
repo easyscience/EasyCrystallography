@@ -98,7 +98,7 @@ class Lattice(BaseObj):
         if length_a is not None:
             self.length_a = length_a
         if length_b is not None:
-            self.length_b = length_c
+            self.length_b = length_b
         if length_c is not None:
             self.length_c = length_c
 
