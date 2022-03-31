@@ -9,13 +9,13 @@ __version__ = '0.1.0'
 from typing import List, Union, ClassVar, TypeVar, Optional
 
 from easyCore import np
-from easyCore.Objects.Base import Descriptor, Parameter, BaseObj
+from easyCore.Objects.Variable import Descriptor, Parameter
+from easyCore.Objects.ObjectClasses import BaseObj
 from easyCore.Objects.Groups import BaseCollection
 from easyCore.Utils.io.star import StarLoop
 
 from .Lattice import PeriodicLattice
 from .Specie import Specie
-from .AtomicDisplacement import AtomicDisplacement
 
 _SITE_DETAILS = {
     "label": {

@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Dict, Union, List, ClassVar
 
 from easyCore import np
-from easyCore.Objects.Base import BaseObj, Parameter, Descriptor
+from easyCore.Objects.ObjectClasses import BaseObj, Parameter, Descriptor
 from easyCore.Objects.Groups import BaseCollection
 
 from easyCrystallography.Components.Lattice import Lattice, PeriodicLattice

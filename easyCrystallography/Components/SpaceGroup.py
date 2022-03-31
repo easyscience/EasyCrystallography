@@ -9,7 +9,7 @@ __version__ = "0.1.0"
 from copy import deepcopy
 from typing import ClassVar
 
-from easyCore.Objects.Base import BaseObj, Descriptor
+from easyCore.Objects.ObjectClasses import BaseObj, Descriptor
 from easyCore.Utils.io.star import StarEntry, StarSection, FakeCore, FakeItem
 
 from easyCrystallography.Symmetry.groups import SpaceGroup as SpaceGroupOpts

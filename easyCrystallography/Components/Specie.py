@@ -7,7 +7,7 @@ __author__ = "github.com/wardsimon"
 __version__ = "0.1.0"
 
 
-from easyCore.Objects.Base import Descriptor
+from easyCore.Objects.ObjectClasses import Descriptor
 from easyCore.Utils.classTools import addProp
 
 from easyCrystallography.Elements.periodic_table import Species, Specie as pSpecie
