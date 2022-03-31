@@ -7,7 +7,7 @@ from __future__ import annotations
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Union, ClassVar, TypeVar, Optional
+from typing import List, Union, ClassVar, TypeVar, Optional, Dict, TYPE_CHECKING
 
 from easyCore import np
 from easyCore.Objects.Variable import Descriptor, Parameter
@@ -71,7 +71,7 @@ class Site(BaseObj):
         fract_x: Optional[Union[float, Parameter]] = None,
         fract_y: Optional[Union[float, Parameter]] = None,
         fract_z: Optional[Union[float, Parameter]] = None,
-        interface: Optional = None,
+        interface: Optional[iF] = None,
         **kwargs,
     ):
 
@@ -103,7 +103,7 @@ class Site(BaseObj):
         self.interface = interface
 
     @classmethod
-    def default(cls, *args, interface: Optional = None, **kwargs):
+    def default(cls, *args, interface: Optional[iF] = None, **kwargs):
         return cls(*args, **kwargs, interface=interface)
 
     @classmethod
@@ -199,7 +199,7 @@ class PeriodicSite(Site):
         self.lattice = lattice
 
     @staticmethod
-    def _from_site_kwargs(lattice, site):
+    def _from_site_kwargs(lattice: PeriodicLattice, site: S) -> Dict[str, float]:
         return {
             "lattice": lattice,
             "label": site.label,
@@ -212,7 +212,7 @@ class PeriodicSite(Site):
         }
 
     @classmethod
-    def from_site(cls, lattice: PeriodicLattice, site: S):
+    def from_site(cls, lattice: PeriodicLattice, site: S) -> S:
         kwargs = cls._from_site_kwargs(lattice, site)
         return cls(**kwargs)
 
@@ -238,7 +238,7 @@ class Atoms(BaseCollection):
 
     _SITE_CLASS = Site
 
-    def __init__(self, name: str, *args, interface=None, **kwargs):
+    def __init__(self, name: str, *args, interface: Optional[iF] = None, **kwargs):
         if not isinstance(name, str):
             raise TypeError("A `name` for this collection must be given in string form")
         super(Atoms, self).__init__(name, *args, **kwargs)
@@ -260,7 +260,7 @@ class Atoms(BaseCollection):
             key = self.atom_labels.index(key)
         return super(Atoms, self).__delitem__(key)
 
-    def append(self, item: Site):
+    def append(self, item: S):
         if not issubclass(type(item), Site):
             raise TypeError("Item must be a Site")
         if item.label.raw_value in self.atom_labels:
@@ -282,7 +282,7 @@ class Atoms(BaseCollection):
         return np.array([atom.occupancy.raw_value for atom in self])
 
     def to_star(self) -> List[StarLoop]:
-        main_loop = StarLoop(self, exclude=["adp"])
+        main_loop = StarLoop(self, exclude=["adp", "msp"])
         loops = [main_loop]
         return loops
 
@@ -299,7 +299,9 @@ class PeriodicAtoms(Atoms):
 
     _SITE_CLASS = PeriodicSite
 
-    def __init__(self, name: str, *args, lattice=None, interface=None, **kwargs):
+    def __init__(self, name: str, *args,
+                 lattice: Optional[PeriodicLattice] = None,
+                 interface: Optional[iF] = None, **kwargs):
         args = list(args)
         if lattice is None:
             for item in args:
