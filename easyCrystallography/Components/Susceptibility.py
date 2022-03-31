@@ -10,7 +10,7 @@ from typing import List, Tuple, Union, ClassVar, Optional, Type
 
 from easyCore import np
 from easyCore.Utils.io.star import StarEntry, StarSection, StarLoop
-from easyCore.Objects.Base import BaseObj, Descriptor, Parameter
+from easyCore.Objects.ObjectClasses import BaseObj, Descriptor, Parameter
 from easyCore.Utils.classTools import addProp, removeProp
 from abc import abstractmethod
 

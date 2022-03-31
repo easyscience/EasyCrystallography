@@ -12,7 +12,6 @@ import itertools
 import math
 import warnings
 
-from copy import deepcopy
 from fractions import Fraction
 from functools import reduce
 from typing import (

@@ -2,11 +2,12 @@
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022 Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
 #
+from __future__ import annotations
 
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Union, ClassVar, TypeVar, Optional
+from typing import List, Union, ClassVar, TypeVar, Optional, Dict, TYPE_CHECKING
 
 from easyCore import np
 from easyCore.Objects.Variable import Descriptor, Parameter
@@ -16,6 +17,10 @@ from easyCore.Utils.io.star import StarLoop
 
 from .Lattice import PeriodicLattice
 from .Specie import Specie
+
+if TYPE_CHECKING:
+    from easyCore.Utils.typing import iF
+
 
 _SITE_DETAILS = {
     "label": {
@@ -66,7 +71,7 @@ class Site(BaseObj):
         fract_x: Optional[Union[float, Parameter]] = None,
         fract_y: Optional[Union[float, Parameter]] = None,
         fract_z: Optional[Union[float, Parameter]] = None,
-        interface: Optional = None,
+        interface: Optional[iF] = None,
         **kwargs,
     ):
 
@@ -98,7 +103,7 @@ class Site(BaseObj):
         self.interface = interface
 
     @classmethod
-    def default(cls, *args, interface: Optional = None, **kwargs):
+    def default(cls, *args, interface: Optional[iF] = None, **kwargs):
         return cls(*args, **kwargs, interface=interface)
 
     @classmethod
@@ -110,7 +115,7 @@ class Site(BaseObj):
         fract_x: float = _SITE_DETAILS["position"]["value"],
         fract_y: float = _SITE_DETAILS["position"]["value"],
         fract_z: float = _SITE_DETAILS["position"]["value"],
-        interface=None,
+        interface: Optional[iF] = None,
     ):
         return cls(
             label,
@@ -183,7 +188,7 @@ class PeriodicSite(Site):
         fract_x: Parameter,
         fract_y: Parameter,
         fract_z: Parameter,
-        interface=None,
+        interface: Optional[iF] = None,
         **kwargs,
     ):
         super(PeriodicSite, self).__init__(
@@ -192,7 +197,7 @@ class PeriodicSite(Site):
         self.lattice = lattice
 
     @staticmethod
-    def _from_site_kwargs(lattice, site):
+    def _from_site_kwargs(lattice: PeriodicLattice, site: S) -> Dict[str, float]:
         return {
             "lattice": lattice,
             "label": site.label,
@@ -205,7 +210,7 @@ class PeriodicSite(Site):
         }
 
     @classmethod
-    def from_site(cls, lattice: PeriodicLattice, site: S):
+    def from_site(cls, lattice: PeriodicLattice, site: S) -> S:
         kwargs = cls._from_site_kwargs(lattice, site)
         return cls(**kwargs)
 
@@ -231,7 +236,7 @@ class Atoms(BaseCollection):
 
     _SITE_CLASS = Site
 
-    def __init__(self, name: str, *args, interface=None, **kwargs):
+    def __init__(self, name: str, *args, interface: Optional[iF] = None, **kwargs):
         if not isinstance(name, str):
             raise TypeError("A `name` for this collection must be given in string form")
         super(Atoms, self).__init__(name, *args, **kwargs)
@@ -248,12 +253,12 @@ class Atoms(BaseCollection):
             idx = self.atom_labels.index(idx)
         return super(Atoms, self).__getitem__(idx)
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: Union[int, str]):
         if isinstance(key, str) and key in self.atom_labels:
             key = self.atom_labels.index(key)
         return super(Atoms, self).__delitem__(key)
 
-    def append(self, item: Site):
+    def append(self, item: S):
         if not issubclass(type(item), Site):
             raise TypeError("Item must be a Site")
         if item.label.raw_value in self.atom_labels:
@@ -275,7 +280,7 @@ class Atoms(BaseCollection):
         return np.array([atom.occupancy.raw_value for atom in self])
 
     def to_star(self) -> List[StarLoop]:
-        main_loop = StarLoop(self, exclude=["adp"])
+        main_loop = StarLoop(self, exclude=["adp", "msp"])
         loops = [main_loop]
         return loops
 
@@ -285,11 +290,16 @@ class Atoms(BaseCollection):
         return s.to_class(cls, cls._SITE_CLASS)
 
 
+A = TypeVar("A", bound=Atoms)
+
+
 class PeriodicAtoms(Atoms):
 
     _SITE_CLASS = PeriodicSite
 
-    def __init__(self, name: str, *args, lattice=None, interface=None, **kwargs):
+    def __init__(self, name: str, *args,
+                 lattice: Optional[PeriodicLattice] = None,
+                 interface: Optional[iF] = None, **kwargs):
         args = list(args)
         if lattice is None:
             for item in args:
@@ -305,13 +315,13 @@ class PeriodicAtoms(Atoms):
         self.lattice = lattice
 
     @classmethod
-    def from_atoms(cls, lattice: PeriodicLattice, atoms):
+    def from_atoms(cls, lattice: PeriodicLattice, atoms: Atoms) -> A:
         return cls(atoms.name, *atoms, lattice=lattice, interface=atoms.interface)
 
     def __repr__(self) -> str:
         return f"Collection of {len(self)} periodic sites."
 
-    def append(self, item: Site):
+    def append(self, item: S):
         if not issubclass(item.__class__, Site):
             raise TypeError("Item must be a Site or periodic site")
         if item.label.raw_value in self.atom_labels:
@@ -322,7 +332,7 @@ class PeriodicAtoms(Atoms):
         item = self._SITE_CLASS.from_site(self.lattice, item)
         super(PeriodicAtoms, self).append(item)
 
-    def get_orbits(self, magnetic_only=False):
+    def get_orbits(self, magnetic_only: bool = False):
         orbit_dict = {}
         for item in self:
             if magnetic_only and not item.is_magnetic:
