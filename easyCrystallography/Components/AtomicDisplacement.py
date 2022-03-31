@@ -8,13 +8,16 @@ from __future__ import annotations
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Tuple, Union, ClassVar, Type, Optional
+from typing import List, Tuple, Union, ClassVar, TypeVar, Optional, TYPE_CHECKING
 
 from easyCore import np
 from easyCore.Utils.io.star import StarEntry, StarSection, StarLoop
 from easyCore.Objects.ObjectClasses import BaseObj, Descriptor, Parameter
 from easyCore.Utils.classTools import addProp, removeProp
 from abc import abstractmethod
+
+if TYPE_CHECKING:
+    from easyCore.Utils.typing import iF
 
 _ANIO_DETAILS = {
     'adp_type': {
@@ -84,11 +87,11 @@ class AdpBase(BaseObj):
         return matrix
 
     @abstractmethod
-    def default(cls, interface=None):
+    def default(cls, interface: Optional[iF] = None):
         pass
 
     @abstractmethod
-    def from_pars(cls, interface=None, **kwargs):
+    def from_pars(cls, interface: Optional[iF] = None, **kwargs):
         pass
 
 
@@ -105,7 +108,7 @@ class Anisotropic(AdpBase):
                  U_11: Optional[Union[Parameter, float]] = None, U_12: Optional[Union[Parameter, float]] = None,
                  U_13: Optional[Union[Parameter, float]] = None, U_22: Optional[Union[Parameter, float]] = None,
                  U_23: Optional[Union[Parameter, float]] = None, U_33: Optional[Union[Parameter, float]] = None,
-                 interface=None):
+                 interface: Optional[iF] = None):
         super(Anisotropic, self).__init__('anisoU',
                                           U_11=Parameter('U_11', **_ANIO_DETAILS['Uani']), U_12=Parameter('U_12', **_ANIO_DETAILS['Uani']),
                                           U_13=Parameter('U_13', **_ANIO_DETAILS['Uani']), U_22=Parameter('U_22', **_ANIO_DETAILS['Uani']),
@@ -125,7 +128,7 @@ class Anisotropic(AdpBase):
         self.interface = interface
 
     @classmethod
-    def default(cls, interface=None):
+    def default(cls, interface: Optional[iF] = None):
         return cls(interface=interface)
 
     @classmethod
@@ -133,7 +136,7 @@ class Anisotropic(AdpBase):
                   U_11: Optional[float] = None, U_12: Optional[float] = None,
                   U_13: Optional[float] = None, U_22: Optional[float] = None,
                   U_23: Optional[float] = None, U_33: Optional[float] = None,
-                  interface=None):
+                  interface: Optional[iF] = None):
         return cls(U_11, U_12, U_13, U_22, U_23, U_33, interface)
 
 
@@ -141,7 +144,7 @@ class Isotropic(AdpBase):
 
     Uiso: ClassVar[Parameter]
 
-    def __init__(self, Uiso: Optional[Union[Parameter, float]] = None, interface=None):
+    def __init__(self, Uiso: Optional[Union[Parameter, float]] = None, interface: Optional[iF] = None):
         super(Isotropic, self).__init__('Uiso',
                                         Uiso=Parameter('Uiso', **_ANIO_DETAILS['Uiso']))
         if Uiso is not None:
@@ -149,11 +152,11 @@ class Isotropic(AdpBase):
         self.interface = interface
 
     @classmethod
-    def default(cls, interface=None):
+    def default(cls, interface: Optional[iF] = None):
         return cls(interface=interface)
 
     @classmethod
-    def from_pars(cls, Uiso: Optional[float] = None, interface=None):
+    def from_pars(cls, Uiso: Optional[float] = None, interface: Optional[iF] = None):
         return cls(Uiso, interface=interface)
 
 
@@ -170,7 +173,7 @@ class AnisotropicBij(AdpBase):
                  B_11: Optional[Union[Parameter, float]] = None, B_12: Optional[Union[Parameter, float]] = None,
                  B_13: Optional[Union[Parameter, float]] = None, B_22: Optional[Union[Parameter, float]] = None,
                  B_23: Optional[Union[Parameter, float]] = None, B_33: Optional[Union[Parameter, float]] = None,
-                 interface=None):
+                 interface: Optional[iF] = None):
         super(AnisotropicBij, self).__init__('anisoB',
                                              **{name: Parameter(name, **_ANIO_DETAILS['Bani']) for name in
                                               ['B_11', 'B_12', 'B_13',
@@ -191,7 +194,7 @@ class AnisotropicBij(AdpBase):
         self.interface = interface
 
     @classmethod
-    def default(cls, interface=None):
+    def default(cls, interface: Optional[iF] = None):
         return cls(interface=interface)
 
     @classmethod
@@ -199,7 +202,7 @@ class AnisotropicBij(AdpBase):
                   B_11: Optional[float] = None, B_12: Optional[float] = None,
                   B_13: Optional[float] = None, B_22: Optional[float] = None,
                   B_23: Optional[float] = None, B_33: Optional[float] = None,
-                  interface=None):
+                  interface: Optional[iF] = None):
         return cls(B_11, B_12, B_13, B_22, B_23, B_33, interface)
 
 
@@ -207,7 +210,7 @@ class IsotropicB(AdpBase):
 
     Biso: ClassVar[Parameter]
 
-    def __init__(self, Biso: Optional[Union[Parameter, float]] = None, interface=None):
+    def __init__(self, Biso: Optional[Union[Parameter, float]] = None, interface: Optional[iF] = None):
         super(IsotropicB, self).__init__('Biso',
                                          Biso=Parameter('Biso', **_ANIO_DETAILS['Biso']))
         if Biso is not None:
@@ -215,11 +218,11 @@ class IsotropicB(AdpBase):
         self.interface = interface
 
     @classmethod
-    def default(cls, interface=None):
+    def default(cls, interface: Optional[iF] = None):
         return cls(interface=interface)
 
     @classmethod
-    def from_pars(cls, Biso: Optional[float] = None, interface=None):
+    def from_pars(cls, Biso: Optional[float] = None, interface: Optional[iF] = None):
         return cls(Biso, interface=interface)
 
 
@@ -233,13 +236,18 @@ _AVAILABLE_ISO_TYPES = {
     # 'Bovl': 'OverallB'
 }
 
+if TYPE_CHECKING:
+    AB = TypeVar('AB', bound=AdpBase)
+
 
 class AtomicDisplacement(BaseObj):
 
     adp_type: ClassVar[Descriptor]
-    adp_class: ClassVar[Type[AdpBase]]
+    adp_class: ClassVar[AB]
 
-    def __init__(self, adp_type: Union[Descriptor, str], interface=None, **kwargs):
+    def __init__(self, adp_type: Optional[Union[Descriptor, str]] = None, interface: Optional[iF] = None, **kwargs):
+        if adp_type is None:
+            adp_type = 'Uiso'
         if isinstance(adp_type, str):
             adp_type = Descriptor('adp_type', adp_type)
         adp_class_name = adp_type.raw_value
@@ -262,29 +270,25 @@ class AtomicDisplacement(BaseObj):
         if adp_string in _AVAILABLE_ISO_TYPES.keys():
             adp_class = _AVAILABLE_ISO_TYPES[adp_string]
             if kwargs:
-                adp_class: AdpBase = adp_class.from_pars(interface=self.interface, **kwargs)
+                adp = adp_class(**kwargs, interface=self.interface)
             else:
-                adp_class: AdpBase = adp_class.default(interface=self.interface)
+                adp = adp_class(interface=self.interface)
         else:
-            raise AttributeError
+            raise AttributeError(f"{adp_string} is not a valid adp type")
         for par in self.adp_class.get_parameters():
             removeProp(self, par.name)
         self.adp_class = adp_class
-        self.adp_type = adp_string
-        for par in adp_class.get_parameters():
+        self.adp_type = adp
+        for par in adp.get_parameters():
             addProp(self, par.name, fget=self.__a_getter(par.name), fset=self.__a_setter(par.name))
 
     @classmethod
-    def from_pars(cls, adp_type: str, interface=None, **kwargs):
-        return cls(Descriptor('adp_type',
-                              value=adp_type,
-                              **{k: _ANIO_DETAILS['adp_type'][k] for k in _ANIO_DETAILS['adp_type'].keys() if
-                                 k != 'value'}),
-                   interface=interface, **kwargs)
+    def from_pars(cls, adp_type: str, interface: Optional[iF] = None, **kwargs):
+        return cls(adp_type, **kwargs, interface=interface)
 
     @classmethod
-    def default(cls, interface=None):
-        return cls(Descriptor('adp_type', **_ANIO_DETAILS['adp_type']), interface=interface)
+    def default(cls, interface: Optional[iF] = None):
+        return cls(interface=interface)
 
     @classmethod
     def from_string(cls, in_string: Union[str, StarLoop]) -> Tuple[List[str], List['AtomicDisplacement']]:
@@ -304,7 +308,7 @@ class AtomicDisplacement(BaseObj):
             adp_type_idx = section.labels.index(cls._CIF_CONVERSIONS[0][1])
             adp_type = entries[adp_type_idx].value
             if adp_type not in _AVAILABLE_ISO_TYPES.keys():
-                raise AttributeError
+                raise AttributeError(f"{adp_type} is not a valid adp type")
             adp_class = _AVAILABLE_ISO_TYPES[adp_type]
             pars = [par[1] for par in adp_class._CIF_CONVERSIONS]
             par_dict = {}
