@@ -76,7 +76,7 @@ class Cani(MSPBase):
                  chi_33: Optional[Union[Parameter, float]] = None,
                  interface=None):
 
-        super(Cani, self).__init__('anisoC',
+        super(Cani, self).__init__('Cani',
                                    chi_11=Parameter('chi_11', **_ANIO_DETAILS['Cani']),
                                    chi_12=Parameter('chi_12', **_ANIO_DETAILS['Cani']),
                                    chi_13=Parameter('chi_13', **_ANIO_DETAILS['Cani']),
@@ -134,7 +134,7 @@ class MagneticSusceptibility(BaseObj):
             msp_class = _AVAILABLE_ISO_TYPES[msp_class_name]
             if "msp_class" in kwargs:
                 msp_type.value = kwargs.pop("msp_class")
-                msp_class = _AVAILABLE_ISO_TYPES[msp_type.raw_value]
+                msp_class = _AVAILABLE_ISO_TYPES[msp_type.raw_value.name]
             msp = msp_class(**kwargs, interface=interface)
         else:
             raise AttributeError(f"{msp_class_name} is not a valid magnetic susceptibility type")
