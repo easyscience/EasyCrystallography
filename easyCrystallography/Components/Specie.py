@@ -6,7 +6,7 @@
 __author__ = "github.com/wardsimon"
 __version__ = "0.1.0"
 
-
+from typing import Union
 from easyCore.Objects.ObjectClasses import Descriptor
 from easyCore.Utils.classTools import addProp
 
