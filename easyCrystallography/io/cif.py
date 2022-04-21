@@ -523,7 +523,7 @@ class CifParser:
 
         # Now look for magnetic susceptibility
         fields = ['atom_site_susceptibility_label', 'atom_site_susceptibility_chi_type']
-        msp_types = {'Uiso': ['Uiso'],
+        msp_types = {'Ciso': ['Ciso'],
                      'Cani': ['chi_11', 'chi_12', 'chi_13', 'chi_22', 'chi_23', 'chi_33'],
                      }
         found = False

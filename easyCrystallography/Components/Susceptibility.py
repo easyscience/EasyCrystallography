@@ -133,8 +133,7 @@ class MagneticSusceptibility(BaseObj):
         if msp_class_name in _AVAILABLE_ISO_TYPES.keys():
             msp_class = _AVAILABLE_ISO_TYPES[msp_class_name]
             if "msp_class" in kwargs:
-                msp_type.value = kwargs.pop("msp_class")
-                msp_class = _AVAILABLE_ISO_TYPES[msp_type.raw_value.name]
+                _ = kwargs.pop("msp_class")
             msp = msp_class(**kwargs, interface=interface)
         else:
             raise AttributeError(f"{msp_class_name} is not a valid magnetic susceptibility type")
