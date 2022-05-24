@@ -16,17 +16,28 @@ from abc import abstractmethod
 
 _ANIO_DETAILS = {
     'msp_type': {
-        'description': "A standard code used to describe the type of atomic displacement parameters used for the site.",
-        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_adp_type.html',
+        'description': "A standard code used to describe the type of magnetic susceptibility parameters used for the site.",
         'value':       'Uani'
     },
     'Cani':     {
-        'description': 'Isotropic magnetic susceptibility parameter.',
-        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_aniso_U_.html',
+        'description': 'The standard anisotropic magnetic susceptibility components in inverse teslas which appear in '
+                       'the structure-factor term.',
         'value':       0.0,
+        'min':         0,
+        'max':         np.inf,
         'units':       'T^-1',
         'fixed':       True,
-    }
+    },
+    'Ciso':     {
+        'description': 'Isotropic magnetic susceptibility parameter, or equivalent isotropic magnetic susceptibility '
+                       'parameter, C(equiv), in inverted teslas, calculated from anisotropic susceptibility '
+                       'components.',
+        'value':       0.0,
+        'min':         0,
+        'max':         np.inf,
+        'units':       'T^-1',
+        'fixed':       True,
+    },
 }
 
 class MSPBase(BaseObj):
@@ -115,11 +126,31 @@ class Cani(MSPBase):
         return cls(chi_11=chi_11, chi_12=chi_12, chi_13=chi_13, chi_22=chi_22,
                    chi_23=chi_23, chi_33=chi_33, interface=interface)
 
+class Ciso(MSPBase):
+
+    chi: ClassVar[Parameter]
+
+    def __init__(self, chi: Optional[Union[Parameter, float]] = None, interface = None):
+        super(Ciso, self).__init__('Ciso',
+                                        chi=Parameter('chi', **_ANIO_DETAILS['Ciso']))
+        if chi is not None:
+            self.chi = chi
+        self.interface = interface
+
+    @classmethod
+    def default(cls, interface = None):
+        return cls(interface=interface)
+
+    @classmethod
+    def from_pars(cls, chi: Optional[float] = None, interface = None):
+        return cls(chi=chi, interface=interface)
+
+
 
 _AVAILABLE_ISO_TYPES = {
-    'Cani': Cani
+    'Cani': Cani,
+    'Ciso' : Ciso,
 }
-
 
 class MagneticSusceptibility(BaseObj):
 

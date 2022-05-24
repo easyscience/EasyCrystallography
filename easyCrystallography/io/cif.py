@@ -523,7 +523,7 @@ class CifParser:
 
         # Now look for magnetic susceptibility
         fields = ['atom_site_susceptibility_label', 'atom_site_susceptibility_chi_type']
-        msp_types = {'Ciso': ['Ciso'],
+        msp_types = {'Ciso': ['chi'],
                      'Cani': ['chi_11', 'chi_12', 'chi_13', 'chi_22', 'chi_23', 'chi_33'],
                      }
         found = False
@@ -531,20 +531,21 @@ class CifParser:
             for idx0, field in enumerate(fields):
                 if field in loop.labels:
                     found = True
-                    needed_labels = []
-                    msp_type = 'Cani'
-                    needed_labels.extend(['atom_site_susceptibility_label',
-                                          'atom_site_susceptibility_chi_11',
-                                          'atom_site_susceptibility_chi_22',
-                                          'atom_site_susceptibility_chi_33',
-                                          'atom_site_susceptibility_chi_12',
-                                          'atom_site_susceptibility_chi_13',
-                                          'atom_site_susceptibility_chi_23'])
-
+                    needed_labels =['atom_site_susceptibility_label',
+                                    'atom_site_susceptibility_chi_11']
                     these_sections = loop.to_StarSections()
                     for idx, section in enumerate(these_sections):
                         if set(loop.labels).issuperset(set(needed_labels)):
                             data_dict = {}
+                            msp_type_ext = section.data[0]._kwargs['atom_site_susceptibility_chi_type'].raw_value
+                            msp_type = 'Ciso'
+                            if 'ani' in msp_type_ext.lower():
+                                msp_type = 'Cani'
+                                needed_labels.extend(['atom_site_susceptibility_chi_22',
+                                                    'atom_site_susceptibility_chi_33',
+                                                    'atom_site_susceptibility_chi_12',
+                                                    'atom_site_susceptibility_chi_13',
+                                                    'atom_site_susceptibility_chi_23'])
                             for idx2, key in enumerate(needed_labels[1:]):
                                 temp_value = section.data[0]._kwargs[key].raw_value
                                 if not isinstance(temp_value, Number):
