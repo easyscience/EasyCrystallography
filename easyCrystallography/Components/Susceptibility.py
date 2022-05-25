@@ -132,7 +132,7 @@ class Ciso(MSPBase):
 
     def __init__(self, chi: Optional[Union[Parameter, float]] = None, interface = None):
         super(Ciso, self).__init__('Ciso',
-                                        chi=Parameter('chi', **_ANIO_DETAILS['Ciso']))
+                                        chi=Parameter('chi_11', **_ANIO_DETAILS['Ciso']))
         if chi is not None:
             self.chi = chi
         self.interface = interface
