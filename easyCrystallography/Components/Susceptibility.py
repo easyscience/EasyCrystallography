@@ -23,7 +23,6 @@ _ANIO_DETAILS = {
         'description': 'The standard anisotropic magnetic susceptibility components in inverse teslas which appear in '
                        'the structure-factor term.',
         'value':       0.0,
-        'min':         0,
         'max':         np.inf,
         'units':       'T^-1',
         'fixed':       True,
@@ -33,7 +32,6 @@ _ANIO_DETAILS = {
                        'parameter, C(equiv), in inverted teslas, calculated from anisotropic susceptibility '
                        'components.',
         'value':       0.0,
-        'min':         0,
         'max':         np.inf,
         'units':       'T^-1',
         'fixed':       True,
