@@ -86,13 +86,12 @@ class AdpBase(BaseObj):
             matrix[2, 2] = pars[5].raw_value
         return matrix
 
-    @abstractmethod
-    def default(cls, interface: Optional[iF] = None):
-        pass
-
-    @abstractmethod
-    def from_pars(cls, interface: Optional[iF] = None, **kwargs):
-        pass
+    def __repr__(self):
+        s = f'{self.name} - ('
+        for par in self.get_parameters():
+            s += f'{par.name}: {par.raw_value}, '
+        s = s[:-2] + ')'
+        return s
 
 
 class Anisotropic(AdpBase):
@@ -127,18 +126,6 @@ class Anisotropic(AdpBase):
             self.U_33 = U_33
         self.interface = interface
 
-    @classmethod
-    def default(cls, interface: Optional[iF] = None):
-        return cls(interface=interface)
-
-    @classmethod
-    def from_pars(cls,
-                  U_11: Optional[float] = None, U_12: Optional[float] = None,
-                  U_13: Optional[float] = None, U_22: Optional[float] = None,
-                  U_23: Optional[float] = None, U_33: Optional[float] = None,
-                  interface: Optional[iF] = None):
-        return cls(U_11, U_12, U_13, U_22, U_23, U_33, interface)
-
 
 class Isotropic(AdpBase):
 
@@ -150,14 +137,6 @@ class Isotropic(AdpBase):
         if Uiso is not None:
             self.Uiso = Uiso
         self.interface = interface
-
-    @classmethod
-    def default(cls, interface: Optional[iF] = None):
-        return cls(interface=interface)
-
-    @classmethod
-    def from_pars(cls, Uiso: Optional[float] = None, interface: Optional[iF] = None):
-        return cls(Uiso, interface=interface)
 
 
 class AnisotropicBij(AdpBase):
@@ -193,18 +172,6 @@ class AnisotropicBij(AdpBase):
             self.B_33 = B_33
         self.interface = interface
 
-    @classmethod
-    def default(cls, interface: Optional[iF] = None):
-        return cls(interface=interface)
-
-    @classmethod
-    def from_pars(cls,
-                  B_11: Optional[float] = None, B_12: Optional[float] = None,
-                  B_13: Optional[float] = None, B_22: Optional[float] = None,
-                  B_23: Optional[float] = None, B_33: Optional[float] = None,
-                  interface: Optional[iF] = None):
-        return cls(B_11, B_12, B_13, B_22, B_23, B_33, interface)
-
 
 class IsotropicB(AdpBase):
 
@@ -216,14 +183,6 @@ class IsotropicB(AdpBase):
         if Biso is not None:
             self.Biso = Biso
         self.interface = interface
-
-    @classmethod
-    def default(cls, interface: Optional[iF] = None):
-        return cls(interface=interface)
-
-    @classmethod
-    def from_pars(cls, Biso: Optional[float] = None, interface: Optional[iF] = None):
-        return cls(Biso, interface=interface)
 
 
 _AVAILABLE_ISO_TYPES = {
@@ -281,63 +240,9 @@ class AtomicDisplacement(BaseObj):
         for par in adp.get_parameters():
             addProp(self, par.name, fget=self.__a_getter(par.name), fset=self.__a_setter(par.name))
 
-    @classmethod
-    def from_pars(cls, adp_type: str, interface: Optional[iF] = None, **kwargs):
-        return cls(adp_type, **kwargs, interface=interface)
-
-    @classmethod
-    def default(cls, interface: Optional[iF] = None):
-        return cls(interface=interface)
-
-    @classmethod
-    def from_string(cls, in_string: Union[str, StarLoop]) -> Tuple[List[str], List['AtomicDisplacement']]:
-        # We assume the in_string is a loop
-        from easyCrystallography.Components.Site import Site
-        if isinstance(in_string, StarLoop):
-            loop = in_string
-        else:
-            loop = StarLoop.from_string(in_string)
-        sections = loop.to_StarSections()
-        atom_labels = []
-        adp = []
-        for section in sections:
-            entries = section.to_StarEntries()
-            site_name_idx = section.labels.index(Site._CIF_CONVERSIONS[0][1])
-            atom_labels.append(entries[site_name_idx].value)
-            adp_type_idx = section.labels.index(cls._CIF_CONVERSIONS[0][1])
-            adp_type = entries[adp_type_idx].value
-            if adp_type not in _AVAILABLE_ISO_TYPES.keys():
-                raise AttributeError(f"{adp_type} is not a valid adp type")
-            adp_class = _AVAILABLE_ISO_TYPES[adp_type]
-            pars = [par[1] for par in adp_class._CIF_CONVERSIONS]
-            par_dict = {}
-            idx_list = []
-            name_list = []
-            for idx, par in enumerate(pars):
-                idx_list.append(section.labels.index(par))
-                name_list.append(adp_class._CIF_CONVERSIONS[idx][0])
-                par_dict[name_list[-1]] = entries[idx_list[-1]].value
-            obj = cls.from_pars(adp_type, **par_dict)
-            for idx2, idx in enumerate(idx_list):
-                if hasattr(entries[idx], 'fixed') and entries[idx].fixed is not None:
-                    entry = getattr(obj, name_list[idx2])
-                    entry.fixed = entries[idx].fixed
-                if hasattr(entries[idx], 'error') and entries[idx].error is not None:
-                    entry = getattr(obj, name_list[idx2])
-                    entry.error = entries[idx].error
-            adp.append(obj)
-        return atom_labels, adp
-
     @property
     def available_types(self) -> List[str]:
         return [name for name in _AVAILABLE_ISO_TYPES.keys()]
-
-    def to_star(self, atom_label: Descriptor) -> StarEntry:
-        s = [StarEntry(atom_label, 'label'),
-             StarEntry(self.adp_type),
-             *[StarEntry(par) for par in self.adp_class.get_parameters()]
-             ]
-        return StarSection.from_StarEntries(s)
 
     @staticmethod
     def __a_getter(key: str):

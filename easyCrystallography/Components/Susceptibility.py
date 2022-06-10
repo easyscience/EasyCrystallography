@@ -29,6 +29,7 @@ _ANIO_DETAILS = {
     }
 }
 
+
 class MSPBase(BaseObj):
 
     def __init__(self, *args, **kwargs):
@@ -48,14 +49,6 @@ class MSPBase(BaseObj):
             matrix[1, 2] = pars[4].raw_value
             matrix[2, 2] = pars[5].raw_value
         return matrix
-
-    @abstractmethod
-    def default(cls, interface=None):
-        pass
-
-    @abstractmethod
-    def from_pars(cls, interface=None, **kwargs):
-        pass
 
 
 class Cani(MSPBase):
@@ -97,23 +90,6 @@ class Cani(MSPBase):
         if chi_33 is not None:
             self.chi_33 = chi_33
         self.interface = interface
-
-    @classmethod
-    def default(cls, interface=None):
-        return cls(interface=interface)
-
-    @classmethod
-    def from_pars(cls,
-                  chi_11: Optional[float] = None,
-                  chi_12: Optional[float] = None,
-                  chi_13: Optional[float] = None,
-                  chi_22: Optional[float] = None,
-                  chi_23: Optional[float] = None,
-                  chi_33: Optional[float] = None,
-                  interface=None):
-#                  interface: Optional[iF] = None):
-        return cls(chi_11=chi_11, chi_12=chi_12, chi_13=chi_13, chi_22=chi_22,
-                   chi_23=chi_23, chi_33=chi_33, interface=interface)
 
 
 _AVAILABLE_ISO_TYPES = {
@@ -160,66 +136,9 @@ class MagneticSusceptibility(BaseObj):
         for par in msp_class.get_parameters():
             addProp(self, par.name, fget=self.__a_getter(par.name), fset=self.__a_setter(par.name))
 
-    @classmethod
-    def from_pars(cls, msp_type: str, interface=None, **kwargs):
-        return cls(Descriptor('msp_type',
-                              value=msp_type,
-                              **{k: _ANIO_DETAILS['msp_type'][k] for k in _ANIO_DETAILS['msp_type'].keys() if k != 'value'}),
-                              interface=interface, **kwargs)
-
-    @classmethod
-    def default(cls, interface=None):
-        return cls(Descriptor('msp_type', **_ANIO_DETAILS['msp_type']), interface=interface)
-
-    @classmethod
-    def from_string(cls, in_string: Union[str, StarLoop]) -> Tuple[List[str], List['MagneticSusceptibility']]:
-        # We assume the in_string is a loop
-        from easyCrystallography.Components.Site import Site
-        if isinstance(in_string, StarLoop):
-            loop = in_string
-        else:
-            loop = StarLoop.from_string(in_string)
-        sections = loop.to_StarSections()
-        atom_labels = []
-        adp = []
-        for section in sections:
-            entries = section.to_StarEntries()
-            site_name_idx = section.labels.index(Site._CIF_CONVERSIONS[0][1])
-            atom_labels.append(entries[site_name_idx].value)
-            adp_type_idx = section.labels.index(cls._CIF_CONVERSIONS[0][1])
-            adp_type = entries[adp_type_idx].value
-            if adp_type not in _AVAILABLE_ISO_TYPES.keys():
-                raise AttributeError
-            adp_class = _AVAILABLE_ISO_TYPES[adp_type]
-            pars = [par[1] for par in adp_class._CIF_CONVERSIONS]
-            par_dict = {}
-            idx_list = []
-            name_list = []
-            for idx, par in enumerate(pars):
-                idx_list.append(section.labels.index(par))
-                name_list.append(adp_class._CIF_CONVERSIONS[idx][0])
-                par_dict[name_list[-1]] = entries[idx_list[-1]].value
-            obj = cls.from_pars(adp_type, **par_dict)
-            for idx2, idx in enumerate(idx_list):
-                if hasattr(entries[idx], 'fixed') and entries[idx].fixed is not None:
-                    entry = getattr(obj, name_list[idx2])
-                    entry.fixed = entries[idx].fixed
-                if hasattr(entries[idx], 'error') and entries[idx].error is not None:
-                    entry = getattr(obj, name_list[idx2])
-                    entry.error = entries[idx].error
-            adp.append(obj)
-        return atom_labels, adp
-
     @property
     def available_types(self) -> List[str]:
         return [name for name in _AVAILABLE_ISO_TYPES.keys()]
-
-    def to_star(self, atom_label: Descriptor) -> StarEntry:
-        s = [StarEntry(atom_label, 'label'),
-             StarEntry(self.msp_type),
-             *[StarEntry(par) for par in self.msp_class.get_parameters()]
-             ]
-        return StarSection.from_StarEntries(s)
 
     @staticmethod
     def __a_getter(key: str):

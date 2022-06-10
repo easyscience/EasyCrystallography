@@ -1,3 +1,4 @@
+from __future__ import annotations
 #  SPDX-FileCopyrightText: 2022 easyCrystallography contributors  <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022 Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
@@ -5,8 +6,7 @@
 __author__ = "github.com/wardsimon"
 __version__ = "0.1.0"
 
-from pathlib import Path
-from typing import Dict, Union, List, ClassVar
+from typing import Dict, Union, List, ClassVar, Optional, TYPE_CHECKING
 
 from easyCore import np
 from easyCore.Objects.ObjectClasses import BaseObj, Parameter, Descriptor
@@ -15,7 +15,9 @@ from easyCore.Objects.Groups import BaseCollection
 from easyCrystallography.Components.Lattice import Lattice, PeriodicLattice
 from easyCrystallography.Components.Site import Site, PeriodicAtoms, Atoms
 from easyCrystallography.Components.SpaceGroup import SpaceGroup
-from easyDiffractionLib.io.cif import CifIO
+
+if TYPE_CHECKING:
+    from easyCore.Utils.typing import iF
 
 
 class Phase(BaseObj):
@@ -28,21 +30,25 @@ class Phase(BaseObj):
     atoms = ClassVar[PeriodicAtoms]
     scale = ClassVar[Parameter]
 
+    _REDIRECT = {
+        'spacegroup': lambda obj: getattr(obj, '_spacegroup'),
+    }
+
     def __init__(
         self,
-        name,
-        spacegroup=None,
-        cell=None,
-        atoms=None,
-        scale=None,
-        interface=None,
-        enforce_sym=True,
+        name: str,
+        spacegroup: Optional[Union[SpaceGroup, str]] = None,
+        cell: Optional[Union[Lattice, PeriodicLattice]] = None,
+        atoms: Optional[Atoms] = None,
+        scale: Optional[Parameter] = None,
+        interface: Optional[iF] = None,
+        enforce_sym: bool = True,
     ):
         self.name = name
         if spacegroup is None:
             spacegroup = SpaceGroup.default()
         if cell is None:
-            cell = Lattice.default()
+            cell = Lattice()
         if isinstance(cell, Lattice):
             cell = PeriodicLattice.from_lattice_and_spacegroup(cell, spacegroup)
         if atoms is None:
@@ -72,7 +78,7 @@ class Phase(BaseObj):
                 self.atoms.append(arg)
                 supplied_atom = True
         if not supplied_atom:
-            atom = self._SITE_CLASS.from_pars(*args, **kwargs)
+            atom = Site(*args, **kwargs)
             self.atoms.append(atom)
 
     def remove_atom(self, key):
@@ -128,15 +134,6 @@ class Phase(BaseObj):
         atoms = PeriodicAtoms.from_atoms(self.cell, self.atoms)
         orbits = atoms.get_orbits(magnetic_only=magnetic_only)
         return orbits
-
-    def to_cif_str(self) -> str:
-        """
-        Generate a cif string from the current crystal
-
-        :return: cif string from the current crystal
-        :rtype: str
-        """
-        return str(self.cif)
 
     @property
     def enforce_sym(self):
@@ -210,46 +207,6 @@ class Phase(BaseObj):
         new_center = new_center.reshape((3,))
         self._centre = new_center
 
-    @property
-    def cif(self) -> CifIO:
-        """
-        The current structure in a cif form.
-
-        :return: Cif object representing the current crystal
-        :rtype: CifIO
-        """
-        return CifIO.from_objects(self.name, self.cell, self.spacegroup, self.atoms)
-
-    @classmethod
-    def from_cif_str(cls, in_string: str):
-        """
-        Generate a crystal from a cif string.
-        !Note! If more than one phase is present, only the first will be used.
-
-        :param in_string: cif string
-        :type in_string: str
-        :return: Phase parsed from a cif string
-        :rtype: Phase
-        """
-        cif = CifIO.from_cif_str(in_string)
-        name, kwargs = cif.to_crystal_form()
-        return cls(name, **kwargs)
-
-    @classmethod
-    def from_cif_file(cls, file_path: Union[str, Path]):
-        """
-        Generate a crystal from a cif file.
-        !Note! If more than one phase is present, only the first will be used.
-
-        :param file_path: cif file path
-        :type file_path: str, Path
-        :return: Phase parsed from a cif file
-        :rtype: Phase
-        """
-        cif = CifIO.from_file(file_path)
-        name, kwargs = cif.to_crystal_form()
-        return cls(name, **kwargs)
-
     def _generate_positions(self, site, extent) -> np.ndarray:
         """
         Generate all orbits for a given fractional position.
@@ -293,11 +250,6 @@ class Phase(BaseObj):
             )
         return sites
 
-    def as_dict(self, skip: list = None) -> dict:
-        d = super(Phase, self).as_dict(skip=skip)
-        del d["_spacegroup"]
-        return d
-
 
 class Phases(BaseCollection):
 
@@ -305,7 +257,7 @@ class Phases(BaseCollection):
     _ATOM_CLASS = Atoms
     _PHASE_CLASS = Phase
 
-    def __init__(self, name: str = "phases", *args, interface=None, **kwargs):
+    def __init__(self, name: str = "phases", *args, interface: Optional[iF] = None, **kwargs):
         """
         Generate a collection of crystals.
 
@@ -320,7 +272,7 @@ class Phases(BaseCollection):
         super(Phases, self).__init__(name, *args, **kwargs)
         self.interface = interface
         self._cif = None
-        self._create_cif()
+        # self._create_cif()
 
     def __repr__(self) -> str:
         return f"Collection of {len(self)} phases."
@@ -348,33 +300,6 @@ class Phases(BaseCollection):
     @property
     def phase_names(self) -> List[str]:
         return [phase.name for phase in self]
-
-    def _create_cif(self):
-        if len(self) == 0:
-            self._cif = CifIO(None)
-            return
-        self._cif = CifIO.from_objects(
-            self[0].name, self[0].cell, self[0].spacegroup, self[0].atoms
-        )
-        for item in self[1:]:
-            self._cif.add_cif_from_objects(
-                item.name, item.cell, item.spacegroup, item.atoms
-            )
-
-    @property
-    def cif(self):
-        self._create_cif()
-        return self._cif
-
-    @classmethod
-    def from_cif_str(cls, in_string: str):
-        _, crystals = cls._from_external(cls, CifIO.from_cif_str, in_string)
-        return cls("Phases", *crystals)
-
-    @classmethod
-    def from_cif_file(cls, file_path: Path):
-        _, crystals = cls._from_external(cls, CifIO.from_file, file_path)
-        return cls("Phases", *crystals)
 
     @staticmethod
     def _from_external(cls, constructor, *args):
