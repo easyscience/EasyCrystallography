@@ -70,10 +70,11 @@ class CifFileReader(AbstractStructureReader):
             kwargs[key] = self.read(block, value().CLASS_READER)
         return phase_class(**kwargs)
 
-    def structures(self, phase_class: Optional = None):
-        from easyCrystallography.Structures.Phase import Phases
+    def structures(self, phases_class: Optional = None, phase_class: Optional = None):
         if phase_class is None:
             from easyCrystallography.Structures.Phase import Phase as phase_class
+        if phases_class is None:
+            from easyCrystallography.Structures.Phase import Phases as phases_class
         components = {
             'cell':       Lattice,
             'spacegroup': SpaceGroup,
@@ -86,7 +87,7 @@ class CifFileReader(AbstractStructureReader):
             for key, value in components.items():
                 kwargs[key] = self.read(block, value().CLASS_READER)
             phases.append( phase_class(**kwargs))
-        return Phases('from_cif', *phases)
+        return phases_class('from_cif', *phases)
 
     def read(self, in_str: str, reader_class):
         """
