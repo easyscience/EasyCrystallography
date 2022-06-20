@@ -122,7 +122,6 @@ class Lattice(BaseObj):
 
         self.interface = interface
 
-
     @classmethod
     def from_matrix(
         cls,

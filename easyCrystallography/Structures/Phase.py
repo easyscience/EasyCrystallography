@@ -322,8 +322,8 @@ class Phases(BaseCollection):
         return s
 
     @classmethod
-    def from_cif_file(cls, filename, phase_class: Optional = None):
+    def from_cif_file(cls, filename):
         s = None
         with Parsers('cif').reader(filename) as r:
-            s = r.structures(phases_class=cls, phase_class=phase_class)
+            s = r.structures(phases_class=cls, phase_class=cls._PHASE_CLASS)
         return s

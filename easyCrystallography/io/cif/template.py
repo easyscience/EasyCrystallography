@@ -73,7 +73,7 @@ class CIF_Template:
         decimal_places = self.decimal_places
         if isinstance(obj.raw_value, Number):
             if abs(value - int(value)) > 0.0:
-                decimal_places = len(str(value).split('.')[1]) - 1
+                decimal_places = len(str(value).split('.')[1])
             initial_str = "{:." + str(decimal_places) + "f}"
             s = initial_str.format(round(value, decimal_places))
             if error is not None:
