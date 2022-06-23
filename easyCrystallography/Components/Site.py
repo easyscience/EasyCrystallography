@@ -177,7 +177,7 @@ class Site(BaseObj):
 
     @property
     def is_magnetic(self) -> bool:
-        return self.specie.spin is not None
+        return self.specie.spin is not None or hasattr(self, 'msp')
 
 
 class PeriodicSite(Site):
@@ -308,7 +308,8 @@ class Atoms(BaseCollection):
         if has_msp:
             entries = []
             for item in self:
-                entries.append(item.msp.to_star(item.label))
+                if hasattr(item, "msp"):
+                    entries.append(item.msp.to_star(item.label))
             add_loops.append(StarLoop.from_StarSections(entries))
         loops = [main_loop, *add_loops]
         return loops
