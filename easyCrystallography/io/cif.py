@@ -834,6 +834,16 @@ class CifWriter:
                            'atom_site_aniso_U_12',
                            'atom_site_aniso_U_13',
                            'atom_site_aniso_U_22', 'atom_site_aniso_U_23', 'atom_site_aniso_U_33']
+
+        msp_conv = ['atom_site_susceptibility_label',
+                    'atom_site_susceptibility_chi_type',
+                    'atom_site_susceptibility_chi_11',
+                    'atom_site_susceptibility_chi_12',
+                    'atom_site_susceptibility_chi_13',
+                    'atom_site_susceptibility_chi_22',
+                    'atom_site_susceptibility_chi_23',
+                    'atom_site_susceptibility_chi_33']
+
         adp_B_must_conv = [item.replace('U_', 'B_') for item in adp_U_must_conv]
 
         lattice_must = ['length_a', 'length_b', 'length_c', 'angle_alpha', 'angle_beta', 'angle_gamma']
@@ -856,6 +866,11 @@ class CifWriter:
                 item.labels = adp_U_must_conv.copy()
             elif any(['B_' in opt for opt in item.labels]):
                 item.labels = adp_B_must_conv.copy()
+            elif any(['chi' in opt for opt in item.labels]):
+                if len(item.labels) == 8:
+                    item.labels = msp_conv.copy()
+                else:
+                    item.labels = msp_conv[0:3].copy()
 
         def parse_section(item: StarSection):
             if set(item.labels).issuperset(set(lattice_must)):

@@ -68,11 +68,11 @@ class Phase(BaseObj):
         """
         supplied_atom = False
         for arg in args:
-            if issubclass(arg.__class__, Site):
+            if issubclass(arg.__class__, self._SITE_CLASS):
                 self.atoms.append(arg)
                 supplied_atom = True
         if not supplied_atom:
-            atom = Site.from_pars(*args, **kwargs)
+            atom = self._SITE_CLASS.from_pars(*args, **kwargs)
             self.atoms.append(atom)
 
     def remove_atom(self, key):

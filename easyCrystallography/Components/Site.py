@@ -116,6 +116,7 @@ class Site(BaseObj):
         fract_y: float = _SITE_DETAILS["position"]["value"],
         fract_z: float = _SITE_DETAILS["position"]["value"],
         interface: Optional[iF] = None,
+        **kwargs
     ):
         return cls(
             label,
@@ -125,6 +126,7 @@ class Site(BaseObj):
             fract_y,
             fract_z,
             interface=interface,
+            **kwargs
         )
 
     def __repr__(self) -> str:
@@ -280,8 +282,35 @@ class Atoms(BaseCollection):
         return np.array([atom.occupancy.raw_value for atom in self])
 
     def to_star(self) -> List[StarLoop]:
+        adps = [hasattr(item, "adp") for item in self]
+        has_adp = any(adps)
         main_loop = StarLoop(self, exclude=["adp", "msp"])
-        loops = [main_loop]
+        if not has_adp:
+            return [main_loop]
+        add_loops = []
+        adp_types = [item.adp.adp_type.raw_value for item in self]
+        if all(adp_types):
+            if adp_types[0] in ["Uiso", "Biso"]:
+                main_loop = main_loop.join(
+                    StarLoop.from_StarSections(
+                        [getattr(item, "adp").to_star(item.label) for item in self]
+                    ),
+                    "label",
+                )
+            else:
+                entries = []
+                for item in self:
+                    entries.append(item.adp.to_star(item.label))
+                add_loops.append(StarLoop.from_StarSections(entries))
+        else:
+            raise NotImplementedError("Multiple types of ADP are not supported")
+        has_msp = any([hasattr(item, "msp") for item in self])
+        if has_msp:
+            entries = []
+            for item in self:
+                entries.append(item.msp.to_star(item.label))
+            add_loops.append(StarLoop.from_StarSections(entries))
+        loops = [main_loop, *add_loops]
         return loops
 
     @classmethod
