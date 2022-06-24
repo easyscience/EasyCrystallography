@@ -16,7 +16,8 @@ from abc import abstractmethod
 
 _ANIO_DETAILS = {
     'msp_type': {
-        'description': "A standard code used to describe the type of magnetic susceptibility parameters used for the site.",
+        'description': "A standard code used to describe the type of magnetic susceptibility parameters used for the "
+                       "site.",
         'value':       'Uani'
     },
     'Cani':     {
@@ -37,6 +38,7 @@ _ANIO_DETAILS = {
         'fixed':       True,
     },
 }
+
 
 class MSPBase(BaseObj):
 
@@ -68,7 +70,6 @@ class MSPBase(BaseObj):
 
 
 class Cani(MSPBase):
-
     chi_11: ClassVar[Parameter]
     chi_12: ClassVar[Parameter]
     chi_13: ClassVar[Parameter]
@@ -120,38 +121,37 @@ class Cani(MSPBase):
                   chi_23: Optional[float] = None,
                   chi_33: Optional[float] = None,
                   interface=None):
-#                  interface: Optional[iF] = None):
+        #                  interface: Optional[iF] = None):
         return cls(chi_11=chi_11, chi_12=chi_12, chi_13=chi_13, chi_22=chi_22,
                    chi_23=chi_23, chi_33=chi_33, interface=interface)
 
-class Ciso(MSPBase):
 
+class Ciso(MSPBase):
     chi: ClassVar[Parameter]
 
-    def __init__(self, chi: Optional[Union[Parameter, float]] = None, interface = None):
+    def __init__(self, chi: Optional[Union[Parameter, float]] = None, interface=None):
         super(Ciso, self).__init__('Ciso',
-                                        chi=Parameter('chi_11', **_ANIO_DETAILS['Ciso']))
+                                   chi=Parameter('chi_11', **_ANIO_DETAILS['Ciso']))
         if chi is not None:
             self.chi = chi
         self.interface = interface
 
     @classmethod
-    def default(cls, interface = None):
+    def default(cls, interface=None):
         return cls(interface=interface)
 
     @classmethod
-    def from_pars(cls, chi: Optional[float] = None, interface = None):
+    def from_pars(cls, chi: Optional[float] = None, interface=None):
         return cls(chi=chi, interface=interface)
-
 
 
 _AVAILABLE_ISO_TYPES = {
     'Cani': Cani,
-    'Ciso' : Ciso,
+    'Ciso': Ciso,
 }
 
-class MagneticSusceptibility(BaseObj):
 
+class MagneticSusceptibility(BaseObj):
     msp_type: ClassVar[Descriptor]
     msp_class: ClassVar[Type[MSPBase]]
 
@@ -194,8 +194,9 @@ class MagneticSusceptibility(BaseObj):
     def from_pars(cls, msp_type: str, interface=None, **kwargs):
         return cls(Descriptor('msp_type',
                               value=msp_type,
-                              **{k: _ANIO_DETAILS['msp_type'][k] for k in _ANIO_DETAILS['msp_type'].keys() if k != 'value'}),
-                              interface=interface, **kwargs)
+                              **{k: _ANIO_DETAILS['msp_type'][k] for k in _ANIO_DETAILS['msp_type'].keys() if
+                                 k != 'value'}),
+                   interface=interface, **kwargs)
 
     @classmethod
     def default(cls, interface=None):
@@ -265,4 +266,3 @@ class MagneticSusceptibility(BaseObj):
             obj.msp_class._kwargs[key].value = value
 
         return setter
-
