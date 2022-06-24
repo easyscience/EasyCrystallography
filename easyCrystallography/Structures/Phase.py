@@ -13,9 +13,9 @@ from easyCore.Objects.ObjectClasses import BaseObj, Parameter, Descriptor
 from easyCore.Objects.Groups import BaseCollection
 
 from easyCrystallography.Components.Lattice import Lattice, PeriodicLattice
-from easyCrystallography.Components.Site import Site, PeriodicSite, PeriodicAtoms, Atoms
+from easyCrystallography.Components.Site import Site, PeriodicAtoms, Atoms
 from easyCrystallography.Components.SpaceGroup import SpaceGroup
-from easyCrystallography.io.cif import CifIO
+from easyDiffractionLib.io.cif import CifIO
 
 
 class Phase(BaseObj):
