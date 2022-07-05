@@ -177,7 +177,7 @@ class Site(BaseObj):
 
     @property
     def is_magnetic(self) -> bool:
-        return self.specie.spin is not None or hasattr(self, 'msp')
+        return getattr(self.specie, 'spin', None) is not None or hasattr(self, 'msp')
 
 
 class PeriodicSite(Site):
