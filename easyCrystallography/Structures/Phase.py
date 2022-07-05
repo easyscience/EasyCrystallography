@@ -9,16 +9,19 @@ from pathlib import Path
 from typing import Dict, Union, List, ClassVar
 
 from easyCore import np
-from easyCore.Objects.Base import BaseObj, Parameter, Descriptor
+from easyCore.Objects.ObjectClasses import BaseObj, Parameter, Descriptor
 from easyCore.Objects.Groups import BaseCollection
 
 from easyCrystallography.Components.Lattice import Lattice, PeriodicLattice
-from easyCrystallography.Components.Site import Site, PeriodicSite, PeriodicAtoms, Atoms
+from easyCrystallography.Components.Site import Site, PeriodicAtoms, Atoms
 from easyCrystallography.Components.SpaceGroup import SpaceGroup
-from easyCrystallography.io.cif import CifIO
+from easyDiffractionLib.io.cif import CifIO
 
 
 class Phase(BaseObj):
+
+    _SITE_CLASS = Site
+    _ATOMS_CLASS = Atoms
 
     cell = ClassVar[PeriodicLattice]
     _spacegroup = ClassVar[SpaceGroup]
@@ -65,11 +68,11 @@ class Phase(BaseObj):
         """
         supplied_atom = False
         for arg in args:
-            if issubclass(arg.__class__, Site):
+            if issubclass(arg.__class__, self._SITE_CLASS):
                 self.atoms.append(arg)
                 supplied_atom = True
         if not supplied_atom:
-            atom = Site.from_pars(*args, **kwargs)
+            atom = self._SITE_CLASS.from_pars(*args, **kwargs)
             self.atoms.append(atom)
 
     def remove_atom(self, key):
@@ -297,6 +300,11 @@ class Phase(BaseObj):
 
 
 class Phases(BaseCollection):
+
+    _SITE_CLASS = Site
+    _ATOM_CLASS = Atoms
+    _PHASE_CLASS = Phase
+
     def __init__(self, name: str = "phases", *args, interface=None, **kwargs):
         """
         Generate a collection of crystals.
@@ -360,20 +368,20 @@ class Phases(BaseCollection):
 
     @classmethod
     def from_cif_str(cls, in_string: str):
-        _, crystals = cls._from_external(CifIO.from_cif_str, in_string)
+        _, crystals = cls._from_external(cls, CifIO.from_cif_str, in_string)
         return cls("Phases", *crystals)
 
     @classmethod
     def from_cif_file(cls, file_path: Path):
-        _, crystals = cls._from_external(CifIO.from_file, file_path)
+        _, crystals = cls._from_external(cls, CifIO.from_file, file_path)
         return cls("Phases", *crystals)
 
     @staticmethod
-    def _from_external(constructor, *args):
+    def _from_external(cls, constructor, *args):
         cif = constructor(*args)
         name = "FromCif"
         crystals = []
         for cif_index in range(cif._parser.number_of_cifs):
-            name, kwargs = cif.to_crystal_form(cif_index=cif_index)
-            crystals.append(Phase(name, **kwargs))
+            name, kwargs = cif.to_crystal_form(cif_index=cif_index, atoms_class=cls._ATOM_CLASS)
+            crystals.append(cls._PHASE_CLASS(name, **kwargs))
         return name, crystals

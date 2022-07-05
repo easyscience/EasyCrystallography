@@ -8,7 +8,7 @@ __version__ = '0.1.0'
 import pytest
 import itertools
 
-from easyCore.Objects.Base import Descriptor, Parameter
+from easyCore.Objects.ObjectClasses import Descriptor, Parameter
 from easyCrystallography.Components.SpaceGroup import SpaceGroup, SG_DETAILS
 from easyCrystallography.Symmetry.groups import SpaceGroup as SG
 
