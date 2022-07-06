@@ -23,7 +23,6 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install pyproject.toml
         pip install ./
     - name: Lint with flake8
       run: |
