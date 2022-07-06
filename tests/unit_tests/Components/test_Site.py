@@ -423,3 +423,11 @@ def test_Site_from_dict(label, elm):
             assert item == check
 
     check_dict(d, s.as_dict())
+
+
+def test_site_with_adp():
+    from easyCrystallography.Components.AtomicDisplacement import AtomicDisplacement
+    adp = AtomicDisplacement()
+    site = Site(adp=adp)
+    assert hasattr(site, "adp")
+    assert site.adp is adp

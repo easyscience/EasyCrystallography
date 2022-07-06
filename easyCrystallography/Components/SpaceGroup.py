@@ -9,7 +9,7 @@ __version__ = "0.1.0"
 from copy import deepcopy
 from typing import ClassVar
 
-from easyCore.Objects.Base import BaseObj, Descriptor
+from easyCore.Objects.ObjectClasses import BaseObj, Descriptor
 from easyCore.Utils.io.star import StarEntry, StarSection, FakeCore, FakeItem
 
 from easyCrystallography.Symmetry.groups import SpaceGroup as SpaceGroupOpts
@@ -149,9 +149,9 @@ class SpaceGroup(BaseObj):
             item = FakeItem(s_list[0])
             item.name = "_space_group_HM_name"
             s._kwargs["space_group_HM_name"] = item
-            # item = FakeItem(s_list[1])
-            # item.name = 'space_group.IT_coordinate_system_code'
-            # s._kwargs['space_group.IT_coordinate_system_code'] = item
+            item = FakeItem(s_list[1])
+            item.name = 'space_group.IT_coordinate_system_code'
+            s._kwargs['space_group.IT_coordinate_system_code'] = item
             return StarSection(s)
         return StarEntry(self.space_group_HM_name)
 

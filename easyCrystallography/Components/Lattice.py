@@ -12,7 +12,6 @@ import itertools
 import math
 import warnings
 
-from copy import deepcopy
 from fractions import Fraction
 from functools import reduce
 from typing import (
@@ -30,16 +29,16 @@ from typing import (
 
 from easyCore import np, ureg
 from easyCore.Fitting.Constraints import ObjConstraint
-from easyCore.Objects.Base import Parameter, BaseObj
+from easyCore.Objects.ObjectClasses import Parameter, BaseObj
 from easyCore.Utils.decorators import memoized
 from easyCore.Utils.io.star import StarSection
-from easyCore.Utils.typing import Vector3Like
-
 from .SpaceGroup import SpaceGroup
 
+Vector3Like = Union[List[float], np.ndarray]
+
+
 if TYPE_CHECKING:
-    from easyCore.Objects.Inferface import InterfaceFactoryTemplate as Interface
-    Interface = Type[Interface]
+    from easyCore.Utils.typing import iF
 
 CELL_DETAILS = {
     "length": {
@@ -62,9 +61,6 @@ CELL_DETAILS = {
     },
 }
 
-L = TypeVar("L", bound="Lattice")
-
-
 class Lattice(BaseObj):
 
     length_a: ClassVar[Parameter]
@@ -76,49 +72,50 @@ class Lattice(BaseObj):
 
     def __init__(
         self,
-        length_a: Parameter,
-        length_b: Parameter,
-        length_c: Parameter,
-        angle_alpha: Parameter,
-        angle_beta: Parameter,
-        angle_gamma: Parameter,
-        interface: Optional[Interface] = None,
+        length_a: Optional[Union[Parameter, float]] = None,
+        length_b: Optional[Union[Parameter, float]] = None,
+        length_c: Optional[Union[Parameter, float]] = None,
+        angle_alpha: Optional[Union[Parameter, float]] = None,
+        angle_beta: Optional[Union[Parameter, float]] = None,
+        angle_gamma: Optional[Union[Parameter, float]] = None,
+        interface: Optional[iF] = None,
+            **kwargs,
     ):
         super().__init__(
             "lattice",
-            length_a=length_a,
-            length_b=length_b,
-            length_c=length_c,
-            angle_alpha=angle_alpha,
-            angle_beta=angle_beta,
-            angle_gamma=angle_gamma,
+            length_a=Parameter("length_a", **CELL_DETAILS["length"]),
+            length_b=Parameter("length_b", **CELL_DETAILS["length"]),
+            length_c=Parameter("length_c", **CELL_DETAILS["length"]),
+            angle_alpha=Parameter("angle_alpha", **CELL_DETAILS["angle"]),
+            angle_beta=Parameter("angle_beta", **CELL_DETAILS["angle"]),
+            angle_gamma=Parameter("angle_gamma", **CELL_DETAILS["angle"]),
+            **kwargs
         )
+        if length_a is not None:
+            self.length_a = length_a
+        if length_b is not None:
+            self.length_b = length_b
+        if length_c is not None:
+            self.length_c = length_c
+
+        if angle_alpha is not None:
+            self.angle_alpha = angle_alpha
+        if angle_beta is not None:
+            self.angle_beta = angle_beta
+        if angle_gamma is not None:
+            self.angle_gamma = angle_gamma
         self.interface = interface
 
     # Class constructors
     @classmethod
-    def default(cls, interface: Optional[Interface] = None) -> L:
+    def default(cls, interface: Optional[iF] = None) -> L:
         """
         Default constructor for a crystallographic unit cell.
 
         :return: Default crystallographic unit cell container
         :rtype: Lattice
         """
-        length_a = Parameter("length_a", **CELL_DETAILS["length"])
-        length_b = Parameter("length_b", **CELL_DETAILS["length"])
-        length_c = Parameter("length_c", **CELL_DETAILS["length"])
-        angle_alpha = Parameter("angle_alpha", **CELL_DETAILS["angle"])
-        angle_beta = Parameter("angle_beta", **CELL_DETAILS["angle"])
-        angle_gamma = Parameter("angle_gamma", **CELL_DETAILS["angle"])
-        return cls(
-            length_a,
-            length_b,
-            length_c,
-            angle_alpha,
-            angle_beta,
-            angle_gamma,
-            interface=interface,
-        )
+        return cls(interface=interface)
 
     @classmethod
     def from_pars(
@@ -130,7 +127,7 @@ class Lattice(BaseObj):
         angle_beta: float,
         angle_gamma: float,
         ang_unit: str = "deg",
-        interface: Optional[Interface] = None,
+        interface: Optional[iF] = None,
     ) -> L:
         """
         Constructor of a crystallographic unit cell when parameters are known.
@@ -156,33 +153,13 @@ class Lattice(BaseObj):
             angle_alpha = np.rad2deg(angle_alpha)
             angle_beta = np.rad2deg(angle_beta)
             angle_gamma = np.rad2deg(angle_gamma)
-
-        default_options = deepcopy(CELL_DETAILS)
-        del default_options["length"]["value"]
-        del default_options["angle"]["value"]
-
-        length_a = Parameter("length_a", length_a, **default_options["length"])
-        length_b = Parameter("length_b", length_b, **default_options["length"])
-        length_c = Parameter("length_c", length_c, **default_options["length"])
-        angle_alpha = Parameter("angle_alpha", angle_alpha, **default_options["angle"])
-        angle_beta = Parameter("angle_beta", angle_beta, **default_options["angle"])
-        angle_gamma = Parameter("angle_gamma", angle_gamma, **default_options["angle"])
-
-        return cls(
-            length_a=length_a,
-            length_b=length_b,
-            length_c=length_c,
-            angle_alpha=angle_alpha,
-            angle_beta=angle_beta,
-            angle_gamma=angle_gamma,
-            interface=interface,
-        )
+        return cls(length_a, length_b, length_c, angle_alpha, angle_beta, angle_gamma, interface=interface)
 
     @classmethod
     def from_matrix(
         cls,
         matrix: Union[List[float], List[List[float]], np.ndarray],
-        interface: Optional[Interface] = None,
+        interface: Optional[iF] = None,
     ) -> L:
         """
         Construct a crystallographic unit cell from the lattice matrix
@@ -206,7 +183,7 @@ class Lattice(BaseObj):
         return cls.from_pars(*lengths, *angles, interface=interface)
 
     @classmethod
-    def cubic(cls, a: float, interface: Optional[Interface] = None) -> L:
+    def cubic(cls, a: float, interface: Optional[iF] = None) -> L:
         """
         Convenience constructor for a cubic lattice.
 
@@ -215,10 +192,10 @@ class Lattice(BaseObj):
         :return: Crystallographic unit cell container
         :rtype: Lattice
         """
-        return cls.from_pars(a, a, a, 90, 90, 90, interface=interface)
+        return cls(a, a, a, 90, 90, 90, interface=interface)
 
     @classmethod
-    def tetragonal(cls, a: float, c: float, interface: Optional[Interface] = None) -> L:
+    def tetragonal(cls, a: float, c: float, interface: Optional[iF] = None) -> L:
         """
         Convenience constructor for a tetragonal lattice.
 
@@ -229,11 +206,11 @@ class Lattice(BaseObj):
         :return: Crystallographic unit cell container
         :rtype: Lattice
         """
-        return cls.from_pars(a, a, c, 90, 90, 90, interface=interface)
+        return cls(a, a, c, 90, 90, 90, interface=interface)
 
     @classmethod
     def orthorhombic(
-        cls, a: float, b: float, c: float, interface: Optional[Interface] = None
+        cls, a: float, b: float, c: float, interface: Optional[iF] = None
     ) -> L:
         """
         Convenience constructor for an orthorhombic lattice.
@@ -247,7 +224,7 @@ class Lattice(BaseObj):
         :return: Crystallographic unit cell container
         :rtype: Lattice
         """
-        return cls.from_pars(a, b, c, 90, 90, 90, interface=interface)
+        return cls(a, b, c, 90, 90, 90, interface=interface)
 
     @classmethod
     def monoclinic(
@@ -256,7 +233,7 @@ class Lattice(BaseObj):
         b: float,
         c: float,
         beta: float,
-        interface: Optional[Interface] = None,
+        interface: Optional[iF] = None,
     ) -> L:
         """
         Convenience constructor for a monoclinic lattice of dimensions a x b x c with non right-angle
@@ -273,10 +250,10 @@ class Lattice(BaseObj):
         :return: Crystallographic unit cell container
         :rtype: Lattice
         """
-        return cls.from_pars(a, b, c, 90, beta, 90, interface=interface)
+        return cls(a, b, c, 90, beta, 90, interface=interface)
 
     @classmethod
-    def hexagonal(cls, a: float, c: float, interface: Optional[Interface] = None) -> L:
+    def hexagonal(cls, a: float, c: float, interface: Optional[iF] = None) -> L:
         """
         Convenience constructor for a hexagonal lattice of dimensions a x a x c
 
@@ -287,11 +264,11 @@ class Lattice(BaseObj):
         :return: Crystallographic unit cell container
         :rtype: Lattice
         """
-        return cls.from_pars(a, a, c, 90, 90, 120, interface=interface)
+        return cls(a, a, c, 90, 90, 120, interface=interface)
 
     @classmethod
     def rhombohedral(
-        cls, a: float, alpha: float, interface: Optional[Interface] = None
+        cls, a: float, alpha: float, interface: Optional[iF] = None
     ) -> L:
         """
         Convenience constructor for a rhombohedral lattice of dimensions a x a x a.
@@ -303,7 +280,7 @@ class Lattice(BaseObj):
         :return: Crystallographic unit cell container
         :rtype: Lattice
         """
-        return cls.from_pars(a, a, a, alpha, alpha, alpha, interface=interface)
+        return cls(a, a, a, alpha, alpha, alpha, interface=interface)
 
     # Dynamic properties
     @property
@@ -817,20 +794,23 @@ class Lattice(BaseObj):
         return [np.array(i) for i in list(zip(*neighbors))]
 
 
+L = TypeVar("L", bound=Lattice)
+
+
 class PeriodicLattice(Lattice):
 
     spacegroup: ClassVar[SpaceGroup]
 
     def __init__(
         self,
-        length_a: Parameter,
-        length_b: Parameter,
-        length_c: Parameter,
-        angle_alpha: Parameter,
-        angle_beta: Parameter,
-        angle_gamma: Parameter,
-        spacegroup: SpaceGroup,
-        interface: Optional[Interface] = None
+        length_a: Optional[Union[Parameter, float]] = None,
+        length_b: Optional[Union[Parameter, float]] = None,
+        length_c: Optional[Union[Parameter, float]] = None,
+        angle_alpha: Optional[Union[Parameter, float]] = None,
+        angle_beta: Optional[Union[Parameter, float]] = None,
+        angle_gamma: Optional[Union[Parameter, float]] = None,
+        spacegroup: Optional[Union[SpaceGroup, str]] = None,
+        interface: Optional[iF] = None
     ):
         super().__init__(
             length_a=length_a,
@@ -839,8 +819,12 @@ class PeriodicLattice(Lattice):
             angle_alpha=angle_alpha,
             angle_beta=angle_beta,
             angle_gamma=angle_gamma,
+            spacegroup=SpaceGroup.from_pars('P1'),
         )
-        self._add_component("spacegroup", spacegroup)
+        if spacegroup is not None:
+            if isinstance(spacegroup, str):
+                spacegroup = SpaceGroup.from_pars(spacegroup)
+            self.spacegroup = spacegroup
 
         # Do some class voodoo. We can do this as we have hidden space_group_HM_name
         # as _space_group_HM_name and used a simple property.
@@ -858,12 +842,12 @@ class PeriodicLattice(Lattice):
     def from_lattice_and_spacegroup(
         cls: Type[L], lattice: Lattice, spacegroup: SpaceGroup
     ):
-        length_a = lattice.length_a
-        length_b = lattice.length_b
-        length_c = lattice.length_c
-        angle_alpha = lattice.angle_alpha
-        angle_beta = lattice.angle_beta
-        angle_gamma = lattice.angle_gamma
+        length_a = lattice.length_a.raw_value
+        length_b = lattice.length_b.raw_value
+        length_c = lattice.length_c.raw_value
+        angle_alpha = lattice.angle_alpha.raw_value
+        angle_beta = lattice.angle_beta.raw_value
+        angle_gamma = lattice.angle_gamma.raw_value
 
         return cls(
             length_a,
@@ -878,30 +862,14 @@ class PeriodicLattice(Lattice):
 
     # Class constructors
     @classmethod
-    def default(cls, interface: Optional[Interface] = None) -> L:
+    def default(cls, interface: Optional[iF] = None) -> L:
         """
         Default constructor for a crystallographic unit cell.
 
         :return: Default crystallographic unit cell container
         :rtype: Lattice
         """
-        length_a = Parameter("length_a", **CELL_DETAILS["length"])
-        length_b = Parameter("length_b", **CELL_DETAILS["length"])
-        length_c = Parameter("length_c", **CELL_DETAILS["length"])
-        angle_alpha = Parameter("angle_alpha", **CELL_DETAILS["angle"])
-        angle_beta = Parameter("angle_beta", **CELL_DETAILS["angle"])
-        angle_gamma = Parameter("angle_gamma", **CELL_DETAILS["angle"])
-        spacegroup = SpaceGroup.default()
-        return cls(
-            length_a,
-            length_b,
-            length_c,
-            angle_alpha,
-            angle_beta,
-            angle_gamma,
-            spacegroup,
-            interface=interface,
-        )
+        return cls(interface=interface)
 
     @classmethod
     def from_pars(
@@ -914,7 +882,7 @@ class PeriodicLattice(Lattice):
         angle_gamma: float,
         spacegroup: str,
         ang_unit: str = "deg",
-        interface: Optional[Interface] = None,
+        interface: Optional[iF] = None,
     ) -> L:
         """
         Constructor of a crystallographic unit cell when parameters are known.
@@ -940,19 +908,6 @@ class PeriodicLattice(Lattice):
             angle_alpha = np.rad2deg(angle_alpha)
             angle_beta = np.rad2deg(angle_beta)
             angle_gamma = np.rad2deg(angle_gamma)
-
-        default_options = deepcopy(CELL_DETAILS)
-        del default_options["length"]["value"]
-        del default_options["angle"]["value"]
-
-        length_a = Parameter("length_a", length_a, **default_options["length"])
-        length_b = Parameter("length_b", length_b, **default_options["length"])
-        length_c = Parameter("length_c", length_c, **default_options["length"])
-        angle_alpha = Parameter("angle_alpha", angle_alpha, **default_options["angle"])
-        angle_beta = Parameter("angle_beta", angle_beta, **default_options["angle"])
-        angle_gamma = Parameter("angle_gamma", angle_gamma, **default_options["angle"])
-        spacegroup = SpaceGroup.from_pars(spacegroup)
-
         return cls(
             length_a=length_a,
             length_b=length_b,
@@ -968,7 +923,7 @@ class PeriodicLattice(Lattice):
     def from_matrix(
         cls: Type[L],
         matrix: Union[List[float], List[List[float]], np.ndarray],
-        interface: Optional[Interface] = None
+        interface: Optional[iF] = None
     ) -> L:
         """
         Construct a crystallographic unit cell from the lattice matrix
