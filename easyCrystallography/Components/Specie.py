@@ -6,8 +6,8 @@
 __author__ = "github.com/wardsimon"
 __version__ = "0.1.0"
 
-
-from easyCore.Objects.Base import Descriptor
+from typing import Union
+from easyCore.Objects.ObjectClasses import Descriptor
 from easyCore.Utils.classTools import addProp
 
 from easyCrystallography.Elements.periodic_table import Species, Specie as pSpecie
@@ -37,9 +37,13 @@ class Specie(Descriptor):
             fdel=self.__class__.value.fdel,
         )
 
-    def __gen_data(self, value: str):
+    def __gen_data(self, value: Union[str, Species]):
         try:
-            self._specie = Species.from_string(value)
+            if isinstance(value, Specie):
+                value = value.raw_value
+                self._specie = Species.from_string(value)
+            else:
+                self._specie = value
         except ValueError:
             self._specie = pSpecie(value)
         return value

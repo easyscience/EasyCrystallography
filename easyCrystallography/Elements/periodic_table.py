@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Optional, Callable
 
 from easyCore import np
-from easyCore.Objects.Base import Descriptor
+from easyCore.Objects.Variable import Descriptor
 from easyCore.Utils.json import MSONable
 
 # Loads element data from json file
