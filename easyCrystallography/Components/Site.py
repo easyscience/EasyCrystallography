@@ -2,36 +2,42 @@
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022 Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
 #
+from __future__ import annotations
 
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Union, ClassVar, TypeVar
+from typing import List, Union, ClassVar, TypeVar, Optional, Dict, TYPE_CHECKING
 
 from easyCore import np
-from easyCore.Objects.Base import Descriptor, Parameter, BaseObj
+from easyCore.Objects.Variable import Descriptor, Parameter
+from easyCore.Objects.ObjectClasses import BaseObj
 from easyCore.Objects.Groups import BaseCollection
 from easyCore.Utils.io.star import StarLoop
 
 from .Lattice import PeriodicLattice
 from .Specie import Specie
-from .AtomicDisplacement import AtomicDisplacement
+
+if TYPE_CHECKING:
+    from easyCore.Utils.typing import iF
+
 
 _SITE_DETAILS = {
     "label": {
+        "value": "H",
         "description": "A unique identifier for a particular site in the crystal",
         "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_label.html",
     },
     "position": {
+        "value": 0.0,
         "description": "Atom-site coordinate as fractions of the unit cell length.",
         "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_fract_.html",
-        "value": 0,
         "fixed": True,
     },
     "occupancy": {
+        "value": 1.0,
         "description": "The fraction of the atom type present at this site.",
         "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_occupancy.html",
-        "value": 1,
         "fixed": True,
     },
 }
@@ -59,64 +65,46 @@ class Site(BaseObj):
 
     def __init__(
         self,
-        label: Descriptor,
-        specie: Specie,
-        occupancy: Parameter,
-        fract_x: Parameter,
-        fract_y: Parameter,
-        fract_z: Parameter,
-        interface=None,
+        label: Optional[Union[str, Descriptor]] = None,
+        specie: Optional[Union[str, Specie]] = None,
+        occupancy: Optional[Union[float, Parameter]] = None,
+        fract_x: Optional[Union[float, Parameter]] = None,
+        fract_y: Optional[Union[float, Parameter]] = None,
+        fract_z: Optional[Union[float, Parameter]] = None,
+        interface: Optional[iF] = None,
         **kwargs,
     ):
-        # We can attach adp etc, which would be in kwargs. Filter them out...
-        # But first, check if we've been given an adp..
-        adp = None
-        if "adp" in kwargs.keys():
-            adp = kwargs["adp"]
-            del kwargs["adp"]
-        k_wargs = {
-            k: kwargs[k]
-            for k in kwargs.keys()
-            if issubclass(kwargs[k].__class__, (Descriptor, Parameter, BaseObj))
-        }
-        kwargs = {
-            k: kwargs[k]
-            for k in kwargs.keys()
-            if not issubclass(kwargs[k].__class__, (Descriptor, Parameter, BaseObj))
-        }
+
         super(Site, self).__init__(
             "site",
-            label=label,
-            specie=specie,
-            occupancy=occupancy,
-            fract_x=fract_x,
-            fract_y=fract_y,
-            fract_z=fract_z,
-            **k_wargs,
+            label=Descriptor("label", **_SITE_DETAILS["label"]),
+            specie=Specie(_SITE_DETAILS["label"]["value"]),
+            occupancy=Parameter("occupancy", **_SITE_DETAILS["occupancy"]),
+            fract_x=Parameter("fract_x", **_SITE_DETAILS["position"]),
+            fract_y=Parameter("fract_y", **_SITE_DETAILS["position"]),
+            fract_z=Parameter("fract_z", **_SITE_DETAILS["position"]),
+            **kwargs,
         )
+        if label is not None:
+            self.label = label
+        if specie is not None:
+            self.specie = specie
+        else:
+            if label is not None:
+                self.specie = label
+        if occupancy is not None:
+            self.occupancy = occupancy
+        if fract_x is not None:
+            self.fract_x = fract_x
+        if fract_y is not None:
+            self.fract_y = fract_y
+        if fract_z is not None:
+            self.fract_z = fract_z
         self.interface = interface
-        if adp is not None:
-            self.add_adp(adp)
 
     @classmethod
-    def default(cls, label: str, specie: str = "", interface=None):
-        label = Descriptor("label", label, **_SITE_DETAILS["label"])
-        if not specie:
-            specie = label.raw_value
-        specie = Specie(specie)
-        occupancy = Parameter("occupancy", **_SITE_DETAILS["occupancy"])
-        x_position = Parameter("fract_x", **_SITE_DETAILS["position"])
-        y_position = Parameter("fract_y", **_SITE_DETAILS["position"])
-        z_position = Parameter("fract_z", **_SITE_DETAILS["position"])
-        return cls(
-            label,
-            specie,
-            occupancy,
-            x_position,
-            y_position,
-            z_position,
-            interface=interface,
-        )
+    def default(cls, *args, interface: Optional[iF] = None, **kwargs):
+        return cls(*args, **kwargs, interface=interface)
 
     @classmethod
     def from_pars(
@@ -127,49 +115,19 @@ class Site(BaseObj):
         fract_x: float = _SITE_DETAILS["position"]["value"],
         fract_y: float = _SITE_DETAILS["position"]["value"],
         fract_z: float = _SITE_DETAILS["position"]["value"],
-        interface=None,
+        interface: Optional[iF] = None,
+        **kwargs
     ):
-
-        label = Descriptor("label", label, **_SITE_DETAILS["label"])
-        specie = Specie(specie)
-
-        pos = {
-            k: _SITE_DETAILS["position"][k]
-            for k in _SITE_DETAILS["position"].keys()
-            if k != "value"
-        }
-
-        x_position = Parameter("fract_x", value=fract_x, **pos)
-        y_position = Parameter("fract_y", value=fract_y, **pos)
-        z_position = Parameter("fract_z", value=fract_z, **pos)
-        occupancy = Parameter(
-            "occupancy",
-            value=occupancy,
-            **{
-                k: _SITE_DETAILS["occupancy"][k]
-                for k in _SITE_DETAILS["occupancy"].keys()
-                if k != "value"
-            },
-        )
-
         return cls(
             label,
             specie,
             occupancy,
-            x_position,
-            y_position,
-            z_position,
+            fract_x,
+            fract_y,
+            fract_z,
             interface=interface,
+            **kwargs
         )
-
-    def add_adp(self, adp_type: Union[str, AtomicDisplacement], **kwargs):
-        if isinstance(adp_type, str):
-            adp_type = AtomicDisplacement.from_pars(
-                adp_type, interface=self.interface, **kwargs
-            )
-        self._add_component("adp", adp_type)
-        if self.interface is not None:
-            self.interface.generate_bindings()
 
     def __repr__(self) -> str:
         return (
@@ -219,7 +177,7 @@ class Site(BaseObj):
 
     @property
     def is_magnetic(self) -> bool:
-        return self.specie.spin is not None
+        return getattr(self.specie, 'spin', None) is not None or hasattr(self, 'msp')
 
 
 class PeriodicSite(Site):
@@ -232,7 +190,7 @@ class PeriodicSite(Site):
         fract_x: Parameter,
         fract_y: Parameter,
         fract_z: Parameter,
-        interface=None,
+        interface: Optional[iF] = None,
         **kwargs,
     ):
         super(PeriodicSite, self).__init__(
@@ -240,21 +198,23 @@ class PeriodicSite(Site):
         )
         self.lattice = lattice
 
+    @staticmethod
+    def _from_site_kwargs(lattice: PeriodicLattice, site: S) -> Dict[str, float]:
+        return {
+            "lattice": lattice,
+            "label": site.label,
+            "specie": site.specie,
+            "occupancy": site.occupancy,
+            "fract_x": site.fract_x,
+            "fract_y": site.fract_y,
+            "fract_z": site.fract_z,
+            "interface": site.interface,
+        }
+
     @classmethod
-    def from_site(cls, lattice: PeriodicLattice, site: S):
-        args = [
-            lattice,
-            site.label,
-            site.specie,
-            site.occupancy,
-            site.fract_x,
-            site.fract_y,
-            site.fract_z,
-        ]
-        kwargs = {"interface": site.interface}
-        if hasattr(site, "adp"):
-            kwargs["adp"] = site.adp
-        return cls(*args, **kwargs)
+    def from_site(cls, lattice: PeriodicLattice, site: S) -> S:
+        kwargs = cls._from_site_kwargs(lattice, site)
+        return cls(**kwargs)
 
     def get_orbit(self) -> np.ndarray:
         """
@@ -275,7 +235,10 @@ class PeriodicSite(Site):
 
 
 class Atoms(BaseCollection):
-    def __init__(self, name: str, *args, interface=None, **kwargs):
+
+    _SITE_CLASS = Site
+
+    def __init__(self, name: str, *args, interface: Optional[iF] = None, **kwargs):
         if not isinstance(name, str):
             raise TypeError("A `name` for this collection must be given in string form")
         super(Atoms, self).__init__(name, *args, **kwargs)
@@ -292,13 +255,13 @@ class Atoms(BaseCollection):
             idx = self.atom_labels.index(idx)
         return super(Atoms, self).__getitem__(idx)
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: Union[int, str]):
         if isinstance(key, str) and key in self.atom_labels:
             key = self.atom_labels.index(key)
         return super(Atoms, self).__delitem__(key)
 
-    def append(self, item: Site):
-        if not isinstance(item, Site):
+    def append(self, item: S):
+        if not issubclass(type(item), Site):
             raise TypeError("Item must be a Site")
         if item.label.raw_value in self.atom_labels:
             raise AttributeError(
@@ -321,7 +284,7 @@ class Atoms(BaseCollection):
     def to_star(self) -> List[StarLoop]:
         adps = [hasattr(item, "adp") for item in self]
         has_adp = any(adps)
-        main_loop = StarLoop(self, exclude=["adp"])
+        main_loop = StarLoop(self, exclude=["adp", "msp"])
         if not has_adp:
             return [main_loop]
         add_loops = []
@@ -341,17 +304,32 @@ class Atoms(BaseCollection):
                 add_loops.append(StarLoop.from_StarSections(entries))
         else:
             raise NotImplementedError("Multiple types of ADP are not supported")
+        has_msp = any([hasattr(item, "msp") for item in self])
+        if has_msp:
+            entries = []
+            for item in self:
+                if hasattr(item, "msp"):
+                    entries.append(item.msp.to_star(item.label))
+            add_loops.append(StarLoop.from_StarSections(entries))
         loops = [main_loop, *add_loops]
         return loops
 
     @classmethod
     def from_string(cls, in_string: str):
-        s = StarLoop.from_string(in_string, [name[0] for name in Site._CIF_CONVERSIONS])
-        return s.to_class(cls, Site)
+        s = StarLoop.from_string(in_string, [name[0] for name in cls._SITE_CLASS._CIF_CONVERSIONS])
+        return s.to_class(cls, cls._SITE_CLASS)
+
+
+A = TypeVar("A", bound=Atoms)
 
 
 class PeriodicAtoms(Atoms):
-    def __init__(self, name: str, *args, lattice=None, interface=None, **kwargs):
+
+    _SITE_CLASS = PeriodicSite
+
+    def __init__(self, name: str, *args,
+                 lattice: Optional[PeriodicLattice] = None,
+                 interface: Optional[iF] = None, **kwargs):
         args = list(args)
         if lattice is None:
             for item in args:
@@ -361,30 +339,30 @@ class PeriodicAtoms(Atoms):
         if lattice is None:
             raise AttributeError
         for idx, item in enumerate(args):
-            if isinstance(item, Site):
-                args[idx] = PeriodicSite.from_site(lattice, item)
+            if issubclass(type(item), Site):
+                args[idx] = self._SITE_CLASS.from_site(lattice, item)
         super(PeriodicAtoms, self).__init__(name, *args, **kwargs, interface=interface)
         self.lattice = lattice
 
     @classmethod
-    def from_atoms(cls, lattice: PeriodicLattice, atoms):
+    def from_atoms(cls, lattice: PeriodicLattice, atoms: Atoms) -> A:
         return cls(atoms.name, *atoms, lattice=lattice, interface=atoms.interface)
 
     def __repr__(self) -> str:
         return f"Collection of {len(self)} periodic sites."
 
-    def append(self, item: Site):
+    def append(self, item: S):
         if not issubclass(item.__class__, Site):
             raise TypeError("Item must be a Site or periodic site")
         if item.label.raw_value in self.atom_labels:
             raise AttributeError(
                 f"An atom of name {item.label.raw_value} already exists."
             )
-        if isinstance(item, Site):
-            item = PeriodicSite.from_site(self.lattice, item)
+        # if isinstance(item, Site):
+        item = self._SITE_CLASS.from_site(self.lattice, item)
         super(PeriodicAtoms, self).append(item)
 
-    def get_orbits(self, magnetic_only=False):
+    def get_orbits(self, magnetic_only: bool = False):
         orbit_dict = {}
         for item in self:
             if magnetic_only and not item.is_magnetic:
