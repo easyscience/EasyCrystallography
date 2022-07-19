@@ -1,3 +1,4 @@
+from __future__ import annotations
 #  SPDX-FileCopyrightText: 2022 easyCrystallography contributors  <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022 Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
@@ -6,13 +7,15 @@
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Tuple, Union, ClassVar, Optional, Type
+from typing import List, Union, ClassVar, Optional, Type,  TYPE_CHECKING
 
 from easyCore import np
 from easyCore.Utils.io.star import StarEntry, StarSection, StarLoop
 from easyCore.Objects.ObjectClasses import BaseObj, Descriptor, Parameter
 from easyCore.Utils.classTools import addProp, removeProp
-from abc import abstractmethod
+
+if TYPE_CHECKING:
+    from easyCore.Utils.typing import iF
 
 _ANIO_DETAILS = {
     'msp_type': {
@@ -26,7 +29,16 @@ _ANIO_DETAILS = {
         'value':       0.0,
         'units':       'T^-1',
         'fixed':       True,
-    }
+    },
+    'Ciso':     {
+        'description': 'Isotropic magnetic susceptibility parameter, or equivalent isotropic magnetic susceptibility '
+                       'parameter, C(equiv), in inverted teslas, calculated from anisotropic susceptibility '
+                       'components.',
+        'value':       0.0,
+        'max':         np.inf,
+        'units':       'T^-1',
+        'fixed':       True,
+    },
 }
 
 
@@ -91,9 +103,19 @@ class Cani(MSPBase):
             self.chi_33 = chi_33
         self.interface = interface
 
+class Ciso(MSPBase):
+    chi: ClassVar[Parameter]
+
+    def __init__(self, chi: Optional[Union[Parameter, float]] = None, interface: Optional[iF] = None):
+        super(Ciso, self).__init__('Ciso',
+                                   chi=Parameter('chi', **_ANIO_DETAILS['Ciso']))
+        if chi is not None:
+            self.chi = chi
+        self.interface = interface
 
 _AVAILABLE_ISO_TYPES = {
-    'Cani': Cani
+    'Cani': Cani,
+    'Ciso': Ciso
 }
 
 
