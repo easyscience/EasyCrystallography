@@ -1062,7 +1062,13 @@ class PeriodicLattice(Lattice):
         :return:
         :rtype:
         """
-        return StarSection(self.to_cell())
+        undo_redo_enabled = self._borg.stack.enabled
+        if undo_redo_enabled:
+            self._borg.stack.enabled = False
+        cif_obj = StarSection(self.to_cell())
+        if undo_redo_enabled:
+            self._borg.stack.enabled = True
+        return cif_obj
 
     @classmethod
     def from_star(cls, in_string):

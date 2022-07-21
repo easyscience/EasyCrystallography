@@ -218,7 +218,13 @@ class Phase(BaseObj):
         :return: Cif object representing the current crystal
         :rtype: CifIO
         """
-        return CifIO.from_objects(self.name, self.cell, self.spacegroup, self.atoms)
+        undo_redo_enabled = self._borg.stack.enabled
+        if undo_redo_enabled:
+            self._borg.stack.enabled = False
+        cif_obj = CifIO.from_objects(self.name, self.cell, self.spacegroup, self.atoms)
+        if undo_redo_enabled:
+            self._borg.stack.enabled = True
+        return cif_obj
 
     @classmethod
     def from_cif_str(cls, in_string: str):
