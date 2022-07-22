@@ -47,15 +47,6 @@ S = TypeVar("S", bound="Site")
 
 class Site(BaseObj):
 
-    _CIF_CONVERSIONS = [
-        ["label", "atom_site_label"],
-        ["specie", "atom_site_type_symbol"],
-        ["occupancy", "atom_site_occupancy"],
-        ["fract_x", "atom_site_fract_x"],
-        ["fract_y", "atom_site_fract_y"],
-        ["fract_z", "atom_site_fract_z"],
-    ]
-
     label: ClassVar[Descriptor]
     specie: ClassVar[Specie]
     occupancy: ClassVar[Parameter]

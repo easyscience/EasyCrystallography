@@ -146,12 +146,13 @@ class MagneticSusceptibility(BaseObj):
         if msp_string in _AVAILABLE_ISO_TYPES.keys():
             msp_class = _AVAILABLE_ISO_TYPES[msp_string]
             if kwargs:
-                msp_class: MSPBase = msp_class.from_pars(interface=self.interface, **kwargs)
+                msp_class: MSPBase = msp_class(interface=self.interface, **kwargs)
             else:
-                msp_class: MSPBase = msp_class.default(interface=self.interface)
+                msp_class: MSPBase = msp_class(interface=self.interface)
         else:
             raise AttributeError
-        for par in self.msp_type.get_parameters():
+
+        for par in self.msp_class.get_parameters():
             removeProp(self, par.name)
         self.msp_class = msp_class
         self.msp_type = msp_string
@@ -174,6 +175,4 @@ class MagneticSusceptibility(BaseObj):
     def __a_setter(key):
         def setter(obj, value):
             obj.msp_class._kwargs[key].value = value
-
         return setter
-

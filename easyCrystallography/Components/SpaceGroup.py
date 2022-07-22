@@ -50,6 +50,7 @@ if TYPE_CHECKING:
 _D_REDIRECT = deepcopy(Descriptor._REDIRECT)
 _D_REDIRECT['value'] = lambda obj: ';'.join([r.as_xyz_string() for r in obj.raw_value.tolist()])
 
+
 class easyOp(Descriptor):
     _REDIRECT = _D_REDIRECT
 
@@ -101,26 +102,6 @@ class SpaceGroup(BaseObj):
         self.__on_change(**kwargs)
         self.interface = interface
         self._cell = None
-
-    @classmethod
-    def from_pars(cls, space_group_HM_name: str, setting: str = None, interface: Optional[iF] = None):
-        """
-        Generate a spacegroup object from it's Hermann-Mauguin symbol and setting.
-
-        :param space_group_HM_name: Hermann-Mauguin symbol
-        :param setting: Optional setting for the space group
-        :param interface: Interface to the calculator
-        """
-        return cls(space_group_HM_name, setting, interface)
-
-    @classmethod
-    def default(cls, interface: Optional[iF] = None):
-        """
-        Generate a P1 spacegroup object.
-
-        :param interface: Interface to the calculator
-        """
-        return cls(interface=interface)
 
     @classmethod
     def from_int_number(cls, int_number: int, hexagonal=True, interface: Optional[iF] = None):

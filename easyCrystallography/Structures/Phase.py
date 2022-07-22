@@ -47,7 +47,7 @@ class Phase(BaseObj):
     ):
         self.name = name
         if spacegroup is None:
-            spacegroup = SpaceGroup.default()
+            spacegroup = SpaceGroup()
         if cell is None:
             cell = Lattice()
         if isinstance(cell, Lattice):
