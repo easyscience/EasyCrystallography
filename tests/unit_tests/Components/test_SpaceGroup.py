@@ -64,7 +64,7 @@ def test_SpaceGroup_fromDescriptor():
 
 
 def test_SpaceGroup_default():
-    sg = SpaceGroup.default()
+    sg = SpaceGroup()
     assert sg.setting is None
 
     for selector in SG_DETAILS.keys():
@@ -85,7 +85,7 @@ def test_SpaceGroup_fromPars_HM_Full(sg_in):
     if sg_in in ['C 2 e b', 'R 1 2/c 1 ("rhombohedral" setting)', 'B 1 21/m 1']:
         return  # This is a known issue
 
-    sg_p = SpaceGroup.from_pars(sg_in)
+    sg_p = SpaceGroup(sg_in)
 
     for selector in SG_DETAILS.keys():
         f = getattr(sg_p, selector)
@@ -108,7 +108,7 @@ def test_SpaceGroup_fromPars_HM_noSpace(sg_in):
                                     'C1c1', 'Pmc21', 'Cmm2', 'P121/c1', 'Pmma', 'P12/c1', 'Pmmm', 'P1211', 'Pnma']:
         return  # This is a known issue
 
-    sg_p = SpaceGroup.from_pars(sg_in['hermann_mauguin'])
+    sg_p = SpaceGroup(sg_in['hermann_mauguin'])
 
     for selector in SG_DETAILS.keys():
         f = getattr(sg_p, selector)
@@ -131,7 +131,7 @@ def test_SpaceGroup_fromPars_HM_noSpace(sg_in):
                                     'C1c1', 'Pmc21', 'Cmm2', 'P121/c1', 'Pmma', 'P12/c1', 'Pmmm', 'P1211', 'Pnma']:
         return  # This is a known issue
 
-    sg_p = SpaceGroup.from_pars(sg_in['universal_h_m'])
+    sg_p = SpaceGroup(sg_in['universal_h_m'])
 
     for selector in SG_DETAILS.keys():
         f = getattr(sg_p, selector)
@@ -149,7 +149,7 @@ def test_SpaceGroup_fromPars_HM_noSpace(sg_in):
 
 
 @pytest.mark.parametrize('sg_int', range(1, 231), ids=[f'spacegroup_int_{s_id}' for s_id in range(1, 231)])
-def test_SpaceGroup_fromIntNumber(sg_int):
+def test_SpaceGroup_fromIntNumber(sg_int: int):
     sg_p = SpaceGroup.from_int_number(sg_int)
 
     for selector in SG_DETAILS.keys():
@@ -171,7 +171,7 @@ def test_SpaceGroup_fromIntNumber(sg_int):
 
 
 @pytest.mark.parametrize('sg_int,setting', itertools.product([146, 148, 155, 160, 161, 166, 167], [True, False]))
-def test_SpaceGroup_fromIntNumber_HexTest(sg_int, setting):
+def test_SpaceGroup_fromIntNumber_HexTest(sg_int: int, setting: bool):
     sg_p = SpaceGroup.from_int_number(sg_int, setting)
 
     for selector in SG_DETAILS.keys():
