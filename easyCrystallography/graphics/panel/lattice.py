@@ -86,7 +86,7 @@ class ParameterLattice(pn.viewable.Viewer):
             setattr(self._lat, par[1], val.value)
             setattr(self, par[0], val.value)
 
-    @param.depends(*[par[0] for par in _parms])
+    @param.depends(*['_' + par[0] + '.value' for par in _parms])
     def gen_str(self):
         s = ['Lattice Details\n']
         for par in self._parms:
