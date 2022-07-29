@@ -294,6 +294,10 @@ class SpaceGroup(BaseObj):
         if self.setting is None:
             return ""
         return self._setting.raw_value
+    
+    @property
+    def settings(self) -> List[str]:
+        return [sg.ext for sg in gemmi.spacegroup_table() if sg.hm == self.hermann_mauguin and sg.ext != '\x00']
 
     @property
     def space_group_HM_name(self) -> Descriptor:

@@ -1,1 +1,3 @@
-easysciencecore==0.2.3
+periodictable==1.6.0
+gemmi==0.5.3
+easysciencecore=https+git://github.com/easyScience/easyCore.git@io_serialization
