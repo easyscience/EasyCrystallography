@@ -1,0 +1,11 @@
+{
+  "name": "easy_crystallography",
+  "version": "0.0.1",
+  "description": "Panel extension for displaying easyCrystallography structures",
+  "license": "Apache 2.0",
+  "keywords": [],
+  "dependencies": {
+    "@bokeh/bokehjs": "^2.4.2"
+  },
+  "devDependencies": {}
+}

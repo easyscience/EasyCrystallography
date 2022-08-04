@@ -259,12 +259,20 @@ class Phase(BaseObj):
             s += r.structure(self)
         return s
 
-    @classmethod
-    def from_cif_file(cls, filename):
+    @staticmethod
+    def _create_from_parser(cls, parser_type:str, encoded_obj):
         s = None
-        with Parsers('cif').reader(filename) as r:
+        with Parsers(parser_type).set_parser(encoded_obj) as r:
             s = r.structure(phase_class=cls)
         return s
+
+    @classmethod
+    def from_cif_string(cls, cif_string):
+        return cls._create_from_parser(cls, 'cif_str', cif_string)
+
+    @classmethod
+    def from_cif_file(cls, filename):
+        return cls._create_from_parser(cls, 'cif', filename)
 
 
 class Phases(BaseCollection):

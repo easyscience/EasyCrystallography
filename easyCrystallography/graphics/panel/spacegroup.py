@@ -60,11 +60,11 @@ class ParameterSpaceGroup(pn.viewable.Viewer):
                 s.append(f'{par[1]}:\t{val}')
         s.append(f'Reference Setting:\t{self._sg.is_reference_setting}')
         s.append(f'Operators:\t{self._sg.symmetry_xyz}')
-        return pn.pane.Str('\n'.join(s), height=380, width=500)
+        return pn.pane.Str('\n'.join(s))
 
     def __panel__(self):
-        return pn.Column('###' + self.name, self._layout)
+        return pn.WidgetBox('###' + self.name, self._layout)
 
     def view(self):
         view = self._layout
-        return pn.Column('###' + self.name, pn.Row(view, self.gen_str))
+        return pn.WidgetBox('###' + self.name, pn.Row(view, self.gen_str))

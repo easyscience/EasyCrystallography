@@ -4,8 +4,7 @@ __version__ = '0.0.1'
 
 import param
 import panel as pn
-from panel_chemistry.pane import NGLViewer # panel_chemistry needs to be imported before you run pn.extension()
-from panel_chemistry.pane.ngl_viewer import EXTENSIONS
+from easyCrystallography.graphics import NGLViewer
 pn.extension("ngl_viewer")
 
 
@@ -93,15 +92,15 @@ class ParameterLattice(pn.viewable.Viewer):
             val = getattr(self, par[0])
             s.append(f'{par[1]}:\t{val}')
         s.append(f'\nVolume\t{self._lat.volume}')
-        return pn.pane.Str('\n'.join(s), height=380, width=500)
+        return pn.pane.Str('\n'.join(s))
 
     def __panel__(self):
-        return pn.Column('###' + self.name, self._layout)
+        return pn.WidgetBox('###' + self.name, self._layout)
 
     def view(self):
         view = self._layout
-        return pn.Column('###' + self.name, pn.Row(view, self.gen_str))
+        return pn.WidgetBox('###' + self.name, pn.Row(view, self.gen_str))
 
     def full_view(self):
         view = self._layout
-        return pn.Column('###' + self.name, pn.Row(view, self.structure))
+        return pn.WidgetBox('###' + self.name, pn.Row(view, self.structure))
