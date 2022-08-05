@@ -68,6 +68,12 @@ class Phase(BaseObj):
         self._extent = np.array([1, 1, 1])
         self._centre = np.array([0, 0, 0])
         self.atom_tolerance = 1e-4
+        if spacegroup.int_number == 1:
+            self._reduced = self
+        else:
+            self._reduced = self.__class__(self.name, cell=cell,
+                                           spacegroup=spacegroup.__class__.from_int_number(1),
+                                           atoms=atoms, scale=scale)
 
     def add_atom(self, *args, **kwargs):
         """
@@ -135,6 +141,23 @@ class Phase(BaseObj):
         atoms = PeriodicAtoms.from_atoms(self.cell, self.atoms)
         orbits = atoms.get_orbits(magnetic_only=magnetic_only)
         return orbits
+
+    def reduced_symmetry(self):
+        if self.spacegroup.int_number != 1:
+            new_positions = self.get_orbits()
+            new_atoms_list = []
+            site_class = self._SITE_CLASS
+            for key, value in new_positions.items():
+                a_dict = self.atoms[key].as_dict()
+                for idx in range(value.shape[0]):
+                    temp_atom = site_class.from_dict(a_dict)
+                    temp_atom.label = key + str(idx)
+                    temp_atom.fract_x = value[idx, 0]
+                    temp_atom.fract_y = value[idx, 1]
+                    temp_atom.fract_z = value[idx, 2]
+                    new_atoms_list.append(temp_atom)
+            self._reduced.atoms = self._ATOMS_CLASS(self.atoms.name, *new_atoms_list)
+        return self._reduced
 
     @property
     def enforce_sym(self):
@@ -212,7 +235,7 @@ class Phase(BaseObj):
         """
         Generate all orbits for a given fractional position.
         """
-        sym_op = self.spacegroup._sg_data.get_orbit
+        sym_op = self.spacegroup.get_orbit
         offsets = np.array(
             np.meshgrid(
                 range(0, extent[0] + 1),
@@ -259,20 +282,13 @@ class Phase(BaseObj):
             s += r.structure(self)
         return s
 
-    @staticmethod
-    def _create_from_parser(cls, parser_type:str, encoded_obj):
-        s = None
-        with Parsers(parser_type).set_parser(encoded_obj) as r:
-            s = r.structure(phase_class=cls)
-        return s
-
     @classmethod
     def from_cif_string(cls, cif_string):
-        return cls._create_from_parser(cls, 'cif_str', cif_string)
+        return Parsers('cif_str').reader().structure(cif_string, phase_class=cls)
 
     @classmethod
     def from_cif_file(cls, filename):
-        return cls._create_from_parser(cls, 'cif', filename)
+        return Parsers('cif').reader(filename).structure(phase_class=cls)
 
 
 class Phases(BaseCollection):

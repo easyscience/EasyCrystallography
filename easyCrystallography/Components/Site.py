@@ -188,8 +188,8 @@ class PeriodicSite(Site):
         Generate all orbits for a given fractional position.
 
         """
-        sym_op = self.lattice.spacegroup._sg_data.get_orbit
-        return sym_op(self.fract_coords)
+        orbit = self.lattice.spacegroup.get_orbit(self.fract_coords)
+        return orbit
 
     @property
     def cart_coords(self) -> np.ndarray:
