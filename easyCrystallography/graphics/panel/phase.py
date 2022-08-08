@@ -16,47 +16,32 @@ class ParameterPhase(pn.viewable.Viewer):
     _pn_l = param.ClassSelector(class_=ParameterLattice, instantiate=True)
     _pn_a = param.ClassSelector(class_=ParameterAtoms, instantiate=True)
     _pn_sg = param.ClassSelector(class_=ParameterSpaceGroup, instantiate=True)
-    structure = param.ClassSelector(class_=NGLViewer, instantiate=True)
+    # structure = param.ClassSelector(class_=NGLViewer, instantiate=True)
     cif_string = param.String(default='')
 
     def __init__(self, phase_obj):
-        opts = {}
-        if phase_obj is not None:
-            opts['phase_obj'] = phase_obj
-            opts['_pn_l'] = ParameterLattice(phase_obj.cell)
-            opts['_pn_a'] = ParameterAtoms(phase_obj.atoms)
-            opts['_pn_sg'] = ParameterSpaceGroup(phase_obj.spacegroup)
-            cif = phase_obj.cif
-            dis_ops = {'representation': 'ball+stick'}
-            if len(phase_obj.atoms) == 0:
-                dis_ops['representation'] = 'unitcell'
-                cif += """
-                        loop_
-                         _atom_site_label
-                         _atom_site_type_symbol
-                         _atom_site_fract_x
-                         _atom_site_fract_y
-                         _atom_site_fract_z
-                         _atom_site_occupancy
-                          H  H   0.0   0.0   0.0   1.0
-                        """
-            opts['structure'] = NGLViewer(object=cif, extension='cif', background="#F7F7F7",
-                                          sizing_mode='stretch_both',
-                                          **dis_ops)
-
+        opts = {
+            'phase_obj': phase_obj,
+            '_pn_l': ParameterLattice(phase_obj.cell),
+            '_pn_a': ParameterAtoms(phase_obj.atoms),
+            '_pn_sg': ParameterSpaceGroup(phase_obj.spacegroup)
+        }
+        dis_ops = {'representation': 'ball+stick'}
         super().__init__(name="Phase Panel", **opts)
+        self.structure = NGLViewer(object='', extension='cif', background="#F7F7F7", sizing_mode='stretch_both', **dis_ops)
         self._layout = pn.Column(self.structure, pn.WidgetBox('###Parameters', self._pn_l, self._pn_sg, self._pn_a))
-        self._cif_editor = pn.widgets.TextAreaInput(value=self.cif_string, sizing_mode='stretch_both')
+        self._cif_editor = pn.widgets.TextAreaInput(value=self.cif_string, height=400, sizing_mode='stretch_both')
+        self._update_structure()
 
     @param.depends('phase_obj', watch=True)
-    def _upadate_objs(self):
+    def _update_objs(self):
         with param.parameterized.discard_events(self):
             self._pn_l.lattice_obj = self.phase_obj.cell
             self._pn_a.atoms_obj = self.phase_obj.atoms
             self._pn_sg.spacegroup_obj = self.phase_obj.spacegroup
-        self._update_structure()
+        # self._update_structure()
 
-    @param.depends('_pn_l.param', '_pn_a.param', '_pn_sg.param',  watch=True)
+    # @param.depends('_pn_l.param', '_pn_a.param', '_pn_sg.param',  watch=True)
     def _update_structure(self):
         base_cif = self.phase_obj.cif
         cif = base_cif
@@ -73,8 +58,8 @@ class ParameterPhase(pn.viewable.Viewer):
                     """
         elif self.structure.representation != 'unitcell':
             cif = self.phase_obj.reduced_symmetry().cif
-        self.cif_string = cif
-        self.structure.object = base_cif
+        self.cif_string = base_cif
+        self.structure.object = cif
 
     @param.depends('cif_string')
     def cif_string_panel(self):
