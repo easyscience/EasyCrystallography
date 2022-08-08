@@ -53,6 +53,9 @@ class ParameterLattice(pn.viewable.Viewer):
                 widget = getattr(self, '_' + par[0])
                 with param.parameterized.discard_events(widget):
                     setattr(widget, 'value', val)
+        for par in self._params:
+            widget = getattr(self, '_' + par[0])
+            widget.param.trigger('value')
 
     @param.depends(*[par[0] for par in _params], watch=True)
     def _sync_widgets(self):

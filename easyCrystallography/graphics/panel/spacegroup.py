@@ -29,20 +29,29 @@ class ParameterSpaceGroup(pn.viewable.Viewer):
 
     @param.depends('spacegroup_obj', watch=True)
     def _update_from_spacegroup(self):
-        with param.parameterized.discard_events(self):
-            self.sg_HM_name = self.spacegroup_obj.hermann_mauguin
-            self.sg_setting = self.spacegroup_obj.setting_str
-        with param.parameterized.discard_events(self.sg_system):
-            new_system = self.spacegroup_obj.crystal_system
-            self.sg_system.value = new_system[0].upper() + new_system[1:]
-        with param.parameterized.discard_events(self._sg_HM_name):
-            self._sg_HM_name.groups = {
-                str(this_system): list(
-                    {par.split(':')[0] for par in SpacegroupInfo.get_compatible_HM_from_int(this_system) if
-                     '(' not in par})
-                for this_system in list(SpacegroupInfo.get_ints_from_system(self.sg_system.value.lower()))
-            }
-            self._sg_HM_name.value = self.spacegroup_obj.hermann_mauguin
+        c_system = self.spacegroup_obj.crystal_system
+        c_hm = self.spacegroup_obj.hermann_mauguin
+        c_set = self.spacegroup_obj.setting_str
+        with param.parameterized.batch_call_watchers(self):
+            self.sg_system.value = c_system[0].upper() + c_system[1:].lower()
+            self.sg_HM_name = c_hm
+            self.sg_setting = c_set
+
+        # with param.parameterized.discard_events(self):
+        #     self.sg_HM_name = self.spacegroup_obj.hermann_mauguin
+        #     self.sg_setting = self.spacegroup_obj.setting_str
+        # with param.parameterized.discard_events(self.sg_system):
+        #     new_system = self.spacegroup_obj.crystal_system
+        #     self.sg_system.value = new_system[0].upper() + new_system[1:]
+        # with param.parameterized.discard_events(self._sg_HM_name):
+        #     self._sg_HM_name.groups = {
+        #         str(this_system): list(
+        #             {par.split(':')[0] for par in SpacegroupInfo.get_compatible_HM_from_int(this_system) if
+        #              '(' not in par})
+        #         for this_system in list(SpacegroupInfo.get_ints_from_system(self.sg_system.value.lower()))
+        #     }
+        # self.sg_system.param.trigger('value')
+        # self.sg_HM_name.value = self.spacegroup_obj.hermann_mauguin
 
     @param.depends('sg_system.value', watch=True)
     def _sync_widgets(self):

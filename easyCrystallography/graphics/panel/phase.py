@@ -16,7 +16,6 @@ class ParameterPhase(pn.viewable.Viewer):
     _pn_l = param.ClassSelector(class_=ParameterLattice, instantiate=True)
     _pn_a = param.ClassSelector(class_=ParameterAtoms, instantiate=True)
     _pn_sg = param.ClassSelector(class_=ParameterSpaceGroup, instantiate=True)
-    # structure = param.ClassSelector(class_=NGLViewer, instantiate=True)
     cif_string = param.String(default='')
 
     def __init__(self, phase_obj):
@@ -29,19 +28,19 @@ class ParameterPhase(pn.viewable.Viewer):
         dis_ops = {'representation': 'ball+stick'}
         super().__init__(name="Phase Panel", **opts)
         self.structure = NGLViewer(object='', extension='cif', background="#F7F7F7", sizing_mode='stretch_both', **dis_ops)
-        self._layout = pn.Column(self.structure, pn.WidgetBox('###Parameters', self._pn_l, self._pn_sg, self._pn_a))
+        self._layout = pn.Column(self.structure, pn.WidgetBox('###Parameters', pn.Row(self._pn_l, self._pn_sg, self._pn_a)))
         self._cif_editor = pn.widgets.TextAreaInput(value=self.cif_string, height=400, sizing_mode='stretch_both')
         self._update_structure()
 
     @param.depends('phase_obj', watch=True)
     def _update_objs(self):
-        with param.parameterized.discard_events(self):
+        with param.parameterized.batch_call_watchers(self):
             self._pn_l.lattice_obj = self.phase_obj.cell
             self._pn_a.atoms_obj = self.phase_obj.atoms
             self._pn_sg.spacegroup_obj = self.phase_obj.spacegroup
-        # self._update_structure()
+        self._update_structure()
 
-    # @param.depends('_pn_l.param', '_pn_a.param', '_pn_sg.param',  watch=True)
+    @param.depends('_pn_l.param', '_pn_a.param', '_pn_sg.param',  watch=True)
     def _update_structure(self):
         base_cif = self.phase_obj.cif
         cif = base_cif
@@ -56,7 +55,7 @@ class ParameterPhase(pn.viewable.Viewer):
                      _atom_site_occupancy
                       H  H   0.0   0.0   0.0   1.0
                     """
-        elif self.structure.representation != 'unitcell':
+        else:
             cif = self.phase_obj.reduced_symmetry().cif
         self.cif_string = base_cif
         self.structure.object = cif

@@ -42,7 +42,7 @@ class ParameterAtom(pn.viewable.Viewer):
         self._layout = pn.Column(pn.Row(
             pn.WidgetBox('Label', self._label),
             pn.WidgetBox('Specie', self._specie),
-            pn.WidgetBox('XYZ', pn.Row(self._x, self._y, self._z), align=('start', 'end'), margin=5),
+            pn.WidgetBox('XYZ', pn.Row(self._x, self._y, self._z), align=('start', 'end'), margin=5,  sizing_mode='stretch_width'),
             pn.WidgetBox('Occupancy', self._occupancy),  sizing_mode='stretch_width')
         )
         self._heading = pn.pane.Markdown(f'##{self.label} Editor')

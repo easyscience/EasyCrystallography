@@ -11,9 +11,21 @@ def create_dashboard(phase):
     Phase = getattr(phase, '__old_class__', phase.__class__)
     panel_phase = ParameterPhase(phase)
 
-    save_cif_button = pn.widgets.Button(name='Save', button_type='primary')
+    def save_cif():
+        from io import StringIO
+        f = StringIO(panel_phase.cif_string)
+        f.seek(0)
+        return f
+
+    save_cif_button = pn.widgets.FileDownload(filename='phase.cif', button_type='success',
+                                              callback=save_cif, auto=False, embed=False,
+                                              name='Right click to save as CIF')
     update_cif_button = pn.widgets.Button(name='Update', button_type='primary')
-    cif_panel = pn.Column(panel_phase.cif_string_panel, pn.Row(update_cif_button, save_cif_button, sizing_mode='stretch_width'), sizing_mode='stretch_both')
+    cif_panel = pn.Column(panel_phase.cif_string_panel, pn.Row(update_cif_button,
+                                                               pn.Spacer(sizing_mode='stretch_width'),
+                                                               save_cif_button,
+                                                               sizing_mode='stretch_width'), sizing_mode='stretch_both')
+
     def load_string(event):
         if file_input.value is None:
             pn.pane.Alert('## Alert\nA cif file needs to se selected')
