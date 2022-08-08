@@ -2,17 +2,14 @@ __author__ = 'github.com/wardsimon'
 __version__ = '0.0.1'
 
 import panel as pn
-import tempfile
+from io import StringIO
 from easyCrystallography.graphics.panel.phase import ParameterPhase
 
 
-def create_dashboard(phase):
-
-    Phase = getattr(phase, '__old_class__', phase.__class__)
+def create_main_area(phase):
     panel_phase = ParameterPhase(phase)
 
     def save_cif():
-        from io import StringIO
         f = StringIO(panel_phase.cif_string)
         f.seek(0)
         return f
@@ -27,15 +24,22 @@ def create_dashboard(phase):
                                                                sizing_mode='stretch_width'), sizing_mode='stretch_both')
 
     def load_string(event):
-        if file_input.value is None:
+        if cif_panel.value is None:
             pn.pane.Alert('## Alert\nA cif file needs to se selected')
             return
         panel_phase.phase_obj = Phase.from_cif_string(cif_panel.value)
     update_cif_button.on_click(load_string)
 
-    bootstrap = pn.template.BootstrapTemplate(title='Structure Editor')
     tabs = pn.Tabs(('Structure', panel_phase),
                    ('CIF', cif_panel))
+    return tabs, panel_phase
+
+
+def create_dashboard(phase):
+
+    Phase = getattr(phase, '__old_class__', phase.__class__)
+    tabs, panel_phase = create_main_area(phase)
+    bootstrap = pn.template.BootstrapTemplate(title='Structure Editor')
     bootstrap.main.append(tabs)
     file_input = pn.widgets.FileInput(accept='.cif')
     load_cif_button = pn.widgets.Button(name='Load', button_type='primary')

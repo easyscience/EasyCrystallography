@@ -25,10 +25,11 @@ class ParameterPhase(pn.viewable.Viewer):
             '_pn_a': ParameterAtoms(phase_obj.atoms),
             '_pn_sg': ParameterSpaceGroup(phase_obj.spacegroup)
         }
-        dis_ops = {'representation': 'ball+stick'}
+        dis_ops = {'representation': 'unitcell'}
         super().__init__(name="Phase Panel", **opts)
         self.structure = NGLViewer(object='', extension='cif', background="#F7F7F7", sizing_mode='stretch_both', **dis_ops)
-        self._layout = pn.Column(self.structure, pn.WidgetBox('###Parameters', pn.Row(self._pn_l, self._pn_sg, self._pn_a)))
+        self.widget_box = pn.WidgetBox('###Parameters', pn.Row(self._pn_l, self._pn_sg, self._pn_a))
+        self._layout = pn.Column(self.structure, self.widget_box, sizing_mode='stretch_both')
         self._cif_editor = pn.widgets.TextAreaInput(value=self.cif_string, height=400, sizing_mode='stretch_both')
         self._update_structure()
 
@@ -44,6 +45,7 @@ class ParameterPhase(pn.viewable.Viewer):
     def _update_structure(self):
         base_cif = self.phase_obj.cif
         cif = base_cif
+        representation = 'ball+stick'
         if len(self.phase_obj.atoms) == 0:
             cif += """
                     loop_
@@ -55,10 +57,13 @@ class ParameterPhase(pn.viewable.Viewer):
                      _atom_site_occupancy
                       H  H   0.0   0.0   0.0   1.0
                     """
+            representation = 'unitcell'
         else:
             cif = self.phase_obj.reduced_symmetry().cif
         self.cif_string = base_cif
-        self.structure.object = cif
+        with param.parameterized.batch_call_watchers(self.structure):
+            self.structure.representation = representation
+            self.structure.object = cif
 
     @param.depends('cif_string')
     def cif_string_panel(self):
