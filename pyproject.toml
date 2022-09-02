@@ -54,7 +54,7 @@ doc8 = "^0.11.2"
 readme-renderer = "^35.0"
 sphinx-rtd-theme = "^1.0.0"
 sphinx-autodoc-typehints = "^1.12.0"
-sphinx-gallery = "^0.10.0"
+sphinx-gallery = "^0.11.1"
 
 [tool.tox]
 legacy_tox_ini = """
