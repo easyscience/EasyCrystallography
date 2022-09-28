@@ -46,7 +46,7 @@ easyScienceCore = '>=0.2.3'
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.0"
-pytest-cov = "^3.0.0"
+pytest-cov = "^4.0.0"
 codecov = "^2.1.11"
 matplotlib = "^3.2.2"
 Sphinx = "^5.0.2"
