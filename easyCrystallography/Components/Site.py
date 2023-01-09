@@ -47,15 +47,6 @@ S = TypeVar("S", bound="Site")
 
 class Site(BaseObj):
 
-    _CIF_CONVERSIONS = [
-        ["label", "atom_site_label"],
-        ["specie", "atom_site_type_symbol"],
-        ["occupancy", "atom_site_occupancy"],
-        ["fract_x", "atom_site_fract_x"],
-        ["fract_y", "atom_site_fract_y"],
-        ["fract_z", "atom_site_fract_z"],
-    ]
-
     label: ClassVar[Descriptor]
     specie: ClassVar[Specie]
     occupancy: ClassVar[Parameter]
@@ -101,33 +92,6 @@ class Site(BaseObj):
         if fract_z is not None:
             self.fract_z = fract_z
         self.interface = interface
-
-    @classmethod
-    def default(cls, *args, interface: Optional[iF] = None, **kwargs):
-        return cls(*args, **kwargs, interface=interface)
-
-    @classmethod
-    def from_pars(
-        cls,
-        label: str,
-        specie: str,
-        occupancy: float = _SITE_DETAILS["occupancy"]["value"],
-        fract_x: float = _SITE_DETAILS["position"]["value"],
-        fract_y: float = _SITE_DETAILS["position"]["value"],
-        fract_z: float = _SITE_DETAILS["position"]["value"],
-        interface: Optional[iF] = None,
-        **kwargs
-    ):
-        return cls(
-            label,
-            specie,
-            occupancy,
-            fract_x,
-            fract_y,
-            fract_z,
-            interface=interface,
-            **kwargs
-        )
 
     def __repr__(self) -> str:
         return (
@@ -183,20 +147,23 @@ class Site(BaseObj):
 class PeriodicSite(Site):
     def __init__(
         self,
-        lattice: PeriodicLattice,
-        label: Descriptor,
-        specie: Specie,
-        occupancy: Parameter,
-        fract_x: Parameter,
-        fract_y: Parameter,
-        fract_z: Parameter,
+        lattice: Optional[PeriodicLattice] = None,
+        label: Optional[Union[str, Descriptor]] = None,
+        specie: Optional[Union[str, Specie]] = None,
+        occupancy: Optional[Union[float, Parameter]] = None,
+        fract_x: Optional[Union[float, Parameter]] = None,
+        fract_y: Optional[Union[float, Parameter]] = None,
+        fract_z: Optional[Union[float, Parameter]] = None,
         interface: Optional[iF] = None,
         **kwargs,
     ):
         super(PeriodicSite, self).__init__(
-            label, specie, occupancy, fract_x, fract_y, fract_z, interface, **kwargs
+            label, specie, occupancy, fract_x, fract_y, fract_z, **kwargs
         )
+        if lattice is None:
+            lattice = PeriodicLattice()
         self.lattice = lattice
+        self.interface = interface
 
     @staticmethod
     def _from_site_kwargs(lattice: PeriodicLattice, site: S) -> Dict[str, float]:
@@ -280,44 +247,6 @@ class Atoms(BaseCollection):
     @property
     def atom_occupancies(self) -> np.ndarray:
         return np.array([atom.occupancy.raw_value for atom in self])
-
-    def to_star(self) -> List[StarLoop]:
-        adps = [hasattr(item, "adp") for item in self]
-        has_adp = any(adps)
-        main_loop = StarLoop(self, exclude=["adp", "msp"])
-        if not has_adp:
-            return [main_loop]
-        add_loops = []
-        adp_types = [item.adp.adp_type.raw_value for item in self]
-        if all(adp_types):
-            if adp_types[0] in ["Uiso", "Biso"]:
-                main_loop = main_loop.join(
-                    StarLoop.from_StarSections(
-                        [getattr(item, "adp").to_star(item.label) for item in self]
-                    ),
-                    "label",
-                )
-            else:
-                entries = []
-                for item in self:
-                    entries.append(item.adp.to_star(item.label))
-                add_loops.append(StarLoop.from_StarSections(entries))
-        else:
-            raise NotImplementedError("Multiple types of ADP are not supported")
-        has_msp = any([hasattr(item, "msp") for item in self])
-        if has_msp:
-            entries = []
-            for item in self:
-                if hasattr(item, "msp"):
-                    entries.append(item.msp.to_star(item.label))
-            add_loops.append(StarLoop.from_StarSections(entries))
-        loops = [main_loop, *add_loops]
-        return loops
-
-    @classmethod
-    def from_string(cls, in_string: str):
-        s = StarLoop.from_string(in_string, [name[0] for name in cls._SITE_CLASS._CIF_CONVERSIONS])
-        return s.to_class(cls, cls._SITE_CLASS)
 
 
 A = TypeVar("A", bound=Atoms)

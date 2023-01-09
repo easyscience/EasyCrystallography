@@ -23,7 +23,7 @@ from typing import Optional, Callable
 
 from easyCore import np
 from easyCore.Objects.Variable import Descriptor
-from easyCore.Utils.json import MSONable
+from easyCore.Objects.core import ComponentSerializer
 
 # Loads element data from json file
 with open(os.path.join(str(Path(__file__).absolute().parent.parent), "Databases", "periodic_table.json"), "rt") as f:
@@ -1059,7 +1059,7 @@ class Element(Enum):
             print(" ".join(rowstr))
 
 
-class Species(MSONable):
+class Species(ComponentSerializer):
     """
     An extension of Element with an oxidation state and other optional
     properties. Properties associated with Species should be "idealized"
