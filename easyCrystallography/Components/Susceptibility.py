@@ -1,3 +1,4 @@
+from __future__ import annotations
 #  SPDX-FileCopyrightText: 2022 easyCrystallography contributors  <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022 Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
@@ -6,25 +7,26 @@
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Tuple, Union, ClassVar, Optional, Type
+from typing import List, Union, ClassVar, Optional, Type,  TYPE_CHECKING
 
 from easyCore import np
 from easyCore.Utils.io.star import StarEntry, StarSection, StarLoop
 from easyCore.Objects.ObjectClasses import BaseObj, Descriptor, Parameter
 from easyCore.Utils.classTools import addProp, removeProp
-from abc import abstractmethod
+
+if TYPE_CHECKING:
+    from easyCore.Utils.typing import iF
 
 _ANIO_DETAILS = {
     'msp_type': {
-        'description': "A standard code used to describe the type of magnetic susceptibility parameters used for the "
-                       "site.",
+        'description': "A standard code used to describe the type of atomic displacement parameters used for the site.",
+        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_adp_type.html',
         'value':       'Uani'
     },
     'Cani':     {
-        'description': 'The standard anisotropic magnetic susceptibility components in inverse teslas which appear in '
-                       'the structure-factor term.',
+        'description': 'Isotropic magnetic susceptibility parameter.',
+        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_aniso_U_.html',
         'value':       0.0,
-        'max':         np.inf,
         'units':       'T^-1',
         'fixed':       True,
     },
@@ -60,16 +62,9 @@ class MSPBase(BaseObj):
             matrix[2, 2] = pars[5].raw_value
         return matrix
 
-    @abstractmethod
-    def default(cls, interface=None):
-        pass
-
-    @abstractmethod
-    def from_pars(cls, interface=None, **kwargs):
-        pass
-
 
 class Cani(MSPBase):
+
     chi_11: ClassVar[Parameter]
     chi_12: ClassVar[Parameter]
     chi_13: ClassVar[Parameter]
@@ -108,50 +103,24 @@ class Cani(MSPBase):
             self.chi_33 = chi_33
         self.interface = interface
 
-    @classmethod
-    def default(cls, interface=None):
-        return cls(interface=interface)
-
-    @classmethod
-    def from_pars(cls,
-                  chi_11: Optional[float] = None,
-                  chi_12: Optional[float] = None,
-                  chi_13: Optional[float] = None,
-                  chi_22: Optional[float] = None,
-                  chi_23: Optional[float] = None,
-                  chi_33: Optional[float] = None,
-                  interface=None):
-        #                  interface: Optional[iF] = None):
-        return cls(chi_11=chi_11, chi_12=chi_12, chi_13=chi_13, chi_22=chi_22,
-                   chi_23=chi_23, chi_33=chi_33, interface=interface)
-
-
 class Ciso(MSPBase):
     chi: ClassVar[Parameter]
 
-    def __init__(self, chi: Optional[Union[Parameter, float]] = None, interface=None):
+    def __init__(self, chi: Optional[Union[Parameter, float]] = None, interface: Optional[iF] = None):
         super(Ciso, self).__init__('Ciso',
                                    chi=Parameter('chi', **_ANIO_DETAILS['Ciso']))
         if chi is not None:
             self.chi = chi
         self.interface = interface
 
-    @classmethod
-    def default(cls, interface=None):
-        return cls(interface=interface)
-
-    @classmethod
-    def from_pars(cls, chi: Optional[float] = None, interface=None):
-        return cls(chi=chi, interface=interface)
-
-
 _AVAILABLE_ISO_TYPES = {
     'Cani': Cani,
-    'Ciso': Ciso,
+    'Ciso': Ciso
 }
 
 
 class MagneticSusceptibility(BaseObj):
+
     msp_type: ClassVar[Descriptor]
     msp_class: ClassVar[Type[MSPBase]]
 
@@ -162,9 +131,8 @@ class MagneticSusceptibility(BaseObj):
         if msp_class_name in _AVAILABLE_ISO_TYPES.keys():
             msp_class = _AVAILABLE_ISO_TYPES[msp_class_name]
             if "msp_class" in kwargs:
-                msp = kwargs.pop("msp_class")
-            else:
-                msp = msp_class(**kwargs, interface=interface)
+                _ = kwargs.pop("msp_class")
+            msp = msp_class(**kwargs, interface=interface)
         else:
             raise AttributeError(f"{msp_class_name} is not a valid magnetic susceptibility type")
         super(MagneticSusceptibility, self).__init__('msp',
@@ -178,79 +146,22 @@ class MagneticSusceptibility(BaseObj):
         if msp_string in _AVAILABLE_ISO_TYPES.keys():
             msp_class = _AVAILABLE_ISO_TYPES[msp_string]
             if kwargs:
-                msp_class: MSPBase = msp_class.from_pars(interface=self.interface, **kwargs)
+                msp_class: MSPBase = msp_class(interface=self.interface, **kwargs)
             else:
-                msp_class: MSPBase = msp_class.default(interface=self.interface)
+                msp_class: MSPBase = msp_class(interface=self.interface)
         else:
             raise AttributeError
-        for par in self.msp_type.get_parameters():
+
+        for par in self.msp_class.get_parameters():
             removeProp(self, par.name)
         self.msp_class = msp_class
         self.msp_type = msp_string
         for par in msp_class.get_parameters():
             addProp(self, par.name, fget=self.__a_getter(par.name), fset=self.__a_setter(par.name))
 
-    @classmethod
-    def from_pars(cls, msp_type: str, interface=None, **kwargs):
-        return cls(Descriptor('msp_type',
-                              value=msp_type,
-                              **{k: _ANIO_DETAILS['msp_type'][k] for k in _ANIO_DETAILS['msp_type'].keys() if
-                                 k != 'value'}),
-                   interface=interface, **kwargs)
-
-    @classmethod
-    def default(cls, interface=None):
-        return cls(Descriptor('msp_type', **_ANIO_DETAILS['msp_type']), interface=interface)
-
-    @classmethod
-    def from_string(cls, in_string: Union[str, StarLoop]) -> Tuple[List[str], List['MagneticSusceptibility']]:
-        # We assume the in_string is a loop
-        from easyCrystallography.Components.Site import Site
-        if isinstance(in_string, StarLoop):
-            loop = in_string
-        else:
-            loop = StarLoop.from_string(in_string)
-        sections = loop.to_StarSections()
-        atom_labels = []
-        adp = []
-        for section in sections:
-            entries = section.to_StarEntries()
-            site_name_idx = section.labels.index(Site._CIF_CONVERSIONS[0][1])
-            atom_labels.append(entries[site_name_idx].value)
-            adp_type_idx = section.labels.index(cls._CIF_CONVERSIONS[0][1])
-            adp_type = entries[adp_type_idx].value
-            if adp_type not in _AVAILABLE_ISO_TYPES.keys():
-                raise AttributeError
-            adp_class = _AVAILABLE_ISO_TYPES[adp_type]
-            pars = [par[1] for par in adp_class._CIF_CONVERSIONS]
-            par_dict = {}
-            idx_list = []
-            name_list = []
-            for idx, par in enumerate(pars):
-                idx_list.append(section.labels.index(par))
-                name_list.append(adp_class._CIF_CONVERSIONS[idx][0])
-                par_dict[name_list[-1]] = entries[idx_list[-1]].value
-            obj = cls.from_pars(adp_type, **par_dict)
-            for idx2, idx in enumerate(idx_list):
-                if hasattr(entries[idx], 'fixed') and entries[idx].fixed is not None:
-                    entry = getattr(obj, name_list[idx2])
-                    entry.fixed = entries[idx].fixed
-                if hasattr(entries[idx], 'error') and entries[idx].error is not None:
-                    entry = getattr(obj, name_list[idx2])
-                    entry.error = entries[idx].error
-            adp.append(obj)
-        return atom_labels, adp
-
     @property
     def available_types(self) -> List[str]:
         return [name for name in _AVAILABLE_ISO_TYPES.keys()]
-
-    def to_star(self, atom_label: Descriptor) -> StarEntry:
-        s = [StarEntry(atom_label, 'label'),
-             StarEntry(self.msp_type),
-             *[StarEntry(par) for par in self.msp_class.get_parameters()]
-             ]
-        return StarSection.from_StarEntries(s)
 
     @staticmethod
     def __a_getter(key: str):
@@ -264,5 +175,4 @@ class MagneticSusceptibility(BaseObj):
     def __a_setter(key):
         def setter(obj, value):
             obj.msp_class._kwargs[key].value = value
-
         return setter

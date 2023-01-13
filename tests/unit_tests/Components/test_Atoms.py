@@ -7,7 +7,7 @@ import pytest
 from easyCore import np
 from easyCrystallography.Components.Site import Atoms, Site, _SITE_DETAILS
 
-site_details = [Site.from_pars('Al', 'Al'), Site.from_pars('Fe', 'Fe3+'), Site.from_pars('TEST', 'H')]
+site_details = [Site('Al', 'Al'), Site('Fe', 'Fe3+'), Site('TEST', 'H')]
 
 
 def gen_sites() -> List[Site]:
