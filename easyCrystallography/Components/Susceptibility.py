@@ -79,6 +79,7 @@ class Cani(MSPBase):
                  chi_22: Optional[Union[Parameter, float]] = None,
                  chi_23: Optional[Union[Parameter, float]] = None,
                  chi_33: Optional[Union[Parameter, float]] = None,
+                 msp_values: Optional[Type[MSPBase]] = None,
                  interface=None):
 
         super(Cani, self).__init__('Cani',
@@ -101,16 +102,27 @@ class Cani(MSPBase):
             self.chi_23 = chi_23
         if chi_33 is not None:
             self.chi_33 = chi_33
+        if msp_values is not None:
+            self.chi_11 = msp_values.chi_11
+            self.chi_12 = msp_values.chi_12
+            self.chi_13 = msp_values.chi_13
+            self.chi_22 = msp_values.chi_22
+            self.chi_23 = msp_values.chi_23
+            self.chi_33 = msp_values.chi_33
         self.interface = interface
 
 class Ciso(MSPBase):
     chi: ClassVar[Parameter]
 
-    def __init__(self, chi: Optional[Union[Parameter, float]] = None, interface: Optional[iF] = None):
+    def __init__(self, chi: Optional[Union[Parameter, float]] = None,
+                 msp_values: Optional[Type[MSPBase]] = None,
+                 interface: Optional[iF] = None):
         super(Ciso, self).__init__('Ciso',
                                    chi=Parameter('chi', **_ANIO_DETAILS['Ciso']))
         if chi is not None:
             self.chi = chi
+        if msp_values is not None:
+            self.chi = msp_values.chi
         self.interface = interface
 
 _AVAILABLE_ISO_TYPES = {
@@ -130,6 +142,8 @@ class MagneticSusceptibility(BaseObj):
         msp_class_name = msp_type.raw_value
         if msp_class_name in _AVAILABLE_ISO_TYPES.keys():
             msp_class = _AVAILABLE_ISO_TYPES[msp_class_name]
+            # enable passing chi values directly to constructor
+            kwargs['msp_values'] = kwargs['msp_class']
             if "msp_class" in kwargs:
                 _ = kwargs.pop("msp_class")
             msp = msp_class(**kwargs, interface=interface)
