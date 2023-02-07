@@ -142,9 +142,9 @@ class MagneticSusceptibility(BaseObj):
         msp_class_name = msp_type.raw_value
         if msp_class_name in _AVAILABLE_ISO_TYPES.keys():
             msp_class = _AVAILABLE_ISO_TYPES[msp_class_name]
-            # enable passing chi values directly to constructor
-            kwargs['msp_values'] = kwargs['msp_class']
             if "msp_class" in kwargs:
+                # enable passing chi values directly to constructor
+                kwargs['msp_values'] = kwargs['msp_class']
                 _ = kwargs.pop("msp_class")
             msp = msp_class(**kwargs, interface=interface)
         else:
