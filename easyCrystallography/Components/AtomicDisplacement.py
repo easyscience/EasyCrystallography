@@ -212,8 +212,11 @@ class AtomicDisplacement(BaseObj):
         adp_class_name = adp_type.raw_value
         if adp_class_name in _AVAILABLE_ISO_TYPES.keys():
             adp_class = _AVAILABLE_ISO_TYPES[adp_class_name]
+            # enable passing ADP parameters to constructor
             if "adp_class" in kwargs.keys():
-               _ = kwargs.pop("adp_class")
+                m = getattr(kwargs["adp_class"], adp_class_name)
+                kwargs[adp_class_name] = m
+                _ = kwargs.pop("adp_class")
             adp = adp_class(**kwargs, interface=interface)
         else:
             raise AttributeError(f"{adp_class_name} is not a valid adp type")
