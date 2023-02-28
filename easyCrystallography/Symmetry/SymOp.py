@@ -6,10 +6,11 @@ __email__ = "shyuep@gmail.com"
 __status__ = "Production"
 __date__ = "Sep 23, 2011"
 
-#  SPDX-FileCopyrightText: 2022 easyCrystallography contributors  <crystallography@easyscience.software>
+#  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022 Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
-#
+#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+
+from typing import Union, List, Tuple, Any
 
 """
 This module provides classes that operate on points or vectors in 3D space.
@@ -22,11 +23,11 @@ import warnings
 from math import sin, cos, pi, sqrt
 
 from easyCore import np
-from easyCore.Utils.json import MSONable
+from easyCore.Objects.core import ComponentSerializer
 from easyCore.Utils.string import transformation_to_string
 
 
-class SymmOp(MSONable):
+class SymmOp(ComponentSerializer):
     """
     A symmetry operation in cartesian space. Consists of a rotation plus a
     translation. Implementation is as an affine transformation matrix of rank 4
@@ -34,6 +35,9 @@ class SymmOp(MSONable):
     .. attribute:: affine_matrix
         A 4x4 numpy.array representing the symmetry operation.
     """
+    _REDIRECT = {
+        'affine_transformation_matrix': lambda obj: getattr(obj, 'affine_matrix').aslist()
+    }
 
     def __init__(self, affine_transformation_matrix, tol=0.01):
         """
@@ -164,7 +168,7 @@ class SymmOp(MSONable):
         return False
 
     @property
-    def rotation_matrix(self):
+    def rotation_matrix(self) -> np.ndarray:
         """
         A 3x3 numpy.array representing the rotation matrix.
         """
@@ -194,13 +198,16 @@ class SymmOp(MSONable):
         return SymmOp(invr)
 
     @staticmethod
-    def from_axis_angle_and_translation(axis, angle, angle_in_radians=False,
-                                        translation_vec=(0, 0, 0)):
+    def from_axis_angle_and_translation(axis: Union[Tuple[float, float, float], List[float], np.ndarray],
+                                        angle: float, angle_in_radians: bool = False,
+                                        translation_vec: Union[Tuple[float, float, float],
+                                                               List[float],
+                                                               np.ndarray] = (0, 0, 0)):
         """
         Generates a SymmOp for a rotation about a given axis plus translation.
         Args:
             axis: The axis of rotation in cartesian space. For example,
-                [1, 0, 0]indicates rotation about x-axis.
+                [1, 0, 0] indicates rotation about x-axis.
             angle (float): Angle of rotation.
             angle_in_radians (bool): Set to True if angles are given in
                 radians. Or else, units of degrees are assumed.
@@ -234,7 +241,9 @@ class SymmOp(MSONable):
         return SymmOp.from_rotation_and_translation(r, vec)
 
     @staticmethod
-    def from_origin_axis_angle(origin, axis, angle, angle_in_radians=False):
+    def from_origin_axis_angle(origin: Union[Tuple[float, float, float], List[float], np.ndarray],
+                               axis: Union[Tuple[float, float, float], List[float], np.ndarray],
+                               angle: float, angle_in_radians: bool = False):
         """
         Generates a SymmOp for a rotation about a given axis through an
         origin.
@@ -290,7 +299,8 @@ class SymmOp(MSONable):
                        [m31, m32, m33, m34], [0, 0, 0, 1]])
 
     @staticmethod
-    def reflection(normal, origin=(0, 0, 0)):
+    def reflection(normal: Union[Tuple[float, float, float], List[float], np.ndarray],
+                   origin: Union[Tuple[float, float, float], List[float], np.ndarray] = (0, 0, 0)):
         """
         Returns reflection symmetry operation.
         Args:
@@ -324,7 +334,7 @@ class SymmOp(MSONable):
         return SymmOp(mirror_mat)
 
     @staticmethod
-    def inversion(origin=(0, 0, 0)):
+    def inversion(origin: Union[Tuple[float, float, float], List[float], np.ndarray] = (0, 0, 0)):
         """
         Inversion symmetry operation about axis.
         Args:
@@ -339,7 +349,8 @@ class SymmOp(MSONable):
         return SymmOp(mat)
 
     @staticmethod
-    def rotoreflection(axis, angle, origin=(0, 0, 0)):
+    def roto_reflection(axis: Union[Tuple[float, float, float], List[float], np.ndarray], angle: float,
+                       origin: Union[Tuple[float, float, float], List[float], np.ndarray] = (0, 0, 0)):
         """
         Returns a roto-reflection symmetry operation
         Args:
@@ -355,15 +366,7 @@ class SymmOp(MSONable):
         m = np.dot(rot.affine_matrix, refl.affine_matrix)
         return SymmOp(m)
 
-    def as_dict(self, skip=None):
-        """
-        :return: MSONAble dict.
-        """
-        return {"@module": self.__class__.__module__,
-                "@class":  self.__class__.__name__,
-                "matrix":  self.affine_matrix.tolist(), "tolerance": self.tol}
-
-    def as_xyz_string(self):
+    def as_xyz_string(self) -> str:
         """
         Returns a string of the form 'x, y, z', '-x, -y, z',
         '-y+1/2, x+1/2, z+1/2', etc. Only works for integer rotation matrices
@@ -376,7 +379,7 @@ class SymmOp(MSONable):
         return transformation_to_string(self.rotation_matrix, translation_vec=self.translation_vector, delim=", ")
 
     @staticmethod
-    def from_xyz_string(xyz_string):
+    def from_xyz_string(xyz_string: str):
         """
         Args:
             xyz_string: string of the form 'x, y, z', '-x, -y, z',
@@ -405,11 +408,3 @@ class SymmOp(MSONable):
                     if m.group(3) != "" else float(m.group(2))
                 trans[i] = num * factor
         return SymmOp.from_rotation_and_translation(rot_matrix, trans)
-
-    @classmethod
-    def from_dict(cls, d):
-        """
-        :param d: dict
-        :return: SymmOp from dict representation.
-        """
-        return cls(d["matrix"], d["tolerance"])

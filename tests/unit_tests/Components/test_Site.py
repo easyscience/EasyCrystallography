@@ -15,7 +15,7 @@ site_details = [("Al", "Al"), ("Fe", "Fe3+"), ("TEST", "H")]
 @pytest.fixture
 def instance(request):
     def class_creation(*args, **kwargs):
-        return Site.from_pars(*request.param, *args, **kwargs)
+        return Site(*request.param, *args, **kwargs)
 
     return class_creation
 
@@ -100,7 +100,7 @@ def test_Site_creation(instance, element: List, expected: dict):
 
 @pytest.mark.parametrize("label, elm", site_details)
 def test_Site_default(label, elm):
-    site = Site.default(label, elm)
+    site = Site(label, elm)
 
     assert site.name == label
     assert site.specie.raw_value == elm
@@ -162,7 +162,7 @@ def test_Site_fract_coords(instance, element: List, expected: dict):
 )
 def test_Site_fract_dist(instance, element: List, expected: dict, second_pt):
     d = instance(**element)
-    other_site = Site.from_pars("H", "H", 1, *second_pt)
+    other_site = Site("H", "H", 1, *second_pt)
     expected_value = np.linalg.norm(np.array(second_pt) - d.fract_coords)
     assert np.all(d.fract_distance(other_site) == expected_value)
 
@@ -170,7 +170,7 @@ def test_Site_fract_dist(instance, element: List, expected: dict, second_pt):
 @pytest.mark.parametrize("label, elm", site_details)
 @pytest.mark.parametrize("element, expected", _generate_inputs(do_occ=False))
 def test_Site_repr(label, elm, element, expected):
-    d = Site.from_pars(label, elm, **element)
+    d = Site(label, elm, **element)
 
     el_for_check = ["fract_x", "fract_y", "fract_z"]
 
@@ -189,7 +189,7 @@ def test_Site_repr(label, elm, element, expected):
 
 @pytest.mark.parametrize("label, elm", site_details)
 def test_Site_as_dict(label, elm):
-    s = Site.from_pars(label, elm)
+    s = Site(label, elm)
     obtained = s.as_dict()
     expected = {
         "@module": "easyCrystallography.Components.Site",
@@ -423,3 +423,11 @@ def test_Site_from_dict(label, elm):
             assert item == check
 
     check_dict(d, s.as_dict())
+
+
+def test_site_with_adp():
+    from easyCrystallography.Components.AtomicDisplacement import AtomicDisplacement
+    adp = AtomicDisplacement()
+    site = Site(adp=adp)
+    assert hasattr(site, "adp")
+    assert site.adp is adp
