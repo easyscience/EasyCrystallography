@@ -76,20 +76,20 @@ class Site(BaseObj):
             fract_z=Parameter("fract_z", **_SITE_DETAILS["position"]),
             **kwargs,
         )
-        if not label:
+        if label is not None:
             self.label = label
-        if not specie:
+        if specie is not None:
             self.specie = specie
         else:
-            if not label:
+            if label is not None:
                 self.specie = label
-        if not occupancy:
+        if occupancy is not None:
             self.occupancy = occupancy
-        if not fract_x:
+        if fract_x is not None:
             self.fract_x = fract_x
-        if not fract_y:
+        if fract_y is not None:
             self.fract_y = fract_y
-        if not fract_z:
+        if fract_z is not None:
             self.fract_z = fract_z
         self.interface = interface
 
