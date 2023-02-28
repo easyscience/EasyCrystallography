@@ -1,29 +1,26 @@
+#  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
+#  SPDX-License-Identifier: BSD-3-Clause
+#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+
 from __future__ import annotations
+
 __author__ = 'github.com/wardsimon'
-__version__ = '0.0.1'
+__version__ = '0.1.0'
 
-from typing import Optional, TYPE_CHECKING
-
-from easyCore.Objects.ObjectClasses import BaseObj, Parameter
-from easyCrystallography.Symmetry.SymOp import SymOp
+from typing import ClassVar, TYPE_CHECKING, Union, List
+from easyCore import np
+from easyCore.Objects.Variable import Parameter
+from easyCore.Objects.Groups import BaseCollection
 
 if TYPE_CHECKING:
-    from easyCore.Utils.typing import iF
+    from easyCore.Utils.typing import iF, BV
 
+class Moment:
 
-class VectorField(BaseObj):
-    _name = "vector_field"
-    _defaults = {
-        'value': {'value': 1.0, 'units': 'tesla', 'fixed': True},
-        'rotation': [0., 0., 1.]
-    }
+    spin: ClassVar[Parameter]
+    axis: np.ndarray
 
     def __init__(self,
-                 value: Optional[Parameter, float] = None,
-                 rotation: Optional[SymOp] = None,
-                 interface: Optional[iF] = None):
-        super().__init__(self._name,
-                         value=Parameter(**self._defaults["value"]))
-        if value is not None:
-            self.value = value
-        self.interface = interface
+                 spin: Union[float, Parameter],
+                 moment: Union[List, np.ndarray, ]):
+        super().__init__(*args, **kwargs)

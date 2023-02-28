@@ -1,7 +1,7 @@
-#  SPDX-FileCopyrightText: 2022 easyCrystallography contributors  <crystallography@easyscience.software>
+#  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022 Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
-#
+#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+
 from __future__ import annotations
 
 __author__ = 'github.com/wardsimon'
@@ -76,20 +76,20 @@ class Site(BaseObj):
             fract_z=Parameter("fract_z", **_SITE_DETAILS["position"]),
             **kwargs,
         )
-        if label is not None:
+        if not label:
             self.label = label
-        if specie is not None:
+        if not specie:
             self.specie = specie
         else:
-            if label is not None:
+            if not label:
                 self.specie = label
-        if occupancy is not None:
+        if not occupancy:
             self.occupancy = occupancy
-        if fract_x is not None:
+        if not fract_x:
             self.fract_x = fract_x
-        if fract_y is not None:
+        if not fract_y:
             self.fract_y = fract_y
-        if fract_z is not None:
+        if not fract_z:
             self.fract_z = fract_z
         self.interface = interface
 
