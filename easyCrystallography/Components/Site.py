@@ -167,7 +167,7 @@ class PeriodicSite(Site):
 
     @staticmethod
     def _from_site_kwargs(lattice: PeriodicLattice, site: S) -> Dict[str, float]:
-        return {
+        basis = {
             "lattice": lattice,
             "label": site.label,
             "specie": site.specie,
@@ -177,6 +177,9 @@ class PeriodicSite(Site):
             "fract_z": site.fract_z,
             "interface": site.interface,
         }
+        if hasattr(site, 'spin'):
+            basis['spin'] = site.spin
+        return basis
 
     @classmethod
     def from_site(cls, lattice: PeriodicLattice, site: S) -> S:

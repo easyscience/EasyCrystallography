@@ -116,7 +116,7 @@ def test_Lattice_from_pars(value: list, ang_unit: str):
             np.deg2rad(value[5]),
         ]
 
-    l = Lattice(*value, ang_unit=ang_unit)
+    this_lattice = Lattice(*value, ang_unit=ang_unit)
 
     items = [
         "length_a",
@@ -128,7 +128,7 @@ def test_Lattice_from_pars(value: list, ang_unit: str):
     ]
 
     for idx, key in enumerate(items):
-        item: Parameter = getattr(l, key)
+        item: Parameter = getattr(this_lattice, key)
         assert item.name == key
         t = key.split("_")[0]
         test_defaults = CELL_DETAILS[t].copy()
@@ -152,7 +152,7 @@ def test_Lattice_from_pars(value: list, ang_unit: str):
 def test_Lattice_from_matrix(value):
     args = value[0:-1]
     matrix = value[-1]
-    l = Lattice.from_matrix(matrix)
+    this_lattice = Lattice.from_matrix(matrix)
     items = [
         "length_a",
         "length_b",
@@ -162,7 +162,7 @@ def test_Lattice_from_matrix(value):
         "angle_gamma",
     ]
     for idx, key in enumerate(items):
-        item: Parameter = getattr(l, key)
+        item: Parameter = getattr(this_lattice, key)
         assert item.name == key
         t = key.split("_")[0]
         test_defaults = CELL_DETAILS[t].copy()
@@ -225,12 +225,12 @@ def test_Lattice_from_special(request, value):
 
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_pars_short_GET(value: list):
-    l = Lattice(*value)
+    this_lattice = Lattice(*value)
 
     items = ["a", "b", "c", "alpha", "beta", "gamma"]
 
     for idx, item in enumerate(items):
-        f = getattr(l, item)
+        f = getattr(this_lattice, item)
         assert f == value[idx]
 
 
@@ -249,15 +249,15 @@ def test_Lattice_pars_short_GET(value: list):
     ),
 )
 def test_Lattice_pars_short_SET(in_value: list, new_value: list):
-    l = Lattice(*in_value)
+    this_lattice = Lattice(*in_value)
 
     items = ["a", "b", "c", "alpha", "beta", "gamma"]
 
     for idx, item in enumerate(items):
-        f = getattr(l, item)
+        f = getattr(this_lattice, item)
         assert f == in_value[idx]
-        setattr(l, item, new_value[idx])
-        f = getattr(l, item)
+        setattr(this_lattice, item, new_value[idx])
+        f = getattr(this_lattice, item)
         assert f == new_value[idx]
 
 
@@ -276,7 +276,7 @@ def test_Lattice_pars_short_SET(in_value: list, new_value: list):
     ),
 )
 def test_Lattice_pars_SET(in_value: list, new_value: list):
-    l = Lattice(*in_value)
+    this_lattice = Lattice(*in_value)
 
     items = [
         "length_a",
@@ -288,23 +288,23 @@ def test_Lattice_pars_SET(in_value: list, new_value: list):
     ]
 
     for idx, item in enumerate(items):
-        f = getattr(l, item)
+        f = getattr(this_lattice, item)
         assert f.raw_value == in_value[idx]
-        setattr(l, item, new_value[idx])
-        f = getattr(l, item)
+        setattr(this_lattice, item, new_value[idx])
+        f = getattr(this_lattice, item)
         assert f.raw_value == new_value[idx]
 
 
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_angles(value: list):
-    l = Lattice(*value)
-    assert np.all(np.array(value[3:]) == l.angles)
+    this_lattice = Lattice(*value)
+    assert np.all(np.array(value[3:]) == this_lattice.angles)
 
 
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_lengths(value: list):
-    l = Lattice(*value)
-    assert np.all(np.array(value[0:3]) == l.lengths)
+    this_lattice = Lattice(*value)
+    assert np.all(np.array(value[0:3]) == this_lattice.lengths)
 
 
 @pytest.mark.parametrize("value", matrix_pars)
@@ -312,8 +312,8 @@ def test_Lattice_matrix(value: list):
     args = value[0:-1]
     matrix = np.array(value[-1])
 
-    l = Lattice(*args)
-    assert np.all(np.isclose(matrix, l.matrix))
+    this_lattice = Lattice(*args)
+    assert np.all(np.isclose(matrix, this_lattice.matrix))
 
 
 @pytest.mark.parametrize("value", matrix_pars)
@@ -322,8 +322,8 @@ def test_Lattice_inv_matrix(value: list):
     matrix = np.array(value[-1])
     matrix = np.linalg.inv(matrix)
 
-    l = Lattice(*args)
-    assert np.all(np.isclose(matrix, l.inv_matrix))
+    this_lattice = Lattice(*args)
+    assert np.all(np.isclose(matrix, this_lattice.inv_matrix))
 
 
 @pytest.mark.parametrize(
@@ -336,9 +336,9 @@ def test_Lattice_volume(value):
     args = value[:-1]
     volume = value[-1]
 
-    l = Lattice(*args)
-    assert volume == pytest.approx(l.volume.m)
-    assert str(l.volume.units) == "angstrom ** 3"
+    this_lattice = Lattice(*args)
+    assert volume == pytest.approx(this_lattice.volume.m)
+    assert str(this_lattice.volume.units) == "angstrom ** 3"
 
 
 @pytest.mark.parametrize("value", matrix_pars)
@@ -348,8 +348,8 @@ def test_Lattice_metric_tensor(value):
     matrix = np.array(value[-1])
     matrix = np.dot(matrix, matrix.T)
 
-    l = Lattice(*args)
-    assert np.all(np.isclose(matrix, l.metric_tensor))
+    this_lattice = Lattice(*args)
+    assert np.all(np.isclose(matrix, this_lattice.metric_tensor))
 
 
 @pytest.mark.parametrize(
@@ -367,8 +367,8 @@ def test_Lattice_metric_tensor(value):
     ),
 )
 def test_Lattice_reciprocal_lattice(in_value: list, new_value: list):
-    l = Lattice(*in_value)
-    obj = l.reciprocal_lattice
+    this_lattice = Lattice(*in_value)
+    obj = this_lattice.reciprocal_lattice
 
     items = [
         "length_a",
@@ -399,8 +399,8 @@ def test_Lattice_reciprocal_lattice(in_value: list, new_value: list):
     ),
 )
 def test_Lattice_reciprocal_lattice(in_value: list, new_value: list):
-    l = Lattice(*in_value)
-    obj = l.reciprocal_lattice_crystallographic
+    this_lattice = Lattice(*in_value)
+    obj = this_lattice.reciprocal_lattice_crystallographic
 
     items = [
         "length_a",
@@ -419,13 +419,13 @@ def test_Lattice_reciprocal_lattice(in_value: list, new_value: list):
 @pytest.mark.parametrize("scale", [0.1, 2, 3.14, 100])
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_scale(value: list, scale: float):
-    l = Lattice(*value)
+    this_lattice = Lattice(*value)
 
-    new_volume = scale * l.volume
-    scaled = l.scale(new_volume)
+    new_volume = scale * this_lattice.volume
+    scaled = this_lattice.scale(new_volume)
 
     assert np.isclose(scaled.volume, new_volume)
-    assert np.all(np.isclose(l.angles, scaled.angles))
+    assert np.all(np.isclose(this_lattice.angles, scaled.angles))
 
 
 @pytest.mark.parametrize(
@@ -433,11 +433,11 @@ def test_Lattice_scale(value: list, scale: float):
 )
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_length_scale(value: list, scale: float):
-    l = Lattice(*value)
+    this_lattice = Lattice(*value)
 
-    scaled = l.scale_lengths(scale)
-    assert np.all(np.isclose(l.angles, scaled.angles))
-    assert np.all(np.isclose(np.array(l.lengths) * scale, scaled.lengths))
+    scaled = this_lattice.scale_lengths(scale)
+    assert np.all(np.isclose(this_lattice.angles, scaled.angles))
+    assert np.all(np.isclose(np.array(this_lattice.lengths) * scale, scaled.lengths))
 
 
 @pytest.mark.parametrize(
@@ -445,10 +445,10 @@ def test_Lattice_length_scale(value: list, scale: float):
 )
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_fract_cart_coords(value: list, co_ords: list):
-    l = Lattice(*value)
+    this_lattice = Lattice(*value)
 
-    frac = l.get_fractional_coords(co_ords)
-    cart_co_ords = l.get_cartesian_coords(frac)
+    frac = this_lattice.get_fractional_coords(co_ords)
+    cart_co_ords = this_lattice.get_cartesian_coords(frac)
 
     assert np.all(np.isclose(co_ords, cart_co_ords))
 
@@ -456,8 +456,8 @@ def test_Lattice_fract_cart_coords(value: list, co_ords: list):
 @pytest.mark.parametrize("crystal_system", ["cubic", "tetragonal", "orthorhombic"])
 def test_Lattice_is_orthogonal(crystal_system):
 
-    l = Lattice(*pars_dict[crystal_system])
-    assert l.is_orthogonal()
+    this_lattice = Lattice(*pars_dict[crystal_system])
+    assert this_lattice.is_orthogonal()
 
 
 def test_Lattice_is_hexagonal():
@@ -465,16 +465,16 @@ def test_Lattice_is_hexagonal():
     lengths = np.array(pars_dict["hexagonal"][0:3])
     angles = np.array(pars_dict["hexagonal"][3:])
 
-    l = Lattice(*lengths, *angles)
-    assert l.is_hexagonal()
+    this_lattice = Lattice(*lengths, *angles)
+    assert this_lattice.is_hexagonal()
 
-    l = Lattice(*lengths, *(angles + 1e-5))
-    assert l.is_hexagonal(hex_angle_tol=1e-4)
-    assert not l.is_hexagonal(hex_angle_tol=1e-6)
+    this_lattice = Lattice(*lengths, *(angles + 1e-5))
+    assert this_lattice.is_hexagonal(hex_angle_tol=1e-4)
+    assert not this_lattice.is_hexagonal(hex_angle_tol=1e-6)
 
-    l = Lattice(*(lengths + [1e-2, -1e-2, 1e-2]), *angles)
-    assert l.is_hexagonal(hex_length_tol=1e-1)
-    assert not l.is_hexagonal(hex_length_tol=1e-7)
+    this_lattice = Lattice(*(lengths + [1e-2, -1e-2, 1e-2]), *angles)
+    assert this_lattice.is_hexagonal(hex_length_tol=1e-1)
+    assert not this_lattice.is_hexagonal(hex_length_tol=1e-7)
 
 
 @pytest.mark.parametrize(
@@ -492,8 +492,8 @@ def test_Lattice_is_hexagonal():
     ),
 )
 def test_Lattice_repr(values, out_str):
-    l = Lattice(*values)
-    assert str(l) == out_str
+    this_lattice = Lattice(*values)
+    assert str(this_lattice) == out_str
 
 
 def make_dict(value) -> dict:
@@ -604,8 +604,8 @@ def make_dict(value) -> dict:
 
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_as_dict(value: list):
-    l = Lattice(*value)
-    obtained = l.as_dict()
+    this_lattice = Lattice(*value)
+    obtained = this_lattice.as_dict()
     expected = make_dict(value)
 
     def check_dict(check, item):
@@ -625,8 +625,8 @@ def test_Lattice_as_dict(value: list):
 def test_Lattice_from_dict(value: list):
 
     expected = make_dict(value)
-    l = Lattice.from_dict(expected)
-    obtained = l.as_dict()
+    this_lattice = Lattice.from_dict(expected)
+    obtained = this_lattice.as_dict()
 
     def check_dict(check, item):
         if isinstance(check, dict) and isinstance(item, dict):
@@ -646,13 +646,13 @@ def test_Lattice_from_dict(value: list):
 @pytest.mark.parametrize("opt", ["m", "l", "t"])
 def test_Lattice_fmt(value, fmt, opt):
 
-    l = Lattice(*value)
+    this_lattice = Lattice(*value)
     out_fmt = "{}{}".format(fmt, opt)
 
     def do_test(in_str):
-        m = (l.lengths, l.angles)
+        m = (this_lattice.lengths, this_lattice.angles)
         if opt == "m":
-            m = l.matrix.tolist()
+            m = this_lattice.matrix.tolist()
             fmt2 = "[[{}, {}, {}], [{}, {}, {}], [{}, {}, {}]]"
         elif opt == "l":
             fmt2 = "{{{}, {}, {}, {}, {}, {}}}"
@@ -664,11 +664,11 @@ def test_Lattice_fmt(value, fmt, opt):
     # Ancient Python. We won't be supporting this
     with pytest.raises(TypeError):
         out_fmt2 = "%" + out_fmt
-        out_str = out_fmt2 % l
+        out_str = out_fmt2 % this_lattice
         do_test(out_str)
     # Python >2.7 "{:03fm}".format(l)
     out_fmt2 = "{:" + f"{out_fmt}" + "}"
-    out_str = out_fmt2.format(l)
+    out_str = out_fmt2.format(this_lattice)
     do_test(out_str)
     # Python >3.6 + f"{l:03fm}"
     # This is stupidly dangerous.
@@ -678,7 +678,7 @@ def test_Lattice_fmt(value, fmt, opt):
     def effify(non_f_str: str, l: Lattice) -> str:
         return eval(f'f"""{non_f_str}"""')
 
-    out_str = effify(f"{{l:{out_fmt}}}", l)
+    out_str = effify(f"{{l:{out_fmt}}}", this_lattice)
     do_test(out_str)
 
 
