@@ -11,7 +11,7 @@ from easyCrystallography.Components.Spin import Spin
 
 from crysvue.canvases.canvas import CrystalCanvas
 from crysvue.visual.components import Arrow3D
-from crysvue.interface.easyCrystallography import UnitCell, Atoms, ABCAxis
+from easyCrystallography.graphics.crysvue import UnitCell, Atoms, ABCAxis
 
 
 lattice = Lattice(5, 5, 5, 90, 90, 90)

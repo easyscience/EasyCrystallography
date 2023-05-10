@@ -19,7 +19,7 @@ from .Lattice import PeriodicLattice
 from .Specie import Specie
 
 if TYPE_CHECKING:
-    from easyCore.Utils.typing import iF
+    from easyCore.Utils.typing import iF, BV, B, V
 
 
 _SITE_DETAILS = {
@@ -94,6 +94,9 @@ class Site(BaseObj):
         self.interface = interface
 
     def __repr__(self) -> str:
+        """
+        Representation of the site
+        """
         return (
             f"Atom {self.name} ({self.specie.raw_value}) @"
             f" ({self.fract_x.raw_value}, {self.fract_y.raw_value}, {self.fract_z.raw_value})"
@@ -218,19 +221,17 @@ class Atoms(BaseCollection):
     def __repr__(self) -> str:
         return f"Collection of {len(self)} sites."
 
-    def __getitem__(
-        self, idx: Union[int, slice]
-    ) -> Union[Parameter, Descriptor, BaseObj, "BaseCollection"]:
+    def __getitem__(self, idx: Union[int, slice]) -> BV:
         if isinstance(idx, str) and idx in self.atom_labels:
             idx = self.atom_labels.index(idx)
         return super(Atoms, self).__getitem__(idx)
 
-    def __delitem__(self, key: Union[int, str]):
+    def __delitem__(self, key: Union[int, str]) -> None:
         if isinstance(key, str) and key in self.atom_labels:
             key = self.atom_labels.index(key)
         return super(Atoms, self).__delitem__(key)
 
-    def append(self, item: S):
+    def append(self, item: S) -> None:
         if not issubclass(type(item), Site):
             raise TypeError("Item must be a Site")
         if item.label.raw_value in self.atom_labels:

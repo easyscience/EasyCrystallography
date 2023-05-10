@@ -9,7 +9,7 @@ from easyCrystallography.Components.Site import PeriodicAtoms, Site
 from easyCrystallography.Components.SpaceGroup import SpaceGroup
 
 from crysvue.canvases.canvas import CrystalCanvas
-from crysvue.interface.easyCrystallography import UnitCell, Atoms, ABCAxis
+from easyCrystallography.graphics.crysvue import UnitCell, Atoms, ABCAxis
 
 
 lattice = Lattice(4, 4, 8, 90, 90, 120)

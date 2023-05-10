@@ -8,13 +8,11 @@ from __future__ import annotations
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Tuple, Union, ClassVar, TypeVar, Optional, TYPE_CHECKING
+from typing import List, Union, ClassVar, TypeVar, Optional, TYPE_CHECKING, NoReturn
 
 from easyCore import np
-from easyCore.Utils.io.star import StarEntry, StarSection, StarLoop
 from easyCore.Objects.ObjectClasses import BaseObj, Descriptor, Parameter
 from easyCore.Utils.classTools import addProp, removeProp
-from abc import abstractmethod
 
 if TYPE_CHECKING:
     from easyCore.Utils.typing import iF
@@ -86,7 +84,7 @@ class AdpBase(BaseObj):
             matrix[2, 2] = pars[5].raw_value
         return matrix
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         s = f'{self.name} - ('
         for par in self.get_parameters():
             s += f'{par.name}: {par.raw_value}, '
@@ -227,7 +225,7 @@ class AtomicDisplacement(BaseObj):
             addProp(self, par.name, fget=self.__a_getter(par.name), fset=self.__a_setter(par.name))
         self.interface = interface
 
-    def switch_type(self, adp_string: str, **kwargs):
+    def switch_type(self, adp_string: str, **kwargs) -> NoReturn:
         if adp_string in _AVAILABLE_ISO_TYPES.keys():
             adp_class = _AVAILABLE_ISO_TYPES[adp_string]
             if kwargs:

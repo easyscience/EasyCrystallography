@@ -11,6 +11,7 @@ import collections
 import itertools
 import math
 import warnings
+import numpy.typing as npt
 
 from fractions import Fraction
 from functools import reduce
@@ -25,6 +26,7 @@ from typing import (
     Optional,
     TYPE_CHECKING,
     Type,
+    NoReturn
 )
 
 from easyCore import np, ureg
@@ -33,9 +35,6 @@ from easyCore.Objects.ObjectClasses import Parameter, BaseObj
 from easyCore.Utils.decorators import memoized
 from .SpaceGroup import SpaceGroup
 from copy import deepcopy
-
-Vector3Like = Union[List[float], np.ndarray]
-
 
 if TYPE_CHECKING:
     from easyCore.Utils.typing import iF
@@ -123,11 +122,7 @@ class Lattice(BaseObj):
         self.interface = interface
 
     @classmethod
-    def from_matrix(
-        cls,
-        matrix: Union[List[float], List[List[float]], np.ndarray],
-        interface: Optional[iF] = None,
-    ) -> L:
+    def from_matrix(cls, matrix: npt.ArrayLike, interface: Optional[iF] = None) -> L:
         """
         Construct a crystallographic unit cell from the lattice matrix
 
@@ -405,15 +400,15 @@ class Lattice(BaseObj):
     @property
     def matrix(self) -> np.ndarray:
         """
-        Get the lattice matrix.
+        Get the lattice matrix. (This is the basis vectors of the unit cell.)
 
-        :return: Lattice matrix in the form of a 9x9 matrix
+        :return: Lattice matrix in the form of a 3x3 matrix
         :rtype: np.ndarray
         """
         return self.__matrix(*self.lengths, *self.angles)
 
     @property
-    def volume(self) -> float:
+    def volume(self) -> ureg.Quantity:
         """
         Volume of the unit cell.
 
@@ -496,7 +491,7 @@ class Lattice(BaseObj):
             versors * (new_c * ratios), interface=self.interface
         )
 
-    def scale_lengths(self, length_scales: Union[float, Vector3Like]) -> L:
+    def scale_lengths(self, length_scales: Union[float, npt.ArrayLike]) -> L:
         """
         Return a new Cell where the cell lengths have been scaled by the scaling
         factors. Angles are preserved.
@@ -514,7 +509,7 @@ class Lattice(BaseObj):
         )
 
     # Get functions
-    def get_cartesian_coords(self, fractional_coords: Vector3Like) -> np.ndarray:
+    def get_cartesian_coords(self, fractional_coords: npt.ArrayLike) -> np.ndarray:
         """
         Returns the cartesian coordinates given fractional coordinates.
 
@@ -525,7 +520,7 @@ class Lattice(BaseObj):
         """
         return np.dot(fractional_coords, self.matrix)
 
-    def get_fractional_coords(self, cart_coords: Vector3Like) -> np.ndarray:
+    def get_fractional_coords(self, cart_coords: npt.ArrayLike) -> np.ndarray:
         """
         Returns the fractional coordinates given cartesian coordinates.
 
@@ -536,9 +531,7 @@ class Lattice(BaseObj):
         """
         return np.dot(cart_coords, self.inv_matrix)
 
-    def get_vector_along_lattice_directions(
-        self, cart_coords: Vector3Like
-    ) -> np.ndarray:
+    def get_vector_along_lattice_directions(self, cart_coords: npt.ArrayLike) -> np.ndarray:
         """
         Returns the coordinates along lattice directions given cartesian coordinates.
         Note, this is different than a projection of the cartesian vector along the
@@ -552,7 +545,7 @@ class Lattice(BaseObj):
         """
         return self.lengths * self.get_fractional_coords(cart_coords)
 
-    def d_hkl(self, miller_index: Vector3Like) -> float:
+    def d_hkl(self, miller_index: npt.ArrayLike) -> float:
         """
         Returns the distance between the hkl plane and the origin
 
@@ -665,7 +658,7 @@ class Lattice(BaseObj):
             )
         )
 
-    def __format__(self, fmt_spec=""):
+    def __format__(self, fmt_spec="") -> str:
         """
         Support format printing. Supported formats are:
 
@@ -707,8 +700,8 @@ class Lattice(BaseObj):
 
     def get_points_in_sphere(
         self,
-        frac_points: List[Vector3Like],
-        center: Vector3Like,
+        frac_points: List[npt.ArrayLike],
+        center: npt.ArrayLike,
         r: float,
         zip_results=True,
     ) -> Union[List[Tuple[np.ndarray, float, int, np.ndarray]], List[np.ndarray],]:
