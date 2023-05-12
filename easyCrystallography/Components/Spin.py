@@ -106,9 +106,9 @@ class Spin(BaseObj):
 
         if m is None:
             m = 1.0
-        spherical = np.array([m * np.cos(theta) * np.sin(phi),
+        spherical = np.array([m * np.sin(theta) * np.cos(phi),
                               m * np.sin(theta) * np.sin(phi),
-                              m * np.cos(phi)])
+                              m * np.cos(theta)])
 
         sx, sy, sz = np.matmul(matrix, spherical)
         return cls(sx, sy, sz, m, normalize=False, normal=normal)
@@ -139,7 +139,11 @@ class Spin(BaseObj):
 
     @vector.setter
     def vector(self, value: npt.ArrayLike):
+        if self._borg.stack.enabled:
+            self._borg.stack.beginMacro('Spin vector change')
         self.s_x, self.s_y, self.s_z = value
+        if self._borg.stack.enabled:
+            self._borg.stack.endMacro()
 
     @property
     def theta(self) -> float:
@@ -161,29 +165,30 @@ class Spin(BaseObj):
     def angles(self) -> Tuple[float, float]:
         """
         Return the Spherical angles of the spin vector.
-        """
-        return self.theta, self.phi
-
-    @property
-    def matrix(self) -> np.ndarray:
-        """
-        Return the spin vector as a 3x3 rotation matrix.
+        If angles `theta` and `phi` are degenerate, the angles are reduced to their lowest base values.
         """
         theta = self.theta
         phi = self.phi
 
-        # Compute the rotation matrix
-        cos_theta = np.cos(theta)
-        sin_theta = np.sin(theta)
-        cos_phi = np.cos(phi)
-        sin_phi = np.sin(phi)
+        if np.abs(theta) < 1e-6:
+            theta = 0
+            # We are rotating around an axis in the xy plane
+            phi = 0
+        if np.abs(phi) - np.pi < 1e-6:
+            # We have a full rotation around the z-axis
+            phi = 0
+        if np.abs(theta) - np.pi < 1e-6:
+            # We have a full rotation around the y-axis
+            theta = 0
+        return theta, phi
 
-        rotation_matrix = np.array([
-            [cos_theta * cos_phi, cos_theta * sin_phi, -sin_theta],
-            [-sin_phi, cos_phi, 0],
-            [sin_theta * cos_phi, sin_theta * sin_phi, cos_theta]
-        ])
-
+    @property
+    def matrix(self) -> np.ndarray:
+        """
+        Return the spin vector as a 3x3 rotation matrix which assumes that the starting point is the [0, 0, 1] vector.
+        """
+        # Matrix needed to rotate a starting point of [0, 0, 1] to the spin vector
+        rotation_matrix = matrix_between_vectors([0, 0, 1], self.vector)
         return rotation_matrix
 
     def normalize(self) -> NoReturn:
@@ -204,9 +209,7 @@ class Spin(BaseObj):
 
         vector = self.vector
         new_vector = np.matmul(matrix, vector)
-        self.s_x = new_vector[0]
-        self.s_y = new_vector[1]
-        self.s_z = new_vector[2]
+        self.vector = new_vector
 
     def __repr__(self) -> str:
         """
@@ -289,9 +292,12 @@ def matrix_between_vectors(vector1: npt.ArrayLike, vector2: npt.ArrayLike) -> np
     vector1 = np.array(vector1)
     vector2 = np.array(vector2)
 
+    if np.all(vector1 == vector2):
+        return np.eye(3)
+
     # Check if the vectors are co-linear
     v = np.cross(vector1, vector2)
-    if np.all(v == 0):
+    if np.all(np.abs(v) < 1E-10):
         # The vectors are co-linear, create another vector C which is normal to vector1.
         # Rotate around this vector by pi.
         scale = np.sum(np.abs(vector1))
