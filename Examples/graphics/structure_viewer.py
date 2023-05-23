@@ -2,14 +2,21 @@
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
 
-from vispy import app
-
+# Import the canvas
+from crysvue import Canvas
+# Import standard EC classes
 from easyCrystallography.Components.Lattice import Lattice, PeriodicLattice
 from easyCrystallography.Components.Site import PeriodicAtoms, Site
 from easyCrystallography.Components.SpaceGroup import SpaceGroup
 
-from crysvue.canvases.canvas import CrystalCanvas
-from easyCrystallography.graphics.crysvue import UnitCell, Atoms, ABCAxis
+# Import Visuals
+from easyCrystallography.graphics.crysvue import UnitCell as UnitCellVisual, \
+    Atoms as AtomsVisual, ABCAxis as ABCAxisVisual
+
+
+canvas = Canvas(display='app')
+
+
 
 
 lattice = Lattice(4, 4, 8, 90, 90, 120)
@@ -21,18 +28,15 @@ atoms = PeriodicAtoms('test', site1, site2,
                       lattice=PeriodicLattice.from_lattice_and_spacegroup(lattice, space_group))
 
 
-canvas = CrystalCanvas(keys='interactive', show=True)
-
 extent = (1, 1, 1)
-cell_visual = UnitCell(lattice, extent=extent)
-atom_visual = Atoms(atoms, extent=extent)
+cell_visual = UnitCellVisual(lattice, extent=extent)
+atom_visual = AtomsVisual(atoms, extent=extent)
 
-axis_visual = ABCAxis(lattice)
+axis_visual = ABCAxisVisual(lattice)
 
-canvas.add_element('unit_cell', cell_visual)
-canvas.add_element('atoms', atom_visual)
-canvas.add_element('axes', axis_visual)
+canvas.add_element(cell_visual)
+canvas.add_element(atom_visual)
+canvas.add_element(axis_visual)
 
+canvas.run()
 
-if __name__ == '__main__':
-    app.run()
