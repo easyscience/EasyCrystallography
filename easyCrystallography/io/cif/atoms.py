@@ -30,18 +30,19 @@ class AtomicDisplacement(CIF_Template):
     ]
     _CIF_ADP_ANISO_CONVERSIONS = [
         ("label", "_aniso_label"),
-        ("B_11", "_B_11"),
-        ("B_12", "_B_12"),
-        ("B_13", "_B_13"),
-        ("B_22", "_B_22"),
-        ("B_23", "_B_23"),
-        ("B_33", "_B_33"),
-        ("U_11", "_U_11"),
-        ("U_12", "_U_12"),
-        ("U_13", "_U_13"),
-        ("U_22", "_U_22"),
-        ("U_23", "_U_23"),
-        ("U_33", "_U_33"),
+        ("adp_type", "_adp_type"),
+        ("B_11", "_aniso_B_11"),
+        ("B_12", "_aniso_B_12"),
+        ("B_13", "_aniso_B_13"),
+        ("B_22", "_aniso_B_22"),
+        ("B_23", "_aniso_B_23"),
+        ("B_33", "_aniso_B_33"),
+        ("U_11", "_aniso_U_11"),
+        ("U_12", "_aniso_U_12"),
+        ("U_13", "_aniso_U_13"),
+        ("U_22", "_aniso_U_22"),
+        ("U_23", "_aniso_U_23"),
+        ("U_33", "_aniso_U_33"),
     ]
 
     def __init__(self, reference_class=_AtomicDisplacement):
@@ -97,11 +98,11 @@ class AtomicDisplacement(CIF_Template):
             is_fixed = {}
             if not row.has(0):
                 continue
-            if row.has(1):
+            if row.has(2):
                 kwargs['adp_type'] = 'Bani'
-                idx = 1
-            elif row.has(7):
-                idx = 7
+                idx = 2
+            elif row.has(8):
+                idx = 8
                 kwargs['adp_type'] = 'Uani'
             else:
                 continue
@@ -122,7 +123,7 @@ class AtomicDisplacement(CIF_Template):
             atom_dict[row[0]] = {'adp': obj}
         return atom_dict
 
-    def add_to_cif_block(self, obj: B, block: gemmi.cif.Block) -> NoReturn:
+    def add_to_cif_block(self, obj: B, block: gemmi.cif.Block):
         labels = []
         objs = []
 
@@ -141,24 +142,32 @@ class AtomicDisplacement(CIF_Template):
                 del labels[3]
             objs = [[getattr(_obj, 'adp')] for _obj in obj]
             del labels[0]
-            return [[labels]]*len(objs), objs
+            return [[labels]] * len(objs), objs
         elif adp_type[-3:] == 'ani':
             labels = self._CIF_ADP_ANISO_CONVERSIONS.copy()
             if adp_type[0].lower() == 'u':
                 idx = 7
+                idy = 1
             else:
                 idx = 1
+                idy = 7
             rows = []
-            for _obj in obj:
-                row = [self.variable_to_string(getattr(_obj, self._CIF_ADP_ANISO_CONVERSIONS[0][0]))]
-                for i in range(idx, idx + 6):
-                    row.append(self.variable_to_string(getattr(_obj, self._CIF_ADP_ANISO_CONVERSIONS[i][0])))
-                rows.append(row)
-            del labels[idx: idx + 6]
-            loop = block.init_loop(self._CIF_SECTION_NAME, [label[1] for label in labels])
-            for row in rows:
-                loop.add_row(row)
-        return labels, objs
+            # for _obj in obj:
+                # row = [self.variable_to_string(getattr(_obj, self._CIF_ADP_ANISO_CONVERSIONS[0][0]))]
+                #if not hasattr(_obj.adp, self._CIF_ADP_ANISO_CONVERSIONS[idx][0]):
+                #    continue
+                # for i in range(idx, idx + 6):
+                    # row.append(self.variable_to_string(getattr(_obj.adp, self._CIF_ADP_ANISO_CONVERSIONS[i][0])))
+                    # row.append(getattr(_obj.adp, self._CIF_ADP_ANISO_CONVERSIONS[i][0]))
+                # rows.append(getattr(_obj, 'adp'))
+                # rows.append(row)
+            objs = [[getattr(_obj, 'adp')] for _obj in obj if hasattr(_obj.adp, self._CIF_ADP_ANISO_CONVERSIONS[idx][0])]
+            del labels[idy: idy + 6]
+            del labels[0]
+            # loop = block.init_loop(self._CIF_SECTION_NAME, [label[1] for label in labels])
+            #for row in rows:
+            #    loop.add_row(row)
+        return [[labels]]*len(objs), objs
 
     def from_cif_string(self, cif_string: str) -> List[Dict[str, B]]:
         if "data_" not in cif_string:
