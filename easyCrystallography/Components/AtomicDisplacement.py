@@ -132,6 +132,7 @@ class Anisotropic(AdpBase):
         else:
             self.Uiso = (self.U_11.raw_value + self.U_22.raw_value + self.U_33.raw_value) / 3.0 # for cubic, tetragonal, and orthorhombic
         self.interface = interface
+        self.isAni = False
 
 
 class Isotropic(AdpBase):
