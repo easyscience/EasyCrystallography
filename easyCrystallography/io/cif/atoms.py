@@ -376,7 +376,9 @@ class Atoms(CIF_Template):
         for keys, objs, line in zip(additional_keys, additional_objs, lines):
             for idx, _obj in enumerate(objs):
                 for key in keys[idx]:
-                    s = self.variable_to_string(_obj.__getattribute__(key[0]))
+                    k = key[0]
+                    # Need to assure Uiso is present on ADP, else just assume 0.0
+                    s = self.variable_to_string(_obj.__getattribute__(k)) if hasattr(_obj, k) else "0.0"
                     # for the cif representation, we only use [UB]iso
                     if 'ani' in s:
                         s = s.replace('ani', 'iso')

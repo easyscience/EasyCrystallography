@@ -96,7 +96,6 @@ class AdpBase(BaseObj):
 
 class Anisotropic(AdpBase):
 
-    Uiso: ClassVar[Parameter]
     U_11: ClassVar[Parameter]
     U_12: ClassVar[Parameter]
     U_13: ClassVar[Parameter]
@@ -105,13 +104,13 @@ class Anisotropic(AdpBase):
     U_33: ClassVar[Parameter]
 
     def __init__(self,
-                 Uiso: Optional[Union[Parameter, float]] = None,
+                 Uiso_ani: Optional[float] = None,
                  U_11: Optional[Union[Parameter, float]] = None, U_12: Optional[Union[Parameter, float]] = None,
                  U_13: Optional[Union[Parameter, float]] = None, U_22: Optional[Union[Parameter, float]] = None,
                  U_23: Optional[Union[Parameter, float]] = None, U_33: Optional[Union[Parameter, float]] = None,
                  interface: Optional[iF] = None):
         super(Anisotropic, self).__init__('anisoU',
-                                          Uiso=Parameter('Uiso', **_ANIO_DETAILS['Uani']),
+                                          Uiso_ani=0.0,
                                           U_11=Parameter('U_11', **_ANIO_DETAILS['Uani']), U_12=Parameter('U_12', **_ANIO_DETAILS['Uani']),
                                           U_13=Parameter('U_13', **_ANIO_DETAILS['Uani']), U_22=Parameter('U_22', **_ANIO_DETAILS['Uani']),
                                           U_23=Parameter('U_23', **_ANIO_DETAILS['Uani']), U_33=Parameter('U_33', **_ANIO_DETAILS['Uani']))
@@ -127,10 +126,10 @@ class Anisotropic(AdpBase):
             self.U_23 = U_23
         if U_33 is not None:
             self.U_33 = U_33
-        if Uiso is not None:
-            self.Uiso = Uiso
+        if Uiso_ani is not None:
+            self.Uiso_ani = Uiso_ani
         else:
-            self.Uiso = (self.U_11.raw_value + self.U_22.raw_value + self.U_33.raw_value) / 3.0 # for cubic, tetragonal, and orthorhombic
+            self.Uiso_ani = (self.U_11.raw_value + self.U_22.raw_value + self.U_33.raw_value) / 3.0 # for cubic, tetragonal, and orthorhombic
         self.interface = interface
 
 
