@@ -26,9 +26,9 @@ maintainers = [
 readme = "README.md"
 license = "BSD-3-Clause"
 
-[project.urls]
-homepage = 'https://github.com/easyScience/easyCrystallography'
-documentation = 'https://github.com/easyScience/easyCrystallography'
+# [project.urls]
+# homepage = 'https://github.com/easyScience/easyCrystallography'
+# documentation = 'https://github.com/easyScience/easyCrystallography'
 
 classifiers = [
     "Programming Language :: Python :: 3",
