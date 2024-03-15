@@ -337,3 +337,10 @@ class Phases(BaseCollection):
         with Parsers('cif').reader(filename) as r:
             s = r.structures(phases_class=cls, phase_class=cls._PHASE_CLASS)
         return s
+
+    @classmethod
+    def from_cif_string(cls, cif_string: str):
+        s = None
+        with Parsers('cif_str').reader() as r:
+            s = r.structures(cif_string, phase_class=cls._PHASE_CLASS)
+        return s

@@ -110,6 +110,7 @@ class Anisotropic(AdpBase):
     U_33: ClassVar[Parameter]
 
     def __init__(self,
+                 Uiso_ani: Optional[float] = None,
                  U_11: Optional[Union[Parameter, float]] = None, U_12: Optional[Union[Parameter, float]] = None,
                  U_13: Optional[Union[Parameter, float]] = None, U_22: Optional[Union[Parameter, float]] = None,
                  U_23: Optional[Union[Parameter, float]] = None, U_33: Optional[Union[Parameter, float]] = None,
@@ -133,6 +134,10 @@ class Anisotropic(AdpBase):
             self.U_23 = U_23
         if U_33 is not None:
             self.U_33 = U_33
+        if Uiso_ani is not None:
+            self.Uiso_ani = Uiso_ani
+        else:
+            self.Uiso_ani = (self.U_11.raw_value + self.U_22.raw_value + self.U_33.raw_value) / 3.0 # for cubic, tetragonal, and orthorhombic
         self.interface = interface
 
 
@@ -247,10 +252,7 @@ class AtomicDisplacement(BaseObj):
             raise AttributeError(f"{adp_string} is not a valid adp type")
         for par in self.adp_class.get_parameters():
             removeProp(self, par.name)
-        self.adp_class = adp_class
-        self.adp_type = adp
-        for par in adp.get_parameters():
-            addProp(self, par.name, fget=self.__a_getter(par.name), fset=self.__a_setter(par.name))
+        self.__init__(adp_type=adp_string, **kwargs)
 
     @property
     def available_types(self) -> List[str]:

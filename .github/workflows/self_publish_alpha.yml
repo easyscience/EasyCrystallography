@@ -17,7 +17,7 @@ jobs:
       with:
         python-version: 3.9
 
-    - uses: Gr1N/setup-poetry@v7
+    - uses: Gr1N/setup-poetry@v8
     - name: Install and build
       run: |
         poetry version prerelease
@@ -61,7 +61,7 @@ jobs:
     - name: Copy index to new repo
       env:
         SOURCE: index.html
-        TARGET: pypi/easysciencecore/
+        TARGET: pypi/easycrystallography/
       run: cp ${{ env.SOURCE }} ${{ env.TARGET }}
     - name: Push
       env:
