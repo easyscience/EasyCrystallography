@@ -8,8 +8,8 @@ build-backend = "hatchling.build"
 source = ['easyCrystallography']
 
 [tool.github.info]
-organization = 'easyScience'
-repo = 'easyCrystallography'
+organization = "easyScience"
+repo = "easyCrystallography"
 
 [project]
 name = "easyCrystallography"
@@ -27,8 +27,8 @@ readme = "README.md"
 license = "BSD-3-Clause"
 
 [project.urls]
-homepage = "https://github.com/easyScience/easyCrystallography"
-documentation = "https://github.com/easyScience/easyCrystallography"
+homepage = 'https://github.com/easyScience/easyCrystallography'
+documentation = 'https://github.com/easyScience/easyCrystallography'
 
 classifiers = [
     "Programming Language :: Python :: 3",
