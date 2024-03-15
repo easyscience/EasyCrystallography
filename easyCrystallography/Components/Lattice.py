@@ -11,28 +11,27 @@ import collections
 import itertools
 import math
 import warnings
-
+from copy import deepcopy
 from fractions import Fraction
 from functools import reduce
-from typing import (
-    Tuple,
-    Union,
-    List,
-    Sequence,
-    Dict,
-    ClassVar,
-    TypeVar,
-    Optional,
-    TYPE_CHECKING,
-    Type,
-)
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import List
+from typing import Optional
+from typing import Sequence
+from typing import Tuple
+from typing import Type
+from typing import TypeVar
+from typing import Union
 
-from easyCore import np, ureg
+from easyCore import np
+from easyCore import ureg
 from easyCore.Fitting.Constraints import ObjConstraint
-from easyCore.Objects.ObjectClasses import Parameter, BaseObj
+from easyCore.Objects.ObjectClasses import BaseObj
+from easyCore.Objects.ObjectClasses import Parameter
 from easyCore.Utils.decorators import memoized
+
 from .SpaceGroup import SpaceGroup
-from copy import deepcopy
 
 Vector3Like = Union[List[float], np.ndarray]
 

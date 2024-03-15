@@ -8,13 +8,19 @@ from __future__ import annotations
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Tuple, Union, ClassVar, TypeVar, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import List
+from typing import Optional
+from typing import TypeVar
+from typing import Union
 
 from easyCore import np
-from easyCore.Utils.io.star import StarEntry, StarSection, StarLoop
-from easyCore.Objects.ObjectClasses import BaseObj, Descriptor, Parameter
-from easyCore.Utils.classTools import addProp, removeProp
-from abc import abstractmethod
+from easyCore.Objects.ObjectClasses import BaseObj
+from easyCore.Objects.ObjectClasses import Descriptor
+from easyCore.Objects.ObjectClasses import Parameter
+from easyCore.Utils.classTools import addProp
+from easyCore.Utils.classTools import removeProp
 
 if TYPE_CHECKING:
     from easyCore.Utils.typing import iF

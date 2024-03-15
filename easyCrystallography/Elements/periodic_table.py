@@ -10,20 +10,21 @@ __version__ = '0.1.0'
 """Module contains classes presenting Element and Species (Element + oxidation state) and PeriodicTable."""
 import ast
 import json
+import os.path
 import re
 import warnings
-import os.path
 from collections import Counter
 from enum import Enum
 from io import open
-from itertools import product, \
-    combinations
+from itertools import combinations
+from itertools import product
 from pathlib import Path
-from typing import Optional, Callable
+from typing import Callable
+from typing import Optional
 
 from easyCore import np
-from easyCore.Objects.Variable import Descriptor
 from easyCore.Objects.core import ComponentSerializer
+from easyCore.Objects.Variable import Descriptor
 
 # Loads element data from json file
 with open(os.path.join(str(Path(__file__).absolute().parent.parent), "Databases", "periodic_table.json"), "rt") as f:

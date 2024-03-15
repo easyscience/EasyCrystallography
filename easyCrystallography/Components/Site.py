@@ -7,13 +7,19 @@ from __future__ import annotations
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Union, ClassVar, TypeVar, Optional, Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import TypeVar
+from typing import Union
 
 from easyCore import np
-from easyCore.Objects.Variable import Descriptor, Parameter
-from easyCore.Objects.ObjectClasses import BaseObj
 from easyCore.Objects.Groups import BaseCollection
-from easyCore.Utils.io.star import StarLoop
+from easyCore.Objects.ObjectClasses import BaseObj
+from easyCore.Objects.Variable import Descriptor
+from easyCore.Objects.Variable import Parameter
 
 from .Lattice import PeriodicLattice
 from .Specie import Specie

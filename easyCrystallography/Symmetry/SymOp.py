@@ -10,7 +10,9 @@ __date__ = "Sep 23, 2011"
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
 
-from typing import Union, List, Tuple, Any
+from typing import List
+from typing import Tuple
+from typing import Union
 
 """
 This module provides classes that operate on points or vectors in 3D space.
@@ -19,8 +21,10 @@ This module provides classes that operate on points or vectors in 3D space.
 import re
 import string
 import warnings
-
-from math import sin, cos, pi, sqrt
+from math import cos
+from math import pi
+from math import sin
+from math import sqrt
 
 from easyCore import np
 from easyCore.Objects.core import ComponentSerializer

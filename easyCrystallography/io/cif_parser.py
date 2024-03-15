@@ -6,11 +6,16 @@ __author__ = 'github.com/wardsimon'
 __version__ = '0.0.1'
 
 
-from typing import List, Tuple, Optional, Union
+from typing import List
+from typing import Optional
+from typing import Union
 
 from gemmi import cif
+
 from .cif import *
-from .template import AbstractStructureParser, AbstractStructureReader, AbstractStructureWriter
+from .template import AbstractStructureParser
+from .template import AbstractStructureReader
+from .template import AbstractStructureWriter
 
 
 class CifFileReader(AbstractStructureReader):

@@ -9,14 +9,20 @@ __version__ = '0.0.1'
 
 import textwrap
 from abc import abstractmethod
-from easyCore import np
-from math import floor, log10
+from math import floor
+from math import log10
 from numbers import Number
-from typing import List, NoReturn, TYPE_CHECKING, Union, Optional
+from typing import TYPE_CHECKING
+from typing import List
+from typing import NoReturn
+from typing import Optional
+
 import gemmi
+from easyCore import np
 
 if TYPE_CHECKING:
-    from easyCore.Utils.typing import B, V
+    from easyCore.Utils.typing import B
+    from easyCore.Utils.typing import V
 
 _MAX_LEN = 140
 _MAX_LABEL_LEN = 130

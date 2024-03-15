@@ -7,14 +7,24 @@ from __future__ import annotations
 __author__ = "github.com/wardsimon"
 __version__ = "0.1.0"
 
-from typing import Dict, Union, List, ClassVar, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Union
 
 from easyCore import np
-from easyCore.Objects.ObjectClasses import BaseObj, Parameter, Descriptor
 from easyCore.Objects.Groups import BaseCollection
+from easyCore.Objects.ObjectClasses import BaseObj
+from easyCore.Objects.ObjectClasses import Descriptor
+from easyCore.Objects.ObjectClasses import Parameter
 
-from easyCrystallography.Components.Lattice import Lattice, PeriodicLattice
-from easyCrystallography.Components.Site import Site, PeriodicAtoms, Atoms
+from easyCrystallography.Components.Lattice import Lattice
+from easyCrystallography.Components.Lattice import PeriodicLattice
+from easyCrystallography.Components.Site import Atoms
+from easyCrystallography.Components.Site import PeriodicAtoms
+from easyCrystallography.Components.Site import Site
 from easyCrystallography.Components.SpaceGroup import SpaceGroup
 from easyCrystallography.io.parser import Parsers
 

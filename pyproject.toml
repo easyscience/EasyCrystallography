@@ -26,9 +26,6 @@ maintainers = [
 readme = "README.md"
 license = "BSD-3-Clause"
 
-# [project.urls]
-# homepage = 'https://github.com/easyScience/easyCrystallography'
-# documentation = 'https://github.com/easyScience/easyCrystallography'
 
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -47,23 +44,6 @@ dependencies = [
     "uncertainties",
     "xarray"
 ]
-
-# [tool.poetry.dependencies]
-# python = ">=3.8,<=3.12"
-# easysciencecore = "^0.3.0"
-# periodictable = "^1.6.1"
-# gemmi = "^0.5.8"
-# pytest = {version = "^7.0.0", optional = true}
-# pytest-cov = {version = ">=3,<5", optional = true}
-# codecov = {version = "^2.1.11", optional = true}
-# flake8 = {version = "^5.0", optional = true}
-# tox-gh-actions = {version = ">=2.11,<4.0", optional = true}
-# doc8 = {version = "^0.11.0", optional = true}
-# readme-renderer = {version = ">=35,<38", optional = true}
-# Sphinx = {version = ">=4.0.2,<6.0.0", optional = true}
-# sphinx-rtd-theme = {version = "^1.0.0", optional = true}
-# sphinx-autodoc-typehints = {version = "^1.12.0", optional = true}
-# sphinx-gallery = {version = ">=0.10,<0.12", optional = true}
 
 [project.optional-dependencies]
 dev = [

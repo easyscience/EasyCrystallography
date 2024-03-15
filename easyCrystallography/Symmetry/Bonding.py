@@ -6,9 +6,12 @@
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import Tuple, Union, List
+from typing import List
+from typing import Tuple
+from typing import Union
 
 from easyCore import np
+
 from easyCrystallography.Symmetry.SymOp import SymmOp
 
 
