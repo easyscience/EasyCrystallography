@@ -137,7 +137,8 @@ class Anisotropic(AdpBase):
         if Uiso_ani is not None:
             self.Uiso_ani = Uiso_ani
         else:
-            self.Uiso_ani = (self.U_11.raw_value + self.U_22.raw_value + self.U_33.raw_value) / 3.0 # for cubic, tetragonal, and orthorhombic
+            # for cubic, tetragonal, and orthorhombic systems
+            self.Uiso_ani = (self.U_11.raw_value + self.U_22.raw_value + self.U_33.raw_value) / 3.0
         self.interface = interface
 
 
@@ -242,14 +243,14 @@ class AtomicDisplacement(BaseObj):
         self.interface = interface
 
     def switch_type(self, adp_string: str, **kwargs):
-        if adp_string in _AVAILABLE_ISO_TYPES.keys():
-            adp_class = _AVAILABLE_ISO_TYPES[adp_string]
-            if kwargs:
-                adp = adp_class(**kwargs, interface=self.interface)
-            else:
-                adp = adp_class(interface=self.interface)
-        else:
-            raise AttributeError(f"{adp_string} is not a valid adp type")
+        #if adp_string in _AVAILABLE_ISO_TYPES.keys():
+            # adp_class = _AVAILABLE_ISO_TYPES[adp_string]
+            # if kwargs:
+            #     adp = adp_class(**kwargs, interface=self.interface)
+            # else:
+            #     adp = adp_class(interface=self.interface)
+        # else:
+        #     raise AttributeError(f"{adp_string} is not a valid adp type")
         for par in self.adp_class.get_parameters():
             removeProp(self, par.name)
         self.__init__(adp_type=adp_string, **kwargs)
