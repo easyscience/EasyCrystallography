@@ -20,6 +20,9 @@ authors = [
     {name = "Simon Ward"},
     {name = "Piotr Rozyczko", email = "piotr.rozyczko@ess.eu"}
     ]
+maintainers = [
+    {name = "Piotr Rozyczko", email = "piotr.rozyczko@ess.eu"}
+]
 
 readme = "README.md"
 license = "BSD-3-Clause"
@@ -36,8 +39,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Topic :: Scientific/Engineering :: Physics",
 ]
-#include = ["CHANGELOG.md"]
-packages = [ { include = "easyCrystallography" } ]
 
 requires-python = ">=3.9,<3.12"
 dependencies = [
@@ -136,7 +137,6 @@ exclude = [
     "examples_old",
     "tests"
 ]
-
 
 [tool.ruff.format]
 quote-style = "single"
