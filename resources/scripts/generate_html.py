@@ -10,13 +10,15 @@ repo = "easyCrystallography"
 if len(sys.argv) > 1:
     repo = sys.argv[1]
 
-releases = requests.get(f"https://api.github.com/repos/{org}/{repo}/releases").json()
+releases = requests.get(f"https://api.github.com/repos/{org}/{repo}/releases").json() # noqa S113
 
-header = f"<!DOCTYPE html>\n<html>\n<head>\n<title>Links for {repo} (alpha)</title>\n</head>\n<body>\n<h1>Links for {repo}</h1>"
+header = \
+f"<!DOCTYPE html>\n<html>\n<head>\n<title>Links for {repo} (alpha)</title>\n</head>\n<body>\n<h1>Links for {repo}</h1>"
+
 body = ""
 for release in releases:
     asset_url = release["assets_url"]
-    assets = requests.get(asset_url).json()
+    assets = requests.get(asset_url).json() # noqa S113
     for asset in assets:
         if asset["name"].endswith(".whl"):
             name = asset["name"][:-4]

@@ -196,7 +196,7 @@ class CifSerializer(BaseEncoderDecoder):
                 tokens = value[1:].split('.')
                 cls = tokens[0]
                 val = tokens[1]
-                value = eval(cls)(val)
+                value = eval(cls)(val) # noqa S307
             elif value == 'None':
                 value = None
             return value, error, fixed

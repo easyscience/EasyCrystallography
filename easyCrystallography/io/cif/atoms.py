@@ -113,14 +113,14 @@ class AtomicDisplacement(CIF_Template):
             else:
                 continue
             for i in range(idx, idx + 6):
-                l = self._CIF_ADP_ANISO_CONVERSIONS[i][0]
+                ll = self._CIF_ADP_ANISO_CONVERSIONS[i][0]
                 if row.has(i):
                     V, E, F = self.string_to_variable(row[i])
-                    kwargs[l] = V
+                    kwargs[ll] = V
                     if E:
-                        errors[l] = E
+                        errors[ll] = E
                     if F is not None and not F:
-                        is_fixed[l] = F
+                        is_fixed[ll] = F
             obj = _AtomicDisplacement(**kwargs)
             for error in errors.keys():
                 setattr(getattr(obj, error), 'error', errors[error])
@@ -214,14 +214,14 @@ class MagneticSusceptibility(CIF_Template):
                 continue
             idx = 2
             for i in range(idx, idx + 6):
-                l = self._CIF_MSP_ANISO_CONVERSIONS[i][0]
+                ll = self._CIF_MSP_ANISO_CONVERSIONS[i][0]
                 if row.has(i):
                     V, E, F = self.string_to_variable(row[i])
-                    kwargs[l] = V
+                    kwargs[ll] = V
                     if E:
-                        errors[l] = E
+                        errors[ll] = E
                     if F is not None and not F:
-                        is_fixed[l] = F
+                        is_fixed[ll] = F
             obj = _MagneticSusceptibility(**kwargs)
             for error in errors.keys():
                 setattr(getattr(obj, error), 'error', errors[error])

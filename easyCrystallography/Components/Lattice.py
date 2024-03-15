@@ -1100,11 +1100,11 @@ def get_points_in_spheres(all_coords: np.ndarray, center_coords: np.ndarray, r: 
     cube_to_coords = collections.defaultdict(list)  # type: Dict[int, List]
     cube_to_images = collections.defaultdict(list)  # type: Dict[int, List]
     cube_to_indices = collections.defaultdict(list)  # type: Dict[int, List]
-    for i, j, k, l in zip(all_cube_index.ravel(), valid_coords,
+    for i, j, k, m in zip(all_cube_index.ravel(), valid_coords,
                           valid_images, valid_indices):
         cube_to_coords[i].append(j)
         cube_to_images[i].append(k)
-        cube_to_indices[i].append(l)
+        cube_to_indices[i].append(m)
 
     # find all neighboring cubes for each atom in the lattice cell
     site_neighbors = find_neighbors(site_cube_index, nx, ny, nz)

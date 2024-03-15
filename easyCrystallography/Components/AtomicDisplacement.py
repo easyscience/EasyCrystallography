@@ -115,9 +115,12 @@ class Anisotropic(AdpBase):
                  U_23: Optional[Union[Parameter, float]] = None, U_33: Optional[Union[Parameter, float]] = None,
                  interface: Optional[iF] = None):
         super(Anisotropic, self).__init__('anisoU',
-                                          U_11=Parameter('U_11', **_ANIO_DETAILS['Uani']), U_12=Parameter('U_12', **_ANIO_DETAILS['Uani']),
-                                          U_13=Parameter('U_13', **_ANIO_DETAILS['Uani']), U_22=Parameter('U_22', **_ANIO_DETAILS['Uani']),
-                                          U_23=Parameter('U_23', **_ANIO_DETAILS['Uani']), U_33=Parameter('U_33', **_ANIO_DETAILS['Uani']))
+                                          U_11=Parameter('U_11', **_ANIO_DETAILS['Uani']),
+                                          U_12=Parameter('U_12', **_ANIO_DETAILS['Uani']),
+                                          U_13=Parameter('U_13', **_ANIO_DETAILS['Uani']),
+                                          U_22=Parameter('U_22', **_ANIO_DETAILS['Uani']),
+                                          U_23=Parameter('U_23', **_ANIO_DETAILS['Uani']),
+                                          U_33=Parameter('U_33', **_ANIO_DETAILS['Uani']))
         if U_11 is not None:
             self.U_11 = U_11
         if U_12 is not None:
