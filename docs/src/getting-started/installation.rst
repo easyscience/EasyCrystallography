@@ -31,12 +31,4 @@ And install via pip:
     $ pip install -r requirements.txt
     $ pip install -e .
 
-Or Poetry
-
-.. code-block:: console
-
-    $ git clone https://github.com/easyScience/easyCore
-    $ cd easyCore
-    $ poetry install
-
 .. installation-end-content
