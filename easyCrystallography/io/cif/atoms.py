@@ -7,12 +7,19 @@ __version__ = '0.0.1'
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
 
-from typing import List, NoReturn, TYPE_CHECKING, ClassVar, Tuple, Dict
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import Dict
+from typing import List
+from typing import NoReturn
+from typing import Tuple
 
-from .template import CIF_Template, gemmi
-from easyCrystallography.Components.Site import Site as _Site, Atoms as _Atoms
 from easyCrystallography.Components.AtomicDisplacement import AtomicDisplacement as _AtomicDisplacement
+from easyCrystallography.Components.Site import Atoms as _Atoms
 from easyCrystallography.Components.Susceptibility import MagneticSusceptibility as _MagneticSusceptibility
+
+from .template import CIF_Template
+from .template import gemmi
 
 if TYPE_CHECKING:
     from easyCore.Utils.typing import B
@@ -106,14 +113,14 @@ class AtomicDisplacement(CIF_Template):
             else:
                 continue
             for i in range(idx, idx + 6):
-                l = self._CIF_ADP_ANISO_CONVERSIONS[i][0]
+                ll = self._CIF_ADP_ANISO_CONVERSIONS[i][0]
                 if row.has(i):
                     V, E, F = self.string_to_variable(row[i])
-                    kwargs[l] = V
+                    kwargs[ll] = V
                     if E:
-                        errors[l] = E
+                        errors[ll] = E
                     if F is not None and not F:
-                        is_fixed[l] = F
+                        is_fixed[ll] = F
             obj = _AtomicDisplacement(**kwargs)
             for error in errors.keys():
                 setattr(getattr(obj, error), 'error', errors[error])
@@ -225,14 +232,14 @@ class MagneticSusceptibility(CIF_Template):
                 continue
             idx = 2
             for i in range(idx, idx + 6):
-                l = self._CIF_MSP_ANISO_CONVERSIONS[i][0]
+                ll = self._CIF_MSP_ANISO_CONVERSIONS[i][0]
                 if row.has(i):
                     V, E, F = self.string_to_variable(row[i])
-                    kwargs[l] = V
+                    kwargs[ll] = V
                     if E:
-                        errors[l] = E
+                        errors[ll] = E
                     if F is not None and not F:
-                        is_fixed[l] = F
+                        is_fixed[ll] = F
             obj = _MagneticSusceptibility(**kwargs)
             for error in errors.keys():
                 setattr(getattr(obj, error), 'error', errors[error])

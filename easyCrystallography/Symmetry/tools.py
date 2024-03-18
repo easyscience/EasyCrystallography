@@ -8,7 +8,8 @@ __version__ = '0.1.0'
 
 from typing import List
 
-from .groups import SpaceGroup, _get_symm_data
+from .groups import SpaceGroup
+from .groups import _get_symm_data
 
 
 def _make_SG_names() -> list:

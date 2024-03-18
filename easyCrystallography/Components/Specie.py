@@ -6,12 +6,16 @@
 __author__ = "github.com/wardsimon"
 __version__ = "0.1.0"
 
-from typing import List, Dict, Union, Any
-from copy import deepcopy
-from easyCore.Objects.ObjectClasses import Descriptor
-from easyCore.Utils.classTools import addProp, removeProp
-import periodictable as pt
 import re
+from copy import deepcopy
+from typing import Any
+from typing import Dict
+from typing import Union
+
+import periodictable as pt
+from easyCore.Objects.ObjectClasses import Descriptor
+from easyCore.Utils.classTools import addProp
+from easyCore.Utils.classTools import removeProp
 
 _SPECIE_DETAILS = {
     "type_symbol": {

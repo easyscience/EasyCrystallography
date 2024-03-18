@@ -7,10 +7,16 @@ __version__ = '0.0.1'
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
 
-from typing import List, NoReturn, TYPE_CHECKING, ClassVar, Tuple
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import List
+from typing import NoReturn
+from typing import Tuple
 
-from .template import CIF_Template, gemmi
 from easyCrystallography.Components.Lattice import Lattice as _Lattice
+
+from .template import CIF_Template
+from .template import gemmi
 
 if TYPE_CHECKING:
     from easyCore.Utils.typing import B

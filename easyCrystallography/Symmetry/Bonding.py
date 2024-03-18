@@ -6,9 +6,12 @@
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import Tuple, Union, List
+from typing import List
+from typing import Tuple
+from typing import Union
 
 from easyCore import np
+
 from easyCrystallography.Symmetry.SymOp import SymmOp
 
 
@@ -67,7 +70,6 @@ def generate_bonds(phase_obj, force_no_sym: bool = False,
     n_atoms = all_atoms_r.shape[0]
 
     c_dim = np.array([n_c[0] + 1, 2 * n_c[1] + 1, 2 * n_c[2] + 1])
-    n_half_cube = np.prod(c_dim)
 
     # generate all cell translations
     c_tr1, c_tr2, c_tr3 = np.mgrid[0:n_c[0] + 1, -n_c[1]:n_c[1] + 1, -n_c[2]:n_c[2] + 1]

@@ -3,23 +3,30 @@
 #  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
 
 from __future__ import annotations
+
 __author__ = 'github.com/wardsimon'
 __version__ = '0.0.1'
 
 import textwrap
-
 from collections.abc import MutableMapping
-from gemmi import cif
-from math import floor, log10
+from math import floor
+from math import log10
 from numbers import Number
-from typing import List, TYPE_CHECKING, Any, Optional, Dict, Union
+from typing import TYPE_CHECKING
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Union
 
 from easyCore import np
+from easyCore.Utils.io.dict import DataDictSerializer
+from easyCore.Utils.io.dict import DictSerializer
 from easyCore.Utils.io.template import BaseEncoderDecoder
-from easyCore.Utils.io.dict import DictSerializer, DataDictSerializer
+from gemmi import cif
 
 if TYPE_CHECKING:
-    from easyCore.Utils.typing import B, V, BV
+    from easyCore.Utils.typing import BV
 
 _MAX_LEN = 160
 _SEP = '.'
@@ -189,7 +196,7 @@ class CifSerializer(BaseEncoderDecoder):
                 tokens = value[1:].split('.')
                 cls = tokens[0]
                 val = tokens[1]
-                value = eval(cls)(val)
+                value = eval(cls)(val) # noqa S307
             elif value == 'None':
                 value = None
             return value, error, fixed
