@@ -303,7 +303,8 @@ class SpaceGroup(SymmetryGroup):
                         gen_ops.append(op)
                         symm_ops = np.append(symm_ops, [op], axis=0)
             new_ops = gen_ops
-        assert len(symm_ops) == self.order # noqa S101
+            if len(symm_ops) != self.order:
+                raise ValueError('Wrong number of symmetry operations generated!')
         return symm_ops
 
     @classmethod

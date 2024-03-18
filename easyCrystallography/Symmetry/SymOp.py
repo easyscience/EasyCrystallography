@@ -146,7 +146,9 @@ class SymmOp(ComponentSerializer):
         """
         dim = tensor.shape
         rank = len(dim)
-        assert all([i == 3 for i in dim]) # noqa S101
+        if not all([i == 3 for i in dim]):
+            raise ValueError("All dimensions must be equal to 3")
+
         # Build einstein sum string
         lc = string.ascii_lowercase
         indices = lc[:rank], lc[rank:2 * rank]
