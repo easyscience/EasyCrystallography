@@ -8,13 +8,19 @@ from __future__ import annotations
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-from typing import List, Tuple, Union, ClassVar, TypeVar, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import List
+from typing import Optional
+from typing import TypeVar
+from typing import Union
 
 from easyCore import np
-from easyCore.Utils.io.star import StarEntry, StarSection, StarLoop
-from easyCore.Objects.ObjectClasses import BaseObj, Descriptor, Parameter
-from easyCore.Utils.classTools import addProp, removeProp
-from abc import abstractmethod
+from easyCore.Objects.ObjectClasses import BaseObj
+from easyCore.Objects.ObjectClasses import Descriptor
+from easyCore.Objects.ObjectClasses import Parameter
+from easyCore.Utils.classTools import addProp
+from easyCore.Utils.classTools import removeProp
 
 if TYPE_CHECKING:
     from easyCore.Utils.typing import iF
@@ -104,14 +110,18 @@ class Anisotropic(AdpBase):
     U_33: ClassVar[Parameter]
 
     def __init__(self,
+                 Uiso_ani: Optional[float] = None,
                  U_11: Optional[Union[Parameter, float]] = None, U_12: Optional[Union[Parameter, float]] = None,
                  U_13: Optional[Union[Parameter, float]] = None, U_22: Optional[Union[Parameter, float]] = None,
                  U_23: Optional[Union[Parameter, float]] = None, U_33: Optional[Union[Parameter, float]] = None,
                  interface: Optional[iF] = None):
         super(Anisotropic, self).__init__('anisoU',
-                                          U_11=Parameter('U_11', **_ANIO_DETAILS['Uani']), U_12=Parameter('U_12', **_ANIO_DETAILS['Uani']),
-                                          U_13=Parameter('U_13', **_ANIO_DETAILS['Uani']), U_22=Parameter('U_22', **_ANIO_DETAILS['Uani']),
-                                          U_23=Parameter('U_23', **_ANIO_DETAILS['Uani']), U_33=Parameter('U_33', **_ANIO_DETAILS['Uani']))
+                                          U_11=Parameter('U_11', **_ANIO_DETAILS['Uani']),
+                                          U_12=Parameter('U_12', **_ANIO_DETAILS['Uani']),
+                                          U_13=Parameter('U_13', **_ANIO_DETAILS['Uani']),
+                                          U_22=Parameter('U_22', **_ANIO_DETAILS['Uani']),
+                                          U_23=Parameter('U_23', **_ANIO_DETAILS['Uani']),
+                                          U_33=Parameter('U_33', **_ANIO_DETAILS['Uani']))
         if U_11 is not None:
             self.U_11 = U_11
         if U_12 is not None:
@@ -124,6 +134,11 @@ class Anisotropic(AdpBase):
             self.U_23 = U_23
         if U_33 is not None:
             self.U_33 = U_33
+        if Uiso_ani is not None:
+            self.Uiso_ani = Uiso_ani
+        else:
+            # for cubic, tetragonal, and orthorhombic systems
+            self.Uiso_ani = (self.U_11.raw_value + self.U_22.raw_value + self.U_33.raw_value) / 3.0
         self.interface = interface
 
 
@@ -228,20 +243,17 @@ class AtomicDisplacement(BaseObj):
         self.interface = interface
 
     def switch_type(self, adp_string: str, **kwargs):
-        if adp_string in _AVAILABLE_ISO_TYPES.keys():
-            adp_class = _AVAILABLE_ISO_TYPES[adp_string]
-            if kwargs:
-                adp = adp_class(**kwargs, interface=self.interface)
-            else:
-                adp = adp_class(interface=self.interface)
-        else:
-            raise AttributeError(f"{adp_string} is not a valid adp type")
+        #if adp_string in _AVAILABLE_ISO_TYPES.keys():
+            # adp_class = _AVAILABLE_ISO_TYPES[adp_string]
+            # if kwargs:
+            #     adp = adp_class(**kwargs, interface=self.interface)
+            # else:
+            #     adp = adp_class(interface=self.interface)
+        # else:
+        #     raise AttributeError(f"{adp_string} is not a valid adp type")
         for par in self.adp_class.get_parameters():
             removeProp(self, par.name)
-        self.adp_class = adp_class
-        self.adp_type = adp
-        for par in adp.get_parameters():
-            addProp(self, par.name, fget=self.__a_getter(par.name), fset=self.__a_setter(par.name))
+        self.__init__(adp_type=adp_string, **kwargs)
 
     @property
     def available_types(self) -> List[str]:

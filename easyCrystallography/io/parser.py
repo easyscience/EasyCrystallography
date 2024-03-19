@@ -5,7 +5,8 @@
 __author__ = 'github.com/wardsimon'
 __version__ = '0.0.1'
 
-from .cif_parser import CifStringParser, CifFileParser
+from .cif_parser import CifFileParser
+from .cif_parser import CifStringParser
 
 
 class Parsers:

@@ -7,12 +7,19 @@ __version__ = '0.0.1'
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
 
-from typing import List, NoReturn, TYPE_CHECKING, ClassVar, Tuple, Dict
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import Dict
+from typing import List
+from typing import NoReturn
+from typing import Tuple
 
-from .template import CIF_Template, gemmi
-from easyCrystallography.Components.Site import Site as _Site, Atoms as _Atoms
 from easyCrystallography.Components.AtomicDisplacement import AtomicDisplacement as _AtomicDisplacement
+from easyCrystallography.Components.Site import Atoms as _Atoms
 from easyCrystallography.Components.Susceptibility import MagneticSusceptibility as _MagneticSusceptibility
+
+from .template import CIF_Template
+from .template import gemmi
 
 if TYPE_CHECKING:
     from easyCore.Utils.typing import B
@@ -30,18 +37,18 @@ class AtomicDisplacement(CIF_Template):
     ]
     _CIF_ADP_ANISO_CONVERSIONS = [
         ("label", "_aniso_label"),
-        ("B_11", "_B_11"),
-        ("B_12", "_B_12"),
-        ("B_13", "_B_13"),
-        ("B_22", "_B_22"),
-        ("B_23", "_B_23"),
-        ("B_33", "_B_33"),
-        ("U_11", "_U_11"),
-        ("U_12", "_U_12"),
-        ("U_13", "_U_13"),
-        ("U_22", "_U_22"),
-        ("U_23", "_U_23"),
-        ("U_33", "_U_33"),
+        ("B_11", "_aniso_B_11"),
+        ("B_12", "_aniso_B_12"),
+        ("B_13", "_aniso_B_13"),
+        ("B_22", "_aniso_B_22"),
+        ("B_23", "_aniso_B_23"),
+        ("B_33", "_aniso_B_33"),
+        ("U_11", "_aniso_U_11"),
+        ("U_12", "_aniso_U_12"),
+        ("U_13", "_aniso_U_13"),
+        ("U_22", "_aniso_U_22"),
+        ("U_23", "_aniso_U_23"),
+        ("U_33", "_aniso_U_33"),
     ]
 
     def __init__(self, reference_class=_AtomicDisplacement):
@@ -106,14 +113,14 @@ class AtomicDisplacement(CIF_Template):
             else:
                 continue
             for i in range(idx, idx + 6):
-                l = self._CIF_ADP_ANISO_CONVERSIONS[i][0]
+                ll = self._CIF_ADP_ANISO_CONVERSIONS[i][0]
                 if row.has(i):
                     V, E, F = self.string_to_variable(row[i])
-                    kwargs[l] = V
+                    kwargs[ll] = V
                     if E:
-                        errors[l] = E
+                        errors[ll] = E
                     if F is not None and not F:
-                        is_fixed[l] = F
+                        is_fixed[ll] = F
             obj = _AtomicDisplacement(**kwargs)
             for error in errors.keys():
                 setattr(getattr(obj, error), 'error', errors[error])
@@ -123,42 +130,60 @@ class AtomicDisplacement(CIF_Template):
         return atom_dict
 
     def add_to_cif_block(self, obj: B, block: gemmi.cif.Block) -> NoReturn:
+        # Add the additional anisotropic loops
+        lines = []
+        names = [self._CIF_ADP_ANISO_CONVERSIONS[0][1]]
+        values_offset = 1
+        # find the adp type first
+        for atom in obj:
+            if not hasattr(atom, 'adp'):
+                continue
+            if self.variable_to_string(atom.adp.adp_type) == 'Uani':
+                values_offset = 7
+            break
+        for i in range(values_offset, values_offset + 6):
+            names.append(self._CIF_ADP_ANISO_CONVERSIONS[i][1])
+
+        for atom in obj:
+            if not hasattr(atom, 'adp'):
+                continue
+            if not self.variable_to_string(atom.adp.adp_type) == 'Uani':  # non-anisotropic ADP on this atom
+                continue
+            line = [self.variable_to_string(atom.__getattribute__(self._CIF_ADP_ANISO_CONVERSIONS[0][0]))]
+            # names.append(self._CIF_ADP_ANISO_CONVERSIONS[values_offset+i][1])
+            for keys in self._CIF_ADP_ANISO_CONVERSIONS[values_offset:values_offset + 6]:
+                key, cif_key = keys
+                s = self.variable_to_string(atom.adp.__getattribute__(key))
+                line.append(s)
+            lines.append(line)
+
+        # _, names = zip(*self._CIF_ADP_ANISO_CONVERSIONS[1])
+
+        loop = block.init_loop(self._CIF_SECTION_NAME, names)
+        for line in lines:
+            loop.add_row(line)
+
+    def iso_adp_block(self, obj: B, block: gemmi.cif.Block):
+        # Add the isotropic objects
         labels = []
         objs = []
 
-        # Assume that all atoms have the same adp type
         if len(obj) == 0:
             return labels, objs
         adp0 = getattr(obj[0], 'adp', None)
         if adp0 is None:
             return labels, objs
-        adp_type = adp0.adp_type.raw_value
-        if adp_type[-3:] == 'iso':
-            labels = self._CIF_ADP_ISO_CONVERSIONS.copy()
-            if adp_type[0].lower() == 'u':
-                del labels[2]
-            else:
-                del labels[3]
-            objs = [[getattr(_obj, 'adp')] for _obj in obj]
-            del labels[0]
-            return [[labels]]*len(objs), objs
-        elif adp_type[-3:] == 'ani':
-            labels = self._CIF_ADP_ANISO_CONVERSIONS.copy()
-            if adp_type[0].lower() == 'u':
-                idx = 7
-            else:
-                idx = 1
-            rows = []
-            for _obj in obj:
-                row = [self.variable_to_string(getattr(_obj, self._CIF_ADP_ANISO_CONVERSIONS[0][0]))]
-                for i in range(idx, idx + 6):
-                    row.append(self.variable_to_string(getattr(_obj, self._CIF_ADP_ANISO_CONVERSIONS[i][0])))
-                rows.append(row)
-            del labels[idx: idx + 6]
-            loop = block.init_loop(self._CIF_SECTION_NAME, [label[1] for label in labels])
-            for row in rows:
-                loop.add_row(row)
-        return labels, objs
+        adp_type = self.variable_to_string(adp0.adp_type)
+        labels = self._CIF_ADP_ISO_CONVERSIONS.copy()
+        # should we have `Uani` in the line or only `Uiso`?
+        if adp_type[0].lower() == 'u':
+            del labels[2]
+        else:
+            del labels[3]
+        ################################
+        objs = [[getattr(_obj, 'adp')] for _obj in obj]
+        del labels[0]
+        return [[labels]] * len(objs), objs
 
     def from_cif_string(self, cif_string: str) -> List[Dict[str, B]]:
         if "data_" not in cif_string:
@@ -207,14 +232,14 @@ class MagneticSusceptibility(CIF_Template):
                 continue
             idx = 2
             for i in range(idx, idx + 6):
-                l = self._CIF_MSP_ANISO_CONVERSIONS[i][0]
+                ll = self._CIF_MSP_ANISO_CONVERSIONS[i][0]
                 if row.has(i):
                     V, E, F = self.string_to_variable(row[i])
-                    kwargs[l] = V
+                    kwargs[ll] = V
                     if E:
-                        errors[l] = E
+                        errors[ll] = E
                     if F is not None and not F:
-                        is_fixed[l] = F
+                        is_fixed[ll] = F
             obj = _MagneticSusceptibility(**kwargs)
             for error in errors.keys():
                 setattr(getattr(obj, error), 'error', errors[error])
@@ -324,19 +349,26 @@ class Atoms(CIF_Template):
     def add_to_cif_block(self, obj: B, block: gemmi.cif.Block) -> NoReturn:
         additional_keys = []
         additional_objs = []
+
+        ADP_WRITER = AtomicDisplacement()
         if len(obj) > 0:
             if getattr(obj[0], 'adp', False):
-                ADP_WRITER = AtomicDisplacement()
-                additional_keys, additional_objs = ADP_WRITER.add_to_cif_block(obj, block)
+                # additional keys for isotropic adp
+                additional_keys, additional_objs = ADP_WRITER.iso_adp_block(obj, block)
+        # Add main atom loop
+        self._add_to_cif_block(obj, block, additional_keys, additional_objs)
+        # another loop for anisotropic atomic displacements
+        ADP_WRITER.add_to_cif_block(obj, block)
+        # another loop for anisotropic magnetic susceptibilities
         MSP_WRITER = MagneticSusceptibility()
         MSP_WRITER.add_to_cif_block(obj, block)
-        self._add_to_cif_block(obj, block, additional_keys, additional_objs)
 
     def _add_to_cif_block(self, obj: B, block: gemmi.cif.Block, additional_keys, additional_objs) -> NoReturn:
         # First add the main loop
         items = list(self._CIF_CONVERSIONS)
         names = [item[1] for item in items]
         lines = []
+        # this loop adds atom name, symbol and coordinates as a line under the main "loop_"
         for idx1, atom in enumerate(obj):
             line = []
             for idx2, item in enumerate(items):
@@ -347,13 +379,21 @@ class Atoms(CIF_Template):
                 line.append(s)
             lines.append(line)
 
+        # this loop adds ADP values to the end of the atom description lines
         for keys, objs, line in zip(additional_keys, additional_objs, lines):
             for idx, _obj in enumerate(objs):
                 for key in keys[idx]:
-                    s = self.variable_to_string(_obj.__getattribute__(key[0]))
+                    k = key[0]
+                    # Need to assure Uiso is present on ADP, else just assume 0.0
+                    s = self.variable_to_string(_obj.__getattribute__(k)) if hasattr(_obj, k) else "0.0"
+                    # for the cif representation, we only use [UB]iso
+                    if 'ani' in s:
+                        s = s.replace('ani', 'iso')
                     line.append(s)
                     if key[1] not in names:
                         names.append(key[1])
+
+        # init_loop creates the main "loop_" section with '_atom_site_<names>' as the tags
         loop = block.init_loop(self._CIF_SECTION_NAME, names)
         for line in lines:
             loop.add_row(line)

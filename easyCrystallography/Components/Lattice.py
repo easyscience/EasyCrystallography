@@ -11,28 +11,27 @@ import collections
 import itertools
 import math
 import warnings
-
+from copy import deepcopy
 from fractions import Fraction
 from functools import reduce
-from typing import (
-    Tuple,
-    Union,
-    List,
-    Sequence,
-    Dict,
-    ClassVar,
-    TypeVar,
-    Optional,
-    TYPE_CHECKING,
-    Type,
-)
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import List
+from typing import Optional
+from typing import Sequence
+from typing import Tuple
+from typing import Type
+from typing import TypeVar
+from typing import Union
 
-from easyCore import np, ureg
+from easyCore import np
+from easyCore import ureg
 from easyCore.Fitting.Constraints import ObjConstraint
-from easyCore.Objects.ObjectClasses import Parameter, BaseObj
+from easyCore.Objects.ObjectClasses import BaseObj
+from easyCore.Objects.ObjectClasses import Parameter
 from easyCore.Utils.decorators import memoized
+
 from .SpaceGroup import SpaceGroup
-from copy import deepcopy
 
 Vector3Like = Union[List[float], np.ndarray]
 
@@ -1101,11 +1100,11 @@ def get_points_in_spheres(all_coords: np.ndarray, center_coords: np.ndarray, r: 
     cube_to_coords = collections.defaultdict(list)  # type: Dict[int, List]
     cube_to_images = collections.defaultdict(list)  # type: Dict[int, List]
     cube_to_indices = collections.defaultdict(list)  # type: Dict[int, List]
-    for i, j, k, l in zip(all_cube_index.ravel(), valid_coords,
+    for i, j, k, m in zip(all_cube_index.ravel(), valid_coords,
                           valid_images, valid_indices):
         cube_to_coords[i].append(j)
         cube_to_images[i].append(k)
-        cube_to_indices[i].append(l)
+        cube_to_indices[i].append(m)
 
     # find all neighboring cubes for each atom in the lattice cell
     site_neighbors = find_neighbors(site_cube_index, nx, ny, nz)

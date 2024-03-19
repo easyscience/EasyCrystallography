@@ -10,12 +10,12 @@ Shyue Ping Ong thanks Marc De Graef for his generous sharing of his
 SpaceGroup data as published in his textbook "Structure of Materials".
 """
 
+import json
 import os
 import re
-import json
 import warnings
-
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
+from abc import abstractmethod
 from collections.abc import Sequence
 from fractions import Fraction
 from itertools import product
@@ -303,7 +303,8 @@ class SpaceGroup(SymmetryGroup):
                         gen_ops.append(op)
                         symm_ops = np.append(symm_ops, [op], axis=0)
             new_ops = gen_ops
-        assert len(symm_ops) == self.order
+            if len(symm_ops) != self.order:
+                raise ValueError('Wrong number of symmetry operations generated!')
         return symm_ops
 
     @classmethod

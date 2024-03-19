@@ -1,29 +1,28 @@
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+import ast
+import json
+import os.path
+import re
+import warnings
+from collections import Counter
+from enum import Enum
+from io import open
+from itertools import combinations
+from itertools import product
+from pathlib import Path
+from typing import Callable
+from typing import Optional
 
+from easyCore import np
+from easyCore.Objects.core import ComponentSerializer
+from easyCore.Objects.Variable import Descriptor
 
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-
 """Module contains classes presenting Element and Species (Element + oxidation state) and PeriodicTable."""
-import ast
-import json
-import re
-import warnings
-import os.path
-from collections import Counter
-from enum import Enum
-from io import open
-from itertools import product, \
-    combinations
-from pathlib import Path
-from typing import Optional, Callable
-
-from easyCore import np
-from easyCore.Objects.Variable import Descriptor
-from easyCore.Objects.core import ComponentSerializer
 
 # Loads element data from json file
 with open(os.path.join(str(Path(__file__).absolute().parent.parent), "Databases", "periodic_table.json"), "rt") as f:
@@ -45,7 +44,7 @@ class Element(Enum):
     B = "B"
     C = "C"
     N = "N"
-    O = "O"
+    O = "O"  # noqa: E741
     F = "F"
     Ne = "Ne"
     Na = "Na"
@@ -90,7 +89,7 @@ class Element(Enum):
     Sn = "Sn"
     Sb = "Sb"
     Te = "Te"
-    I = "I"
+    I = "I" # noqa: E741
     Xe = "Xe"
     Cs = "Cs"
     Ba = "Ba"
@@ -657,12 +656,12 @@ class Element(Enum):
         full_electron_config = self.full_electronic_structure
         last_orbital = full_electron_config[-1]
         for n, l_symbol, ne in full_electron_config:
-            l = L_symbols.lower().index(l_symbol)
-            if ne < (2 * l + 1) * 2:
-                valence.append((l, ne))
+            ll = L_symbols.lower().index(l_symbol)
+            if ne < (2 * ll + 1) * 2:
+                valence.append((ll, ne))
             # check for full last shell (e.g. column 2)
-            elif (n, l_symbol, ne) == last_orbital and ne == (2 * l + 1) * 2 and len(valence) == 0:
-                valence.append((l, ne))
+            elif (n, l_symbol, ne) == last_orbital and ne == (2 * ll + 1) * 2 and len(valence) == 0:
+                valence.append((ll, ne))
         if len(valence) > 1:
             raise ValueError("Ambiguous valence")
 

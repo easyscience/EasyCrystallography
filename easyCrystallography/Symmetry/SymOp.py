@@ -1,3 +1,4 @@
+# ruff: noqa
 __author__ = "Shyue Ping Ong, Shyam Dwaraknath, Matthew Horton"
 __copyright__ = "Copyright 2011, The Materials Project"
 __version__ = "1.0"
@@ -10,7 +11,9 @@ __date__ = "Sep 23, 2011"
 #  SPDX-License-Identifier: BSD-3-Clause
 #  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
 
-from typing import Union, List, Tuple, Any
+from typing import List
+from typing import Tuple
+from typing import Union
 
 """
 This module provides classes that operate on points or vectors in 3D space.
@@ -19,8 +22,10 @@ This module provides classes that operate on points or vectors in 3D space.
 import re
 import string
 import warnings
-
-from math import sin, cos, pi, sqrt
+from math import cos
+from math import pi
+from math import sin
+from math import sqrt
 
 from easyCore import np
 from easyCore.Objects.core import ComponentSerializer
@@ -141,7 +146,9 @@ class SymmOp(ComponentSerializer):
         """
         dim = tensor.shape
         rank = len(dim)
-        assert all([i == 3 for i in dim])
+        if not all([i == 3 for i in dim]):
+            raise ValueError("All dimensions must be equal to 3")
+
         # Build einstein sum string
         lc = string.ascii_lowercase
         indices = lc[:rank], lc[rank:2 * rank]
@@ -271,29 +278,29 @@ class SymmOp(ComponentSerializer):
         cos_t = cos(theta)
         sin_t = sin(theta)
         l2 = u2 + v2 + w2
-        l = sqrt(l2)
+        lsq = sqrt(l2)
 
         # Build the matrix entries element by element.
         m11 = (u2 + (v2 + w2) * cos_t) / l2
-        m12 = (u * v * (1 - cos_t) - w * l * sin_t) / l2
-        m13 = (u * w * (1 - cos_t) + v * l * sin_t) / l2
+        m12 = (u * v * (1 - cos_t) - w * lsq * sin_t) / l2
+        m13 = (u * w * (1 - cos_t) + v * lsq * sin_t) / l2
         m14 = (a * (v2 + w2) - u * (b * v + c * w) +
                (u * (b * v + c * w) - a * (v2 + w2)) * cos_t +
-               (b * w - c * v) * l * sin_t) / l2
+               (b * w - c * v) * lsq * sin_t) / l2
 
-        m21 = (u * v * (1 - cos_t) + w * l * sin_t) / l2
+        m21 = (u * v * (1 - cos_t) + w * lsq * sin_t) / l2
         m22 = (v2 + (u2 + w2) * cos_t) / l2
-        m23 = (v * w * (1 - cos_t) - u * l * sin_t) / l2
+        m23 = (v * w * (1 - cos_t) - u * lsq * sin_t) / l2
         m24 = (b * (u2 + w2) - v * (a * u + c * w) +
                (v * (a * u + c * w) - b * (u2 + w2)) * cos_t +
-               (c * u - a * w) * l * sin_t) / l2
+               (c * u - a * w) * lsq * sin_t) / l2
 
-        m31 = (u * w * (1 - cos_t) - v * l * sin_t) / l2
-        m32 = (v * w * (1 - cos_t) + u * l * sin_t) / l2
+        m31 = (u * w * (1 - cos_t) - v * lsq * sin_t) / l2
+        m32 = (v * w * (1 - cos_t) + u * lsq * sin_t) / l2
         m33 = (w2 + (u2 + v2) * cos_t) / l2
         m34 = (c * (u2 + v2) - w * (a * u + b * v) +
                (w * (a * u + b * v) - c * (u2 + v2)) * cos_t +
-               (a * v - b * u) * l * sin_t) / l2
+               (a * v - b * u) * lsq * sin_t) / l2
 
         return SymmOp([[m11, m12, m13, m14], [m21, m22, m23, m24],
                        [m31, m32, m33, m34], [0, 0, 0, 1]])

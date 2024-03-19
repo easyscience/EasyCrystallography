@@ -7,15 +7,21 @@ from __future__ import annotations
 __author__ = "github.com/wardsimon"
 __version__ = "0.1.0"
 
-import gemmi
 from copy import deepcopy
-from typing import ClassVar, Type, List, Tuple, Optional, TYPE_CHECKING, Union, Dict, NoReturn
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import List
+from typing import NoReturn
+from typing import Optional
+from typing import Tuple
+from typing import Union
+
+import gemmi
+from easyCore import np
+from easyCore.Objects.ObjectClasses import BaseObj
+from easyCore.Objects.ObjectClasses import Descriptor
 
 from easyCrystallography.Symmetry.SymOp import SymmOp
-
-from easyCore import np
-from easyCore.Objects.ObjectClasses import BaseObj, Descriptor
-from easyCore.Utils.io.star import StarEntry, StarSection, FakeCore, FakeItem
 
 SG_DETAILS = {
     "space_group_HM_name": {
@@ -41,9 +47,10 @@ SG_DETAILS = {
 }
 
 if TYPE_CHECKING:
-    from easyCore.Utils.typing import iF
-    from easyCrystallography.Components.Site import S
     import numpy.typing as npt
+    from easyCore.Utils.typing import iF
+
+    from easyCrystallography.Components.Site import S
     T = Union[S, npt.ArrayLike]
 
 
