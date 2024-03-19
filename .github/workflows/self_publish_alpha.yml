@@ -17,19 +17,17 @@ jobs:
       with:
         python-version: 3.9
 
-    - uses: Gr1N/setup-poetry@v8
     - name: Install and build
       run: |
-        poetry version prerelease
-        poetry build
+        pip install -e '.[dev]'
+        python -m build
 
     - name: Set name variable
       id: name
       shell: bash
       run: |
-        EDLVERSION=$( poetry version | awk -F'[" "|.|-]' '{ print $5=="" ? "v"$2"."$3"."$4 : "v"$2"."$3"."$4"-"$5 ;}' )
         echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
-        echo "::set-output name=tag::$EDLVERSION"
+        echo "::set-output name=tag::v0.4.0a0"
 
     - name: Upload Artifacts GitHub releases
       uses: ncipollo/release-action@v1
