@@ -2,7 +2,7 @@ from __future__ import annotations
 
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2024  Contributors to the easyCrystallography project <https://github.com/easyScience/easyCrystallography>
 
 
 __author__ = 'github.com/wardsimon'
@@ -15,15 +15,15 @@ from typing import Optional
 from typing import Type
 from typing import Union
 
-from easyCore import np
-from easyCore.Objects.ObjectClasses import BaseObj
-from easyCore.Objects.ObjectClasses import Descriptor
-from easyCore.Objects.ObjectClasses import Parameter
-from easyCore.Utils.classTools import addProp
-from easyCore.Utils.classTools import removeProp
+import numpy as np
+from easyscience.Objects.ObjectClasses import BaseObj
+from easyscience.Objects.ObjectClasses import Descriptor
+from easyscience.Objects.ObjectClasses import Parameter
+from easyscience.Utils.classTools import addProp
+from easyscience.Utils.classTools import removeProp
 
 if TYPE_CHECKING:
-    from easyCore.Utils.typing import iF
+    from easyscience.Utils.typing import iF
 
 _ANIO_DETAILS = {
     'msp_type': {

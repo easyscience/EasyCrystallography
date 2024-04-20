@@ -1,6 +1,6 @@
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2024  Contributors to the easyCrystallography project <https://github.com/easyScience/easyCrystallography>
 
 from __future__ import annotations
 
@@ -24,12 +24,12 @@ from typing import Type
 from typing import TypeVar
 from typing import Union
 
-from easyCore import np
-from easyCore import ureg
-from easyCore.Fitting.Constraints import ObjConstraint
-from easyCore.Objects.ObjectClasses import BaseObj
-from easyCore.Objects.ObjectClasses import Parameter
-from easyCore.Utils.decorators import memoized
+import numpy as np
+from easyscience import ureg
+from easyscience.Fitting.Constraints import ObjConstraint
+from easyscience.Objects.ObjectClasses import BaseObj
+from easyscience.Objects.ObjectClasses import Parameter
+from easyscience.Utils.decorators import memoized
 
 from .SpaceGroup import SpaceGroup
 
@@ -37,7 +37,7 @@ Vector3Like = Union[List[float], np.ndarray]
 
 
 if TYPE_CHECKING:
-    from easyCore.Utils.typing import iF
+    from easyscience.Utils.typing import iF
 
 CELL_DETAILS = {
     "length": {

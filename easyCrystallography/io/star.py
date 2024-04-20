@@ -1,6 +1,6 @@
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2024  Contributors to the easyCrystallography project <https://github.com/easyScience/easyCrystallography>
 
 from __future__ import annotations
 
@@ -19,14 +19,14 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from easyCore import np
-from easyCore.Utils.io.dict import DataDictSerializer
-from easyCore.Utils.io.dict import DictSerializer
-from easyCore.Utils.io.template import BaseEncoderDecoder
+import numpy as np
+from easyscience.Utils.io.dict import DataDictSerializer
+from easyscience.Utils.io.dict import DictSerializer
+from easyscience.Utils.io.template import BaseEncoderDecoder
 from gemmi import cif
 
 if TYPE_CHECKING:
-    from easyCore.Utils.typing import BV
+    from easyscience.Utils.typing import BV
 
 _MAX_LEN = 160
 _SEP = '.'

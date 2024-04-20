@@ -1,6 +1,6 @@
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2024  Contributors to the easyCrystallography project <https://github.com/easyScience/easyCrystallography>
 import ast
 import json
 import os.path
@@ -15,9 +15,9 @@ from pathlib import Path
 from typing import Callable
 from typing import Optional
 
-from easyCore import np
-from easyCore.Objects.core import ComponentSerializer
-from easyCore.Objects.Variable import Descriptor
+import numpy as np
+from easyscience.Objects.core import ComponentSerializer
+from easyscience.Objects.Variable import Descriptor
 
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'

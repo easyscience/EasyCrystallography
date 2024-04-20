@@ -3,13 +3,13 @@ __version__ = '0.1.0'
 
 #  SPDX-FileCopyrightText: 2022 easyCrystallography contributors  <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022 Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2024 Contributors to the easyscience project <https://github.com/easyScience/easyCrystallography>
 
 import pytest
 import itertools
 import numpy as np
 
-from easyCore.Objects.ObjectClasses import Descriptor, Parameter
+from easyscience.Objects.ObjectClasses import Descriptor, Parameter
 from easyCrystallography.Components.SpaceGroup import SpaceGroup, SG_DETAILS as _SG_DETAILS
 from easyCrystallography.Symmetry.groups import SpaceGroup as SG
 

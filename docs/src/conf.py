@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-#  SPDX-FileCopyrightText: 2022 easyCore contributors  <core@easyscience.software>
+#  SPDX-FileCopyrightText: 2024 easyscience contributors  <core@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2021-2022 Contributors to the easyCore project <https://github.com/easyScience/easyCore>
+#  © 2021-2024 Contributors to the easyCrystallography project <https://github.com/easyScience/easyCore>
 
 #
 # Configuration file for the Sphinx documentation builder.
@@ -29,7 +29,7 @@ project_info = toml.load(os.path.join(main_root, 'pyproject.toml'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'easyCore'
+project = 'easyscience'
 copyright = f"2021, {project_info['tool']['poetry']['authors'][0]}"
 author = project_info['tool']['poetry']['authors'][0]
 
@@ -137,7 +137,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'easyCoredoc'
+htmlhelp_basename = 'easysciencedoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -164,7 +164,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'easyCore.tex', 'easyCore Documentation',
+    (master_doc, 'easyscience.tex', 'easyscience Documentation',
      'Simon Ward', 'manual'),
 ]
 
@@ -174,7 +174,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'easycore', 'easyCore Documentation',
+    (master_doc, 'easyscience', 'easyscience Documentation',
      [author], 1)
 ]
 
@@ -185,8 +185,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'easyCore', 'easyCore Documentation',
-     author, 'easyCore', 'One line description of project.',
+    (master_doc, 'easyscience', 'easyscience Documentation',
+     author, 'easyscience', 'One line description of project.',
      'Miscellaneous'),
 ]
 
@@ -216,5 +216,5 @@ sphinx_gallery_conf = {
     'backreferences_dir': 'gen_modules/backreferences',     # directory where function/class granular galleries are stored
     # Modules for which function/class level galleries are created. In
     # this case sphinx_gallery and numpy in a tuple of strings.
-    'doc_module':         ('sphinx_gallery', 'numpy', 'easyCore'),
+    'doc_module':         ('sphinx_gallery', 'numpy', 'easyscience'),
 }

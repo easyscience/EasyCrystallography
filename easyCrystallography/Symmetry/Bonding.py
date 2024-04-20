@@ -1,6 +1,6 @@
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2024  Contributors to the easyCrystallography project <https://github.com/easyScience/easyCrystallography>
 
 
 __author__ = 'github.com/wardsimon'
@@ -10,7 +10,7 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-from easyCore import np
+import numpy as np
 
 from easyCrystallography.Symmetry.SymOp import SymmOp
 

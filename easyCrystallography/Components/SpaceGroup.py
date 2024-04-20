@@ -1,6 +1,6 @@
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2024  Contributors to the easyCrystallography project <https://github.com/easyScience/easyCrystallography>
 
 from __future__ import annotations
 
@@ -17,9 +17,9 @@ from typing import Tuple
 from typing import Union
 
 import gemmi
-from easyCore import np
-from easyCore.Objects.ObjectClasses import BaseObj
-from easyCore.Objects.ObjectClasses import Descriptor
+import numpy as np
+from easyscience.Objects.ObjectClasses import BaseObj
+from easyscience.Objects.ObjectClasses import Descriptor
 
 from easyCrystallography.Symmetry.SymOp import SymmOp
 
@@ -48,7 +48,7 @@ SG_DETAILS = {
 
 if TYPE_CHECKING:
     import numpy.typing as npt
-    from easyCore.Utils.typing import iF
+    from easyscience.Utils.typing import iF
 
     from easyCrystallography.Components.Site import S
     T = Union[S, npt.ArrayLike]

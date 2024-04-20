@@ -5,7 +5,7 @@ __version__ = '0.0.1'
 
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2024  Contributors to the easyCrystallography project <https://github.com/easyScience/easyCrystallography>
 
 import textwrap
 from abc import abstractmethod
@@ -18,11 +18,11 @@ from typing import NoReturn
 from typing import Optional
 
 import gemmi
-from easyCore import np
+import numpy as np
 
 if TYPE_CHECKING:
-    from easyCore.Utils.typing import B
-    from easyCore.Utils.typing import V
+    from easyscience.Utils.typing import B
+    from easyscience.Utils.typing import V
 
 _MAX_LEN = 140
 _MAX_LABEL_LEN = 130

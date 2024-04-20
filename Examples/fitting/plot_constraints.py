@@ -4,8 +4,8 @@ Constraints example
 This  example shows the usages of the different constraints.
 """
 
-from easyCore.Fitting import Constraints
-from easyCore.Objects.ObjectClasses import Parameter
+from easyscience.Fitting import Constraints
+from easyscience.Objects.ObjectClasses import Parameter
 
 p1 = Parameter('p1', 1)
 constraint = Constraints.NumericConstraint(p1, '<', 5)
