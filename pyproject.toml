@@ -47,7 +47,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     #"easyscience>=0.5.0",
-    "easyScience @ git+https://github.com/easyScience/easyscience.git@master"
+    "easyScience @ git+https://github.com/easyScience/easyscience.git@master",
     "periodictable",
     "gemmi",
     "build",
