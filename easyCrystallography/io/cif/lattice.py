@@ -44,6 +44,9 @@ class Lattice(CIF_Template):
         is_fixed = {}
         for item in self._CIF_CONVERSIONS:
             value = block.find_pair_item(self._CIF_SECTION_NAME + item[1])
+            if value is None:
+                # try the new CIF format with '.' instead of '_'
+                value = block.find_pair_item(self._CIF_SECTION_NAME + item[1].replace("_", ".",1))
             V, E, F = self.string_to_variable(value.pair[1])
             if E:
                 errors[item[0]] = E

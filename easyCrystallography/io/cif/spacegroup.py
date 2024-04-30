@@ -32,7 +32,9 @@ class SpaceGroup(CIF_Template):
         ("symmetry_ops", "'_symop.operation_xyz'"),
     ]
     _CIF_ALTERNATES: ClassVar[List[Tuple[str, List[str]]]] = [
-        ["space_group_HM_name", ["_name_H-M_full", "_IT_number", "_name_Hall", "_name_H-M_alt"]],
+        ["space_group_HM_name",
+         ["_name_H-M_full", "_IT_number", "_name_Hall", "_name_H-M_alt",
+          ".name_H-M_full", ".IT_number", ".name_Hall", ".name_H-M_alt"]],
     ]
 
     def __init__(self, reference_class=_SpaceGroup):

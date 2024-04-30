@@ -276,6 +276,12 @@ class Phase(BaseObj):
             s = r.structure(phase_class=cls)
         return s
 
+    @classmethod
+    def from_cif_string(cls, cif_string: str):
+        s = None
+        with Parsers('cif_str').reader() as r:
+            s = r.structures(cif_string, phase_class=cls)
+        return s
 
 class Phases(BaseCollection):
     _SITE_CLASS = Site
@@ -298,7 +304,7 @@ class Phases(BaseCollection):
         self.interface = interface
 
     def __repr__(self) -> str:
-        return f"Collection of {len(self)} phases."
+        return f"Collection of {len(self)} phases: {self.phase_names}"
 
     def __getitem__(
             self, idx: Union[int, slice]

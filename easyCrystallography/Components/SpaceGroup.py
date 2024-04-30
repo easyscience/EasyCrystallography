@@ -203,6 +203,35 @@ class SpaceGroup(BaseObj):
             ops.append(SymmOp.from_xyz_string(xyz))
         return cls.from_symOps(ops, interface)
 
+    @staticmethod
+    def find_settings_by_number(number):
+        """
+        Find the IT_coordinate_system_code by group's number.
+        gemmi doesn't do it natively.
+        """
+        ext = []
+        for item in gemmi.spacegroup_table():
+            if item.number > number:
+                break
+            if item.number == number:
+                st = ""
+                # Cases where ext and qualifier are not empty
+                if item.ext and item.ext != "\x00":
+                    st += item.ext
+                if item.qualifier:
+                    st += item.qualifier
+                # special cases of defaul settings, not explicitly defined in gemmi
+                system = item.crystal_system_str()
+                if system == "orthorhombic" and not item.qualifier:
+                    st += "abc"
+                elif (system == "trigonal" or system == "hexagonal") and not item.qualifier:
+                    st += "h"
+                # failed, just assign "1" to triclinic/monoclinic/tetragonal
+                if not st:
+                    st = "1"
+                ext.append(st)
+        return ext
+
     def __on_change(self,
                     new_spacegroup: Union[int, str],
                     new_setting: Optional[str] = None,
@@ -233,8 +262,10 @@ class SpaceGroup(BaseObj):
             if sg_data is None:
                 raise ValueError(f"Spacegroup \'{new_spacegroup}\' not found in database.")
 
+            settings = self.find_settings_by_number(sg_data.number)
             hm_name = sg_data.hm
             reference = sg_data.ext
+
             if new_setting is None or new_setting == "" or new_setting == "\x00":
                 if reference != '\x00':
                     setting = reference
@@ -245,10 +276,20 @@ class SpaceGroup(BaseObj):
                     pass
                 new_setting = str(new_setting)
                 if new_setting != reference:
-                    sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + new_setting)
+                    # modify the space group with the new setting
+                    new_sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + new_setting)
+                    if new_sg_data is None and new_setting in settings:
+                        # this can be because the setting is the "default" setting which gemmi treats as a blank
+                        new_sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + reference)
+                    if new_sg_data is None:
+                        raise ValueError(f"Spacegroup \'{new_spacegroup}:{new_setting}\' not found in database.")
+                    sg_data = new_sg_data
                     setting = sg_data.ext
                 else:
                     setting = new_setting
+                if new_setting in settings:
+                    setting = new_setting
+
             if operations_set is None:
                 operations_set = sg_data.operations()
             operations = [SymmOp.from_rotation_and_translation(np.array(op.rot) / op.DEN, np.array(op.tran) / op.DEN)
