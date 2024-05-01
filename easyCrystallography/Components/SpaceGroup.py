@@ -333,6 +333,30 @@ class SpaceGroup(BaseObj):
         _, setting, _ = self.__on_change(self._space_group_HM_name.raw_value, new_setting, set_internal=True)
 
     @property
+    def it_coordinate_system_code(self) -> Optional[Descriptor]:
+        """
+        Space group setting. If the space group does not have a setting, this will be None.
+        Equivalent to setting, defined to satisfy CIF Template
+
+        :return: Space group setting
+        """
+        setting_str = self._setting.raw_value
+        if setting_str == "\x00":
+            return None  # no setting
+        return self._setting
+
+    @it_coordinate_system_code.setter
+    def it_coordinate_system_code(self, new_setting: str) -> NoReturn:
+        """
+        Set the space group setting.
+        Equivalent to setting, defined to satisfy CIF Template
+
+        :param new_setting: Space group setting
+        """
+        _, setting, _ = self.__on_change(self._space_group_HM_name.raw_value, new_setting, set_internal=True)
+
+
+    @property
     def setting_str(self) -> str:
         """
         Space group setting as a string. If the space group does not have a setting, this will be an empty string.
@@ -362,6 +386,26 @@ class SpaceGroup(BaseObj):
         self.__on_change(value, set_internal=True)
 
     @property
+    def name_hm_alt(self) -> Descriptor:
+        """
+        Space group name as defined by a Hermann-Mauguin symbol
+        Equivalent to space_group_HM_name, defined to satisfy CIF Template
+
+        :return: Space group name as easyCore Descriptor
+        """
+        return self._space_group_HM_name
+
+    @name_hm_alt.setter
+    def name_hm_alt(self, value: str) -> NoReturn:
+        """
+        Set the space group name as defined by a Hermann-Mauguin symbol
+        Equivalent to space_group_HM_name, defined to satisfy CIF Template
+
+        :param value: Space group name as a string
+        """
+        self.__on_change(value, set_internal=True)
+
+    @property
     def hermann_mauguin(self) -> str:
         """
         Space group name as defined by a Hermann-Mauguin symbol
@@ -369,6 +413,19 @@ class SpaceGroup(BaseObj):
         :return: Space group name as a string
         """
         return self._space_group_HM_name.raw_value
+
+    @property
+    def name_hall(self) -> str:
+        """
+        Hall symbol of the space group
+        Equivalent to hall_symbol, defined to satisfy CIF Template
+
+        :return: Hall symbol of the space group
+        """
+        hall = None
+        if not self.is_custom:
+            hall = self._sg_data.hall
+        return hall
 
     @property
     def hall_symbol(self) -> str:
@@ -398,6 +455,29 @@ class SpaceGroup(BaseObj):
     def int_number(self, new_it_number: int) -> NoReturn:
         """
         Set the spacegroup by its international number
+
+        :param new_it_number: International number of the new space group
+        """
+        self.__on_change(new_it_number, set_internal=True)
+
+    @property
+    def it_number(self) -> int:
+        """
+        International number of the space group
+        Equivalent to int_number, defined to satisfy CIF Template
+
+        :return: International number of the space group
+        """
+        n = None
+        if not self.is_custom:
+            n = self._sg_data.number
+        return n
+
+    @it_number.setter
+    def it_number(self, new_it_number: int) -> NoReturn:
+        """
+        Set the spacegroup by its international number
+        Equivalent to int_number, defined to satisfy CIF Template
 
         :param new_it_number: International number of the new space group
         """
