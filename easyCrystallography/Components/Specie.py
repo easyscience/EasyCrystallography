@@ -1,6 +1,6 @@
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2023  Contributors to the EasyScience project <https://github.com/easyScience/easyCrystallography>
 
 
 __author__ = "github.com/wardsimon"
@@ -13,9 +13,9 @@ from typing import Dict
 from typing import Union
 
 import periodictable as pt
-from easyCore.Objects.ObjectClasses import Descriptor
-from easyCore.Utils.classTools import addProp
-from easyCore.Utils.classTools import removeProp
+from easyscience.Objects.ObjectClasses import Descriptor
+from easyscience.Utils.classTools import addProp
+from easyscience.Utils.classTools import removeProp
 
 _SPECIE_DETAILS = {
     "type_symbol": {

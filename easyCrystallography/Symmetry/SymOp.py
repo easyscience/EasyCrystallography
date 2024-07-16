@@ -9,7 +9,7 @@ __date__ = "Sep 23, 2011"
 
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2023  Contributors to the EasyScience project <https://github.com/easyScience/easyCrystallography>
 
 from typing import List
 from typing import Tuple
@@ -27,9 +27,9 @@ from math import pi
 from math import sin
 from math import sqrt
 
-from easyCore import np
-from easyCore.Objects.core import ComponentSerializer
-from easyCore.Utils.string import transformation_to_string
+import numpy as np
+from easyscience.Objects.core import ComponentSerializer
+from easyscience.Utils.string import transformation_to_string
 
 
 class SymmOp(ComponentSerializer):

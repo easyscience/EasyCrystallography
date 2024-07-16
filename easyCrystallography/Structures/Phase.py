@@ -1,6 +1,6 @@
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2023  Contributors to the EasyScience project <https://github.com/easyScience/easyCrystallography>
 
 from __future__ import annotations
 
@@ -14,11 +14,11 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from easyCore import np
-from easyCore.Objects.Groups import BaseCollection
-from easyCore.Objects.ObjectClasses import BaseObj
-from easyCore.Objects.ObjectClasses import Descriptor
-from easyCore.Objects.ObjectClasses import Parameter
+import numpy as np
+from easyscience.Objects.Groups import BaseCollection
+from easyscience.Objects.ObjectClasses import BaseObj
+from easyscience.Objects.ObjectClasses import Descriptor
+from easyscience.Objects.ObjectClasses import Parameter
 
 from easyCrystallography.Components.Lattice import Lattice
 from easyCrystallography.Components.Lattice import PeriodicLattice
@@ -29,7 +29,7 @@ from easyCrystallography.Components.SpaceGroup import SpaceGroup
 from easyCrystallography.io.parser import Parsers
 
 if TYPE_CHECKING:
-    from easyCore.Utils.typing import iF
+    from easyscience.Utils.typing import iF
 
 
 class Phase(BaseObj):
