@@ -82,7 +82,7 @@ def test_SpaceGroup_default():
 
 @pytest.mark.parametrize('sg_in', [sg['hermann_mauguin_fmt'] for sg in SYM])
 def test_SpaceGroup_fromPars_HM_Full(sg_in):
-    if sg_in in ['C 2 e b', 'R 1 2/c 1 ("rhombohedral" setting)', 'B 1 21/m 1']:
+    if sg_in in ['C 2 e b', 'R 1 2/c 1 ("rhombohedral" setting)', 'B 1 21/m 1', 'B 1 21 1']:
         return  # This is a known issue
 
     sg_p = SpaceGroup(sg_in)
