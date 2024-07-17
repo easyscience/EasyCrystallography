@@ -240,7 +240,10 @@ class Atoms(BaseCollection):
         """
         Add an atom to the crystal
         """
-        atom = Site(*args, **kwargs)
+        if len(args) == 1 and isinstance(args[0], Site):
+            atom = args[0]
+        else:
+            atom = Site(*args, **kwargs)
         super(Atoms, self).append(atom)
 
     # def append(self, item: S):
