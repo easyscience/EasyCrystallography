@@ -11,10 +11,10 @@ from easyscience.models.polynomial import Line
 from easyscience.Objects.Groups import BaseCollection
 from easyscience.Objects.Variable import Descriptor
 from easyscience.Objects.Variable import Parameter
-from easyCrystallography.Components.Site import Atoms, Site, _SITE_DETAILS
-from easyCrystallography.io.star_base import ItemHolder
-from easyCrystallography.io.star_base import StarLoop
-from easyCrystallography.io.star_base import StarSection
+from easycrystallography.Components.Site import Atoms, Site, _SITE_DETAILS
+from easycrystallography.io.star_base import ItemHolder
+from easycrystallography.io.star_base import StarLoop
+from easycrystallography.io.star_base import StarSection
 import gc
 
 

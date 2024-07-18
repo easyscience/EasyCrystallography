@@ -5,7 +5,7 @@ from typing import List
 
 import pytest
 import numpy as np
-from easyCrystallography.Components.Site import Atoms, Site, _SITE_DETAILS
+from easycrystallography.Components.Site import Atoms, Site, _SITE_DETAILS
 
 site_details = [Site('Al', 'Al'), Site('Fe', 'Fe3+'), Site('TEST', 'H')]
 

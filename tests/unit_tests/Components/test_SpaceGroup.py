@@ -1,9 +1,9 @@
 __author__ = 'github.com/wardsimon'
 __version__ = '0.1.0'
 
-#  SPDX-FileCopyrightText: 2022 easyCrystallography contributors  <crystallography@easyscience.software>
+#  SPDX-FileCopyrightText: 2022 EasyCrystallography contributors  <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022 Contributors to the EasyScience project <https://github.com/easyScience/easyCrystallography>
+#  © 2022 Contributors to the EasyScience project <https://github.com/EasyScience/EasyCrystallography>
 
 import pytest
 import itertools
@@ -11,8 +11,8 @@ import numpy as np
 
 from easyscience.Objects.ObjectClasses import Descriptor, Parameter
 from easyscience import global_object
-from easyCrystallography.Components.SpaceGroup import SpaceGroup, SG_DETAILS as _SG_DETAILS
-from easyCrystallography.Symmetry.groups import SpaceGroup as SG
+from easycrystallography.Components.SpaceGroup import SpaceGroup, SG_DETAILS as _SG_DETAILS
+from easycrystallography.Symmetry.groups import SpaceGroup as SG
 
 SG_DETAILS = _SG_DETAILS.copy()
 del SG_DETAILS['symmetry_ops']
@@ -275,7 +275,7 @@ def test_SpaceGroup_from_dict():
 
 
 def testSpaceGroup_from_SymOps():
-    from easyCrystallography.Symmetry.SymOp import SymmOp
+    from easycrystallography.Symmetry.SymOp import SymmOp
     ops_str = 'x, y, z;-x, y, -z+1/2;-x, -y, -z;x, -y, z+1/2;x+1/2, y+1/2, z;-x+1/2, y+1/2, -z+1/2;-x+1/2, -y+1/2, ' \
               '-z;x+1/2, -y+1/2, z+1/2'
     ops_str_list = ops_str.split(';')
@@ -296,7 +296,7 @@ def testSpaceGroup_from_xyz_string():
 
 
 def testSpaceGroup_from_SymOps():
-    from easyCrystallography.Symmetry.SymOp import SymmOp
+    from easycrystallography.Symmetry.SymOp import SymmOp
     ops_str = 'x, y, z;-x, y, -z+1/2;-x, -y, -z;x, -y, z+1/2;x+1/2, y+1/2, z;-x+1/2, y+1/2, -z+1/2;-x+1/2, -y+1/2, ' \
               '-z;x+1/2, -y+1/2, z+1/2'
     ops_str_list = ops_str.split(';')
