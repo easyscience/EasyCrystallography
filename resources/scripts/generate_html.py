@@ -5,8 +5,8 @@ import sys
 
 import requests
 
-org = "easyScience"
-repo = "easyCrystallography"
+org = "EasyScience"
+repo = "EasyCrystallography"
 if len(sys.argv) > 1:
     repo = sys.argv[1]
 

@@ -5,17 +5,17 @@
 
 <img height="80"><img src="https://raw.githubusercontent.com/easyScience/easyCrystallography/develop/resources/images/ec_logo.svg" height="65">
 
-**easyCrystallography** is a library that can be used for the generation and manipulation of crystal structures.
+**EasyCrystallography** is a library that can be used for the generation and manipulation of crystal structures.
 
 ## Install
 
-**easyCrystallography** can be downloaded using pip:
+**EasyCrystallography** can be downloaded using pip:
 
-```pip install easyCrystallography```
+```pip install easycrystallography```
 
 Or direct from the repository:
 
-```pip install https://github.com/easyScience/easyCrystallography```
+```pip install https://github.com/EasyScience/EasyCrystallography```
 
 ## Test
 
@@ -39,9 +39,9 @@ While **easyCore** is under the BSD-3 license
 
 <!---CI Build Status--->
 
-[20]: https://github.com/easyScience/easyCrystallography/workflows/CI%20using%20pip/badge.svg
+[20]: https://github.com/EasyScience/EasyCrystallography/workflows/CI%20using%20pip/badge.svg
 
-[21]: https://github.com/easyScience/easyCrystallography/actions
+[21]: https://github.com/EasyScience/EasyCrystallography/actions
 
 
 <!---Release--->
@@ -55,7 +55,7 @@ While **easyCore** is under the BSD-3 license
 
 [50]: https://img.shields.io/github/license/easyScience/easyCrystallography.svg
 
-[51]: https://github.com/easyScience/easyCrystallography/blob/master/LICENSE.md
+[51]: https://github.com/EasyScience/EasyCrystallography/blob/master/LICENSE.md
 
 
 <!---Downloads--->

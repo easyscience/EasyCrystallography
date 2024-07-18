@@ -4,14 +4,14 @@ requires = ["hatchling<=1.21.0"]
 build-backend = "hatchling.build"
 
 [tool.coverage.run]
-source = ['easyCrystallography']
+source = ['src/easycrystallography']
 
 [tool.github.info]
 organization = "easyScience"
-repo = "easyCrystallography"
+repo = "EasyCrystallography"
 
 [project]
-name = "easyCrystallography"
+name = "EasyCrystallography"
 version = "0.4.0"
 description = "Crystallography in easyScience"
 authors = [
@@ -71,7 +71,7 @@ docs = [
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["easyCrystallography"]
+packages = ["src/easycrystallography"]
 
 [tool.tox]
 legacy_tox_ini = """

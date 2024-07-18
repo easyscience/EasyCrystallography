@@ -7,7 +7,7 @@ import pytest
 from copy import deepcopy
 import easyscience
 import numpy as np
-from easyCrystallography.Components.Site import Site, PeriodicSite, Parameter, _SITE_DETAILS
+from easycrystallography.Components.Site import Site, PeriodicSite, Parameter, _SITE_DETAILS
 
 site_details = [("Al", "Al"), ("Fe", "Fe3+"), ("TEST", "H")]
 
@@ -192,7 +192,7 @@ def test_Site_as_dict(label, elm):
     s = Site(label, elm)
     obtained = s.as_dict()
     expected = {
-        "@module": "easyCrystallography.Components.Site",
+        "@module": "easycrystallography.Components.Site",
         "@class": "Site",
         "@version": "0.1.0",
         "@id": None,
@@ -312,7 +312,7 @@ def test_Site_as_dict(label, elm):
 @pytest.mark.parametrize("label, elm", site_details)
 def test_Site_from_dict(label, elm):
     d = {
-        "@module": "easyCrystallography.Components.Site",
+        "@module": "easycrystallography.Components.Site",
         "@class": "Site",
         "@version": "0.1.0",
         "@id": None,
@@ -331,7 +331,7 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "specie": {
-            "@module": "easyCrystallography.Components.Specie",
+            "@module": "easycrystallography.Components.Specie",
             "@class": "Specie",
             "@version": easyscience.__version__,
             "@id": None,
@@ -426,7 +426,7 @@ def test_Site_from_dict(label, elm):
 
 
 def test_site_with_adp():
-    from easyCrystallography.Components.AtomicDisplacement import AtomicDisplacement
+    from easycrystallography.Components.AtomicDisplacement import AtomicDisplacement
     adp = AtomicDisplacement()
     site = Site(adp=adp)
     assert hasattr(site, "adp")

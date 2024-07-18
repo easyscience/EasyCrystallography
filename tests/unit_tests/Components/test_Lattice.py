@@ -5,7 +5,7 @@ import pytest
 import easyscience
 import numpy as np
 from numbers import Number
-from easyCrystallography.Components.Lattice import Lattice, Parameter, CELL_DETAILS
+from easycrystallography.Components.Lattice import Lattice, Parameter, CELL_DETAILS
 
 pars_dict = {
     "cubic": (5, 5, 5, 90, 90, 90),
@@ -498,7 +498,7 @@ def test_Lattice_repr(values, out_str):
 
 def make_dict(value) -> dict:
     return {
-        "@module": "easyCrystallography.Components.Lattice",
+        "@module": "easycrystallography.Components.Lattice",
         "@class": "Lattice",
         "@version": "0.1.0",
         "length_a": {
