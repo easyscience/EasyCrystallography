@@ -38,7 +38,7 @@ classifiers = [
 requires-python = ">=3.9,<3.12"
 dependencies = [
     "asteval",
-    "numpy",
+    "numpy<2.0",
     "pint",
     "uncertainties",
     "xarray"
@@ -46,7 +46,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "easysciencecore>=0.3.0",
+    "easyscience @ git+https://github.com/EasyScience/EasyScience.git@develop",
     "periodictable",
     "gemmi",
     "build",

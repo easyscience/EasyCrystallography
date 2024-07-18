@@ -1,7 +1,7 @@
 # coding: utf-8
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2023  Contributors to the EasyScience project <https://github.com/easyScience/easyCrystallography>
 
 
 """
@@ -20,8 +20,8 @@ from collections.abc import Sequence
 from fractions import Fraction
 from itertools import product
 
-from easyCore import np
-from easyCore.Utils.classUtils import cached_class
+import numpy as np
+from easyscience.Utils.classUtils import cached_class
 
 from easyCrystallography.Symmetry.SymOp import SymmOp
 

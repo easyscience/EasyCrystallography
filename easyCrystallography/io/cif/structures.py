@@ -1,6 +1,6 @@
 #  SPDX-FileCopyrightText: 2023 easyCrystallography contributors <crystallography@easyscience.software>
 #  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the easyCore project <https://github.com/easyScience/easyCrystallography>
+#  © 2022-2023  Contributors to the EasyScience project <https://github.com/easyScience/easyCrystallography>
 
 # from __future__ import annotations
 #
@@ -9,7 +9,7 @@
 #
 # from typing import List, NoReturn, TYPE_CHECKING, ClassVar, Tuple, Dict
 #
-# from easyCore.Objects.ObjectClasses import B
+# from easyscience.Objects.ObjectClasses import B
 # from easyCrystallography.Structures.Phase import Phase as _Phase, Phases as _Phases
 # from .template import CIF_Template, gemmi
 # from . import *
