@@ -102,7 +102,6 @@ class AdpBase(BaseObj):
 
 class Anisotropic(AdpBase):
 
-    Uiso: ClassVar[Parameter]
     U_11: ClassVar[Parameter]
     U_12: ClassVar[Parameter]
     U_13: ClassVar[Parameter]
