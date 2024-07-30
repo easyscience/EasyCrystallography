@@ -32,7 +32,7 @@ jobs:
         pytest
     - uses: actions/upload-artifact@v2
       with:
-        name: easyCore - Python ${{ matrix.python-version }}
+        name: easyscience - Python ${{ matrix.python-version }}
         path: ${{ github.workspace }}/dist/*
 
 #   deploy:

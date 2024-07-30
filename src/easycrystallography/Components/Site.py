@@ -222,7 +222,7 @@ class Atoms(BaseCollection):
         return f"Collection of {len(self)} sites."
 
     def __getitem__(
-        self, idx: Union[int, slice]
+        self, idx: Union[int, slice, str]
     ) -> Union[Parameter, Descriptor, BaseObj, "BaseCollection"]:
         if isinstance(idx, str) and idx in self.atom_labels:
             idx = self.atom_labels.index(idx)
@@ -233,14 +233,27 @@ class Atoms(BaseCollection):
             key = self.atom_labels.index(key)
         return super(Atoms, self).__delitem__(key)
 
-    def append(self, item: S):
-        if not issubclass(type(item), Site):
-            raise TypeError("Item must be a Site")
-        if item.label.raw_value in self.atom_labels:
-            raise AttributeError(
-                f"An atom of name {item.label.raw_value} already exists."
-            )
-        super(Atoms, self).append(item)
+    def remove(self, key: Union[int, str]):
+        self.__delitem__(key)
+
+    def append(self, *args, **kwargs):
+        """
+        Add an atom to the crystal
+        """
+        if len(args) == 1 and isinstance(args[0], Site):
+            atom = args[0]
+        else:
+            atom = Site(*args, **kwargs)
+        super(Atoms, self).append(atom)
+
+    # def append(self, item: S):
+    #     if not issubclass(type(item), Site):
+    #         raise TypeError("Item must be a Site")
+    #     if item.label.raw_value in self.atom_labels:
+    #         raise AttributeError(
+    #             f"An atom of name {item.label.raw_value} already exists."
+    #         )
+    #     super(Atoms, self).append(item)
 
     @property
     def atom_labels(self) -> List[str]:

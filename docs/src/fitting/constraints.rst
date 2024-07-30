@@ -28,8 +28,8 @@ A constraint can be used in one of three ways; Assignment to a parameter, assign
 
 .. code-block:: python
 
-     from easyCore.Fitting.Constraints import NumericConstraint
-     from easyCore.Objects.Base import Parameter
+     from easyscience.Fitting.Constraints import NumericConstraint
+     from easyscience.Objects.Base import Parameter
      # Create an `a < 1` constraint
      a = Parameter('a', 0.5)
      constraint = NumericConstraint(a, '<=', 1)
