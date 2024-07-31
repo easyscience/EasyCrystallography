@@ -203,6 +203,35 @@ class SpaceGroup(BaseObj):
             ops.append(SymmOp.from_xyz_string(xyz))
         return cls.from_symOps(ops, interface)
 
+    @staticmethod
+    def find_settings_by_number(number):
+        """
+        Find the IT_coordinate_system_code by group's number.
+        gemmi doesn't do it natively.
+        """
+        ext = []
+        for item in gemmi.spacegroup_table():
+            if item.number > number:
+                break
+            if item.number == number:
+                st = ""
+                # Cases where ext and qualifier are not empty
+                if item.ext and item.ext != "\x00":
+                    st += item.ext
+                if item.qualifier:
+                    st += item.qualifier
+                # special cases of defaul settings, not explicitly defined in gemmi
+                system = item.crystal_system_str()
+                if system == "orthorhombic" and not item.qualifier:
+                    st += "abc"
+                elif (system == "trigonal" or system == "hexagonal") and not item.qualifier:
+                    st += "h"
+                # failed, just assign "1" to triclinic/monoclinic/tetragonal
+                if not st:
+                    st = "1"
+                ext.append(st)
+        return ext
+
     def __on_change(self,
                     new_spacegroup: Union[int, str],
                     new_setting: Optional[str] = None,
@@ -233,8 +262,10 @@ class SpaceGroup(BaseObj):
             if sg_data is None:
                 raise ValueError(f"Spacegroup \'{new_spacegroup}\' not found in database.")
 
+            settings = self.find_settings_by_number(sg_data.number)
             hm_name = sg_data.hm
             reference = sg_data.ext
+
             if new_setting is None or new_setting == "" or new_setting == "\x00":
                 if reference != '\x00':
                     setting = reference
@@ -245,10 +276,20 @@ class SpaceGroup(BaseObj):
                     pass
                 new_setting = str(new_setting)
                 if new_setting != reference:
-                    sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + new_setting)
+                    # modify the space group with the new setting
+                    new_sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + new_setting)
+                    if new_sg_data is None and new_setting in settings:
+                        # this can be because the setting is the "default" setting which gemmi treats as a blank
+                        new_sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + reference)
+                    if new_sg_data is None:
+                        raise ValueError(f"Spacegroup \'{new_spacegroup}:{new_setting}\' not found in database.")
+                    sg_data = new_sg_data
                     setting = sg_data.ext
                 else:
                     setting = new_setting
+                if new_setting in settings:
+                    setting = new_setting
+
             if operations_set is None:
                 operations_set = sg_data.operations()
             operations = [SymmOp.from_rotation_and_translation(np.array(op.rot) / op.DEN, np.array(op.tran) / op.DEN)
@@ -292,6 +333,30 @@ class SpaceGroup(BaseObj):
         _, setting, _ = self.__on_change(self._space_group_HM_name.raw_value, new_setting, set_internal=True)
 
     @property
+    def it_coordinate_system_code(self) -> Optional[Descriptor]:
+        """
+        Space group setting. If the space group does not have a setting, this will be None.
+        Equivalent to setting, defined to satisfy CIF Template
+
+        :return: Space group setting
+        """
+        setting_str = self._setting.raw_value
+        if setting_str == "\x00":
+            return None  # no setting
+        return self._setting
+
+    @it_coordinate_system_code.setter
+    def it_coordinate_system_code(self, new_setting: str) -> NoReturn:
+        """
+        Set the space group setting.
+        Equivalent to setting, defined to satisfy CIF Template
+
+        :param new_setting: Space group setting
+        """
+        _, setting, _ = self.__on_change(self._space_group_HM_name.raw_value, new_setting, set_internal=True)
+
+
+    @property
     def setting_str(self) -> str:
         """
         Space group setting as a string. If the space group does not have a setting, this will be an empty string.
@@ -321,6 +386,26 @@ class SpaceGroup(BaseObj):
         self.__on_change(value, set_internal=True)
 
     @property
+    def name_hm_alt(self) -> Descriptor:
+        """
+        Space group name as defined by a Hermann-Mauguin symbol
+        Equivalent to space_group_HM_name, defined to satisfy CIF Template
+
+        :return: Space group name as easyCore Descriptor
+        """
+        return self._space_group_HM_name
+
+    @name_hm_alt.setter
+    def name_hm_alt(self, value: str) -> NoReturn:
+        """
+        Set the space group name as defined by a Hermann-Mauguin symbol
+        Equivalent to space_group_HM_name, defined to satisfy CIF Template
+
+        :param value: Space group name as a string
+        """
+        self.__on_change(value, set_internal=True)
+
+    @property
     def hermann_mauguin(self) -> str:
         """
         Space group name as defined by a Hermann-Mauguin symbol
@@ -328,6 +413,19 @@ class SpaceGroup(BaseObj):
         :return: Space group name as a string
         """
         return self._space_group_HM_name.raw_value
+
+    @property
+    def name_hall(self) -> str:
+        """
+        Hall symbol of the space group
+        Equivalent to hall_symbol, defined to satisfy CIF Template
+
+        :return: Hall symbol of the space group
+        """
+        hall = None
+        if not self.is_custom:
+            hall = self._sg_data.hall
+        return hall
 
     @property
     def hall_symbol(self) -> str:
@@ -357,6 +455,29 @@ class SpaceGroup(BaseObj):
     def int_number(self, new_it_number: int) -> NoReturn:
         """
         Set the spacegroup by its international number
+
+        :param new_it_number: International number of the new space group
+        """
+        self.__on_change(new_it_number, set_internal=True)
+
+    @property
+    def it_number(self) -> int:
+        """
+        International number of the space group
+        Equivalent to int_number, defined to satisfy CIF Template
+
+        :return: International number of the space group
+        """
+        n = None
+        if not self.is_custom:
+            n = self._sg_data.number
+        return n
+
+    @it_number.setter
+    def it_number(self, new_it_number: int) -> NoReturn:
+        """
+        Set the spacegroup by its international number
+        Equivalent to int_number, defined to satisfy CIF Template
 
         :param new_it_number: International number of the new space group
         """

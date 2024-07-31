@@ -182,7 +182,7 @@ structure. The following example uses the :meth:`easycrystallography.Components.
 
 .. code-block:: python
 
-    from easyCore import np
+    import numpy as np
     from easycrystallography.Components.SpaceGroup import SpaceGroup
 
     # Create a spacegroup which has a few operations
@@ -209,7 +209,7 @@ factors and other properties. It is also required in some calculations. The foll
 
 .. code-block:: python
 
-    from easyCore import np
+    import numpy as np
     from easycrystallography.Components.SpaceGroup import SpaceGroup
 
     # Create a spacegroup which has a few operations
@@ -226,5 +226,5 @@ factors and other properties. It is also required in some calculations. The foll
 Symmetry Reference
 --------------------
 
-.. minigallery:: easyCore.Fitting.Constraints.NumericConstraint
+.. minigallery:: easyscience.Fitting.Constraints.NumericConstraint
     :add-heading: Examples using `SpaceGroup`

@@ -42,13 +42,13 @@ class Phase(BaseObj):
     scale = ClassVar[Parameter]
 
     _REDIRECT = {
-        'spacegroup': lambda obj: getattr(obj, '_spacegroup'),
+        'space_group': lambda obj: getattr(obj, '_spacegroup'),
     }
 
     def __init__(
             self,
             name: str,
-            spacegroup: Optional[Union[SpaceGroup, str]] = None,
+            space_group: Optional[Union[SpaceGroup, str]] = None,
             cell: Optional[Union[Lattice, PeriodicLattice]] = None,
             atoms: Optional[Atoms] = None,
             scale: Optional[Parameter] = None,
@@ -56,19 +56,19 @@ class Phase(BaseObj):
             enforce_sym: bool = True,
     ):
         self.name = name
-        if spacegroup is None:
-            spacegroup = SpaceGroup()
+        if space_group is None:
+            space_group = SpaceGroup()
         if cell is None:
             cell = Lattice()
         if isinstance(cell, Lattice):
-            cell = PeriodicLattice.from_lattice_and_spacegroup(cell, spacegroup)
+            cell = PeriodicLattice.from_lattice_and_spacegroup(cell, space_group)
         if atoms is None:
             atoms = Atoms("atoms")
         if scale is None:
             scale = Parameter("scale", 1, min=0)
 
         super(Phase, self).__init__(
-            name, cell=cell, _spacegroup=spacegroup, atoms=atoms, scale=scale
+            name, cell=cell, _spacegroup=space_group, atoms=atoms, scale=scale
         )
         if not enforce_sym:
             self.cell.clear_sym()
@@ -158,7 +158,7 @@ class Phase(BaseObj):
             self.cell.clear_sym()
 
     @property
-    def spacegroup(self):
+    def space_group(self):
         return self._spacegroup
 
     def set_spacegroup(self, value):
@@ -222,7 +222,7 @@ class Phase(BaseObj):
         """
         Generate all orbits for a given fractional position.
         """
-        sym_op = self.spacegroup._sg_data.get_orbit
+        sym_op = self.space_group._sg_data.get_orbit
         offsets = np.array(
             np.meshgrid(
                 range(0, extent[0] + 1),
@@ -241,7 +241,7 @@ class Phase(BaseObj):
         (0, 0, 0) -> obj.extent
         :rtype: Dict[str, np.ndarray]
         """
-        if self.spacegroup is None:
+        if self.space_group is None:
             return {atom.label: atom.fract_coords for atom in self.atoms}
 
         if extent is None:
@@ -276,6 +276,12 @@ class Phase(BaseObj):
             s = r.structure(phase_class=cls)
         return s
 
+    @classmethod
+    def from_cif_string(cls, cif_string: str):
+        s = None
+        with Parsers('cif_str').reader() as r:
+            s = r.structures(cif_string, phase_class=cls)
+        return s
 
 class Phases(BaseCollection):
     _SITE_CLASS = Site
@@ -298,7 +304,7 @@ class Phases(BaseCollection):
         self.interface = interface
 
     def __repr__(self) -> str:
-        return f"Collection of {len(self)} phases."
+        return f"Collection of {len(self)} phases: {self.phase_names}"
 
     def __getitem__(
             self, idx: Union[int, slice]

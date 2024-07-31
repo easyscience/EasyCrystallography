@@ -309,7 +309,7 @@ class CifStringWriter(AbstractStructureWriter):
         block = d.add_new_block(data_name)
         components = {
             'cell':       Lattice,
-            'spacegroup': SpaceGroup,
+            'space_group': SpaceGroup,
             'atoms':      Atoms
         }
         for key, value in components.items():
@@ -319,7 +319,7 @@ class CifStringWriter(AbstractStructureWriter):
     def structures(self, objs):
         components = {
             'cell':       Lattice,
-            'spacegroup': SpaceGroup,
+            'space_group': SpaceGroup,
             'atoms':      Atoms
         }
         d = cif.Document()
