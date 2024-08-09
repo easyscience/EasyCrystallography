@@ -7,13 +7,13 @@ build-backend = "hatchling.build"
 source = ['src/easycrystallography']
 
 [tool.github.info]
-organization = "easyScience"
+organization = "EasyScience"
 repo = "EasyCrystallography"
 
 [project]
 name = "EasyCrystallography"
 version = "0.4.0"
-description = "Crystallography in easyScience"
+description = "Crystallography in EasyScience"
 authors = [
     {name = "Simon Ward"},
     {name = "Piotr Rozyczko", email = "piotr.rozyczko@ess.eu"}
