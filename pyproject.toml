@@ -41,14 +41,14 @@ dependencies = [
     "numpy<2.0",
     "pint",
     "uncertainties",
-    "xarray"
+    "xarray",
+    "gemmi",
+    "easyscience @ git+https://github.com/EasyScience/EasyScience.git@develop",
+    "periodictable",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "easyscience @ git+https://github.com/EasyScience/EasyScience.git@develop",
-    "periodictable",
-    "gemmi",
     "build",
     "codecov",
     "flake8",
