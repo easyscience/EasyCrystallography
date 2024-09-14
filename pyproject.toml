@@ -43,7 +43,7 @@ dependencies = [
     "uncertainties",
     "xarray",
     "gemmi",
-    "easyscience @ git+https://github.com/EasyScience/EasyScience.git@develop",
+    "easyscience @ git+https://github.com/EasyScience/EasyScience.git",
     "periodictable",
 ]
 
