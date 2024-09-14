@@ -343,12 +343,13 @@ class Atoms(CIF_Template):
         atoms = []
         for a in atom_dict.values():
             obj = self._CIF_CLASS._SITE_CLASS(**a)
-            if obj.label in error_dict.keys():
-                for atr in error_dict[obj.label].keys():
-                    setattr(getattr(obj, atr), 'error', error_dict[obj.label][atr])
-            if obj.label in fixed_dict.keys():
-                for atr in fixed_dict[obj.label].keys():
-                    setattr(getattr(obj, atr), 'fixed', fixed_dict[obj.label][atr])
+            label = obj.label.raw_value
+            if label in error_dict.keys():
+                for atr in error_dict[label].keys():
+                    setattr(getattr(obj, atr), 'error', error_dict[label][atr])
+            if label in fixed_dict.keys():
+                for atr in fixed_dict[label].keys():
+                    setattr(getattr(obj, atr), 'fixed', fixed_dict[label][atr])
             atoms.append(obj)
         return atoms
 
