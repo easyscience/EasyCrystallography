@@ -23,6 +23,8 @@ from easyscience.Objects.Variable import Parameter
 
 from .Lattice import PeriodicLattice
 from .Specie import Specie
+from .AtomicDisplacement import AtomicDisplacement
+
 
 if TYPE_CHECKING:
     from easyscience.Utils.typing import iF
@@ -71,6 +73,11 @@ class Site(BaseObj):
         interface: Optional[iF] = None,
         **kwargs,
     ):
+
+        b_iso_or_equiv = kwargs.get("b_iso_or_equiv", None)
+        if b_iso_or_equiv is not None:
+            adp = AtomicDisplacement("Biso", Biso=b_iso_or_equiv)
+            kwargs["adp"] = adp
 
         super(Site, self).__init__(
             "site",
