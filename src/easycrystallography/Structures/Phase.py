@@ -267,6 +267,7 @@ class Phase(BaseObj):
         cif_str_parser = Parsers('cif_str')
         with cif_str_parser.writer() as r:
             s += r.structure(self)
+        s = s.strip()  # remove leading and trailing newlines
         return s
 
     @classmethod
