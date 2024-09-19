@@ -195,12 +195,12 @@ def test_Site_as_dict(label, elm):
         "@module": "easycrystallography.Components.Site",
         "@class": "Site",
         "@version": "0.1.0",
-        "@id": None,
+        "unique_name": None,
         "label": {
             "@module": "easyscience.Objects.Variable",
             "@class": "Descriptor",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "name": "label",
             "value": label,
             "units": "dimensionless",
@@ -214,7 +214,7 @@ def test_Site_as_dict(label, elm):
         # 'specie': {
         #      '@module':  'easyCore.Elements.Basic.Specie', '@class': 'Specie',
         #      '@version': '0.1.0',
-        #      '@id':      None,
+        #      'unique_name':      None,
         #      'specie':
         #                  {
         #                      '@module':         'easyCore.Elements.periodic_table',
@@ -229,7 +229,7 @@ def test_Site_as_dict(label, elm):
             "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "name": "occupancy",
             "value": 1.0,
             "error": 0.0,
@@ -246,7 +246,7 @@ def test_Site_as_dict(label, elm):
             "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "name": "fract_x",
             "value": 0.0,
             "error": 0.0,
@@ -263,7 +263,7 @@ def test_Site_as_dict(label, elm):
             "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "name": "fract_y",
             "value": 0.0,
             "error": 0.0,
@@ -280,7 +280,7 @@ def test_Site_as_dict(label, elm):
             "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "name": "fract_z",
             "value": 0.0,
             "error": 0.0,
@@ -299,7 +299,7 @@ def test_Site_as_dict(label, elm):
     def check_dict(check, item):
         if isinstance(check, dict) and isinstance(item, dict):
             for this_check_key in check.keys():
-                if this_check_key == "@id":
+                if this_check_key == "unique_name":
                     continue
                 check_dict(check[this_check_key], item[this_check_key])
         else:
@@ -315,12 +315,12 @@ def test_Site_from_dict(label, elm):
         "@module": "easycrystallography.Components.Site",
         "@class": "Site",
         "@version": "0.1.0",
-        "@id": None,
+        "unique_name": None,
         "label": {
             "@module": "easyscience.Objects.Variable",
             "@class": "Descriptor",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "name": "label",
             "value": label,
             "units": "dimensionless",
@@ -334,7 +334,7 @@ def test_Site_from_dict(label, elm):
             "@module": "easycrystallography.Components.Specie",
             "@class": "Specie",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "specie": elm,
             "value": elm,
             "units": "dimensionless",
@@ -343,7 +343,7 @@ def test_Site_from_dict(label, elm):
             "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "name": "occupancy",
             "value": 1.0,
             "error": 0.0,
@@ -360,7 +360,7 @@ def test_Site_from_dict(label, elm):
             "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "name": "fract_x",
             "value": 0.0,
             "error": 0.0,
@@ -377,7 +377,7 @@ def test_Site_from_dict(label, elm):
             "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "name": "fract_y",
             "value": 0.0,
             "error": 0.0,
@@ -394,7 +394,7 @@ def test_Site_from_dict(label, elm):
             "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
             "@version": easyscience.__version__,
-            "@id": None,
+            "unique_name": None,
             "name": "fract_z",
             "value": 0.0,
             "error": 0.0,
@@ -415,7 +415,7 @@ def test_Site_from_dict(label, elm):
     def check_dict(check, item):
         if isinstance(check, dict) and isinstance(item, dict):
             for this_check_key in check.keys():
-                if this_check_key == "@id" or this_check_key == "specie":
+                if this_check_key == "unique_name" or this_check_key == "specie":
                     continue
                 check_dict(check[this_check_key], item[this_check_key])
         else:

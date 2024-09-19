@@ -197,9 +197,7 @@ def test_SpaceGroup_as_dict():
     sg_p_dict = sg_p.as_dict()
     del sg_p_dict['setting']['unique_name']
     del sg_p_dict['space_group_HM_name']['unique_name']
-    del sg_p_dict['@id']
-    del sg_p_dict['setting']['@id']
-    del sg_p_dict['space_group_HM_name']['@id']
+    del sg_p_dict['unique_name']
     del sg_p_dict['space_group_HM_name']['@class']
     del sg_p_dict['setting']['@class']
     del sg_p_dict['space_group_HM_name']['@module']

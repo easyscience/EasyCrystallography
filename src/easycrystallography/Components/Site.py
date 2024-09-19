@@ -21,10 +21,9 @@ from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.Variable import Descriptor
 from easyscience.Objects.Variable import Parameter
 
+from .AtomicDisplacement import AtomicDisplacement
 from .Lattice import PeriodicLattice
 from .Specie import Specie
-from .AtomicDisplacement import AtomicDisplacement
-
 
 if TYPE_CHECKING:
     from easyscience.Utils.typing import iF

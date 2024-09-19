@@ -26,7 +26,7 @@ from typing import Union
 
 import numpy as np
 from easyscience import ureg
-from easyscience.fitting.Constraints import ObjConstraint
+from easyscience.Constraints import ObjConstraint
 from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.ObjectClasses import Parameter
 from easyscience.Utils.decorators import memoized

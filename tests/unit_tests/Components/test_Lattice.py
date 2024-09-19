@@ -514,7 +514,7 @@ def make_dict(value) -> dict:
             "description": "Unit-cell length of the selected structure in angstroms.",
             "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_length_.html",
             "units": "angstrom",
-            "@id": "149027786693506016496254445195239597714",
+            "unique_name": "149027786693506016496254445195239597714",
             "enabled": True,
         },
         "length_b": {
@@ -530,7 +530,7 @@ def make_dict(value) -> dict:
             "description": "Unit-cell length of the selected structure in angstroms.",
             "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_length_.html",
             "units": "angstrom",
-            "@id": "294836968667493729920294930317191977696",
+            "unique_name": "294836968667493729920294930317191977696",
             "enabled": True,
         },
         "length_c": {
@@ -546,7 +546,7 @@ def make_dict(value) -> dict:
             "description": "Unit-cell length of the selected structure in angstroms.",
             "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_length_.html",
             "units": "angstrom",
-            "@id": "275642519607899521714432039990092728990",
+            "unique_name": "275642519607899521714432039990092728990",
             "enabled": True,
         },
         "angle_alpha": {
@@ -562,7 +562,7 @@ def make_dict(value) -> dict:
             "description": "Unit-cell angle of the selected structure in degrees.",
             "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_angle_.html",
             "units": "degree",
-            "@id": "161899496656810433045540450883723049023",
+            "unique_name": "161899496656810433045540450883723049023",
             "enabled": True,
         },
         "angle_beta": {
@@ -578,7 +578,7 @@ def make_dict(value) -> dict:
             "description": "Unit-cell angle of the selected structure in degrees.",
             "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_angle_.html",
             "units": "degree",
-            "@id": "186637124621565458307862080073460500737",
+            "unique_name": "186637124621565458307862080073460500737",
             "enabled": True,
         },
         "angle_gamma": {
@@ -594,11 +594,11 @@ def make_dict(value) -> dict:
             "description": "Unit-cell angle of the selected structure in degrees.",
             "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_angle_.html",
             "units": "degree",
-            "@id": "225244117838730303286513043607480352526",
+            "unique_name": "225244117838730303286513043607480352526",
             "enabled": True,
         },
         "interface": None,
-        "@id": "78109834334085432621980127205750673524",
+        "unique_name": "78109834334085432621980127205750673524",
     }
 
 
@@ -611,7 +611,7 @@ def test_Lattice_as_dict(value: list):
     def check_dict(check, item):
         if isinstance(check, dict) and isinstance(item, dict):
             for this_check_key in check.keys():
-                if this_check_key == "@id":
+                if this_check_key == "unique_name":
                     continue
                 check_dict(check[this_check_key], item[this_check_key])
         else:
@@ -631,7 +631,7 @@ def test_Lattice_from_dict(value: list):
     def check_dict(check, item):
         if isinstance(check, dict) and isinstance(item, dict):
             for this_check_key in check.keys():
-                if this_check_key == "@id":
+                if this_check_key == "unique_name":
                     continue
                 check_dict(check[this_check_key], item[this_check_key])
         else:
