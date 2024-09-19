@@ -7,7 +7,7 @@ Constraints are a fundamental component in non-trivial fitting operations. They 
 Creating a spacegroup
 -----------------------
 
-Spacegroups can be created using a few class methods. The most common is by calling :class:`easyCrystallography.Components.SpaceGroup.SpaceGroup` directly, which will try to ascertain if the; Hermann-Mauguin name, Hall symbol, or international number was provided.
+Spacegroups can be created using a few class methods. The most common is by calling :class:`easycrystallography.Components.SpaceGroup.SpaceGroup` directly, which will try to ascertain if the; Hermann-Mauguin name, Hall symbol, or international number was provided.
 
 At the moment only known spacegroups can be used. The ability to describe custom spacegroups is planned for a future release.
 
@@ -18,7 +18,7 @@ One of the extended Hermann-Mauguin symbols given in Table 4.3.2.1 of Internatio
 
 .. code-block:: python
 
-     from easyCrystallography.Components.SpaceGroup import SpaceGroup
+     from easycrystallography.Components.SpaceGroup import SpaceGroup
      # Create a spacegroup from the Hermann-Mauguin symbol
      HM_symbol = 'C m c a'
      spacegroup = SpaceGroup(HM_symbol)
@@ -28,11 +28,11 @@ One of the extended Hermann-Mauguin symbols given in Table 4.3.2.1 of Internatio
 IT Number
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 The number as assigned in International Tables for Crystallography Vol. A, specifying the proper affine class  of space groups
-(crystallographic space-group type) to which the space group belongs.  This number defines the space-group type but not the coordinate system in which it is expressed. The method :meth:`easyCrystallography.Components.SpaceGroup.SpaceGroup.from_int_number` is used for generation.
+(crystallographic space-group type) to which the space group belongs.  This number defines the space-group type but not the coordinate system in which it is expressed. The method :meth:`easycrystallography.Components.SpaceGroup.SpaceGroup.from_int_number` is used for generation.
 
 .. code-block:: python
 
-     from easyCrystallography.Components.SpaceGroup import SpaceGroup
+     from easycrystallography.Components.SpaceGroup import SpaceGroup
      # Create a spacegroup from the IT number
      IT_number = 64
      spacegroup = SpaceGroup.from_int_number(IT_number)
@@ -43,7 +43,7 @@ Hexagonal spacegroups can also be created by specifying the `hexagonal` flag.
 
 .. code-block:: python
 
-     from easyCrystallography.Components.SpaceGroup import SpaceGroup
+     from easycrystallography.Components.SpaceGroup import SpaceGroup
      # Create a spacegroup from the IT number
      IT_number = 160
      spacegroup = SpaceGroup.from_int_number(IT_number, hexagonal=False)
@@ -59,7 +59,7 @@ Space-group symbol as described by Hall. This symbol gives the space-group setti
 
 .. code-block:: python
 
-     from easyCrystallography.Components.SpaceGroup import SpaceGroup
+     from easycrystallography.Components.SpaceGroup import SpaceGroup
      # Create a spacegroup from the Hall symbol
      Hall_symbol = '-C 2ac 2'
      spacegroup = SpaceGroup(HM_symbol)
@@ -68,11 +68,11 @@ Space-group symbol as described by Hall. This symbol gives the space-group setti
 
 XYZ operators
 ^^^^^^^^^^^^^^^^^^^^^^
-Often spacegroups are defined by a set `XYZ` operators. These operators are used to define the symmetry operations of the spacegroup. These can be used to create a spacegroup, but cannot be used to define arbitrarily groups. The method :meth:`easyCrystallography.Components.SpaceGroup.SpaceGroup.from_xyz_string` is used for generation.
+Often spacegroups are defined by a set `XYZ` operators. These operators are used to define the symmetry operations of the spacegroup. These can be used to create a spacegroup, but cannot be used to define arbitrarily groups. The method :meth:`easycrystallography.Components.SpaceGroup.SpaceGroup.from_xyz_string` is used for generation.
 
 .. code-block:: python
 
-    from easyCrystallography.Components.SpaceGroup import SpaceGroup
+    from easycrystallography.Components.SpaceGroup import SpaceGroup
 
     # Define the operators for the 'C m c a' spacegroup
     xyz = ['x,y,z',
@@ -102,11 +102,11 @@ Often spacegroups are defined by a set `XYZ` operators. These operators are used
 Symmetry matrices and operators
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Often spacegroups are defined by a set of rotation matrices and translation vectors. These can be used to create a spacegroup, but cannot be used to define arbitrarily groups. The method :meth:`easyCrystallography.Components.SpaceGroup.SpaceGroup.from_symMatrices`, :meth:`easyCrystallography.Components.SpaceGroup.SpaceGroup.from_generators` can be used for generation.
+Often spacegroups are defined by a set of rotation matrices and translation vectors. These can be used to create a spacegroup, but cannot be used to define arbitrarily groups. The method :meth:`easycrystallography.Components.SpaceGroup.SpaceGroup.from_symMatrices`, :meth:`easycrystallography.Components.SpaceGroup.SpaceGroup.from_generators` can be used for generation.
 
 .. code-block:: python
 
-    from easyCrystallography.Components.SpaceGroup import SpaceGroup
+    from easycrystallography.Components.SpaceGroup import SpaceGroup
 
     # Define the operators for the 'P 2' spacegroup
     rot = [[[24, 0, 0], [0, 24, 0], [0, 0, 24]], [[-24, 0, 0], [0, 24, 0], [0, 0, -24]]]
@@ -123,12 +123,12 @@ Often spacegroups are defined by a set of rotation matrices and translation vect
     print(spacegroup)
     # <Spacegroup: system: 'monoclinic', number: 3, H-M: 'P 1 2 1'>
 
-`easyCrystallography` uses it's own implementation of `Operations` (:class:`easyCrystallography.Symmetry.SymOp.SymmOp`) which can be used to describe arbitrary rotations and translations of points and objects. A spacegroup can also be formed from these operations. The following example uses rotations and translations to describe the spacegroup, however any of the class methods in the :class:`easyCrystallography.Symmetry.SymOp.SymmOp` can be used. The method :meth:`easyCrystallography.Components.SpaceGroup.SpaceGroup.from_symOps` is used for generation.
+`easyCrystallography` uses it's own implementation of `Operations` (:class:`easycrystallography.Symmetry.SymOp.SymmOp`) which can be used to describe arbitrary rotations and translations of points and objects. A spacegroup can also be formed from these operations. The following example uses rotations and translations to describe the spacegroup, however any of the class methods in the :class:`easycrystallography.Symmetry.SymOp.SymmOp` can be used. The method :meth:`easycrystallography.Components.SpaceGroup.SpaceGroup.from_symOps` is used for generation.
 
 .. code-block:: python
 
-    from easyCrystallography.Components.SpaceGroup import SpaceGroup
-    from easyCrystallography.Symmetry.SymOp import SymmOp
+    from easycrystallography.Components.SpaceGroup import SpaceGroup
+    from easycrystallography.Symmetry.SymOp import SymmOp
 
     # Define the operators for the 'P 2' spacegroup
     rots = [[[24, 0, 0], [0, 24, 0], [0, 0, 24]], [[-24, 0, 0], [0, 24, 0], [0, 0, -24]]]
@@ -140,7 +140,7 @@ Often spacegroups are defined by a set of rotation matrices and translation vect
     print(spacegroup)
     # <Spacegroup: system: 'monoclinic', number: 3, H-M: 'P 1 2 1'>
 
-The same can be used for `gemmi` operators and operator groups by using the :meth:`easyCrystallography.Components.SpaceGroup.SpaceGroup.from_gemmi_operations` class method.
+The same can be used for `gemmi` operators and operator groups by using the :meth:`easycrystallography.Components.SpaceGroup.SpaceGroup.from_gemmi_operations` class method.
 
 Features
 -----------------
@@ -152,7 +152,7 @@ reference settings, unique identifiers and symmetry operations.
 
 .. code-block:: python
 
-    from easyCrystallography.Components.SpaceGroup import SpaceGroup
+    from easycrystallography.Components.SpaceGroup import SpaceGroup
 
     # Create an interesting spacegroup.
     spacegroup_str = 'C m c a'
@@ -178,12 +178,12 @@ Operating on a point
 ^^^^^^^^^^^^^^^^^^^^^^
 
 We can use the operators in the spacegroup to transform points. This is useful for generating all atomic positions in a
-structure. The following example uses the :meth:`easyCrystallography.Components.SpaceGroup.SpaceGroup.get_orbit` method.
+structure. The following example uses the :meth:`easycrystallography.Components.SpaceGroup.SpaceGroup.get_orbit` method.
 
 .. code-block:: python
 
-    from easyCore import np
-    from easyCrystallography.Components.SpaceGroup import SpaceGroup
+    import numpy as np
+    from easycrystallography.Components.SpaceGroup import SpaceGroup
 
     # Create a spacegroup which has a few operations
     spacegroup_str = 'C m c a'
@@ -205,12 +205,12 @@ structure. The following example uses the :meth:`easyCrystallography.Components.
 Multiplicity for a point
 ^^^^^^^^^^^^^^^^^^^^^^^^
 We can also use the spacegroup to determine the multiplicity of a point. This is useful for determining structure
-factors and other properties. It is also required in some calculations. The following example uses the :meth:`easyCrystallography.Components.SpaceGroup.SpaceGroup.get_site_multiplicity` method.
+factors and other properties. It is also required in some calculations. The following example uses the :meth:`easycrystallography.Components.SpaceGroup.SpaceGroup.get_site_multiplicity` method.
 
 .. code-block:: python
 
-    from easyCore import np
-    from easyCrystallography.Components.SpaceGroup import SpaceGroup
+    import numpy as np
+    from easycrystallography.Components.SpaceGroup import SpaceGroup
 
     # Create a spacegroup which has a few operations
     spacegroup_str = 'C m c a'
@@ -226,5 +226,5 @@ factors and other properties. It is also required in some calculations. The foll
 Symmetry Reference
 --------------------
 
-.. minigallery:: easyCore.Fitting.Constraints.NumericConstraint
+.. minigallery:: easyscience.Fitting.Constraints.NumericConstraint
     :add-heading: Examples using `SpaceGroup`

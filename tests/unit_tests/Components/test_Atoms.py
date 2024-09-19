@@ -4,8 +4,8 @@ __version__ = '0.1.0'
 from typing import List
 
 import pytest
-from easyCore import np
-from easyCrystallography.Components.Site import Atoms, Site, _SITE_DETAILS
+import numpy as np
+from easycrystallography.Components.Site import Atoms, Site, _SITE_DETAILS
 
 site_details = [Site('Al', 'Al'), Site('Fe', 'Fe3+'), Site('TEST', 'H')]
 

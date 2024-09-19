@@ -4,16 +4,16 @@ requires = ["hatchling<=1.21.0"]
 build-backend = "hatchling.build"
 
 [tool.coverage.run]
-source = ['easyCrystallography']
+source = ['src/easycrystallography']
 
 [tool.github.info]
-organization = "easyScience"
-repo = "easyCrystallography"
+organization = "EasyScience"
+repo = "EasyCrystallography"
 
 [project]
-name = "easyCrystallography"
-version = "0.4.0"
-description = "Crystallography in easyScience"
+name = "EasyCrystallography"
+version = "0.5.0"
+description = "Crystallography in EasyScience"
 authors = [
     {name = "Simon Ward"},
     {name = "Piotr Rozyczko", email = "piotr.rozyczko@ess.eu"}
@@ -35,20 +35,20 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
 ]
 
-requires-python = ">=3.9,<3.12"
+requires-python = ">=3.9,<3.13"
 dependencies = [
     "asteval",
-    "numpy",
+    "numpy<2.0",
     "pint",
     "uncertainties",
-    "xarray"
+    "xarray",
+    "gemmi",
+    "easyscience @ git+https://github.com/EasyScience/EasyScience.git",
+    "periodictable",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "easysciencecore>=0.3.0",
-    "periodictable",
-    "gemmi",
     "build",
     "codecov",
     "flake8",
@@ -71,7 +71,7 @@ docs = [
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["easyCrystallography"]
+packages = ["src/easycrystallography"]
 
 [tool.tox]
 legacy_tox_ini = """

@@ -5,9 +5,9 @@ from typing import List
 
 import pytest
 from copy import deepcopy
-import easyCore
-from easyCore import np
-from easyCrystallography.Components.Site import Site, PeriodicSite, Parameter, _SITE_DETAILS
+import easyscience
+import numpy as np
+from easycrystallography.Components.Site import Site, PeriodicSite, Parameter, _SITE_DETAILS
 
 site_details = [("Al", "Al"), ("Fe", "Fe3+"), ("TEST", "H")]
 
@@ -192,15 +192,15 @@ def test_Site_as_dict(label, elm):
     s = Site(label, elm)
     obtained = s.as_dict()
     expected = {
-        "@module": "easyCrystallography.Components.Site",
+        "@module": "easycrystallography.Components.Site",
         "@class": "Site",
         "@version": "0.1.0",
-        "@id": None,
+        "unique_name": None,
         "label": {
-            "@module": "easyCore.Objects.Variable",
+            "@module": "easyscience.Objects.Variable",
             "@class": "Descriptor",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "name": "label",
             "value": label,
             "units": "dimensionless",
@@ -214,7 +214,7 @@ def test_Site_as_dict(label, elm):
         # 'specie': {
         #      '@module':  'easyCore.Elements.Basic.Specie', '@class': 'Specie',
         #      '@version': '0.1.0',
-        #      '@id':      None,
+        #      'unique_name':      None,
         #      'specie':
         #                  {
         #                      '@module':         'easyCore.Elements.periodic_table',
@@ -226,10 +226,10 @@ def test_Site_as_dict(label, elm):
         #      'units':    'dimensionless',
         #  },
         "occupancy": {
-            "@module": "easyCore.Objects.Variable",
+            "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "name": "occupancy",
             "value": 1.0,
             "error": 0.0,
@@ -243,10 +243,10 @@ def test_Site_as_dict(label, elm):
             "enabled": True,
         },
         "fract_x": {
-            "@module": "easyCore.Objects.Variable",
+            "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "name": "fract_x",
             "value": 0.0,
             "error": 0.0,
@@ -260,10 +260,10 @@ def test_Site_as_dict(label, elm):
             "enabled": True,
         },
         "fract_y": {
-            "@module": "easyCore.Objects.Variable",
+            "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "name": "fract_y",
             "value": 0.0,
             "error": 0.0,
@@ -277,10 +277,10 @@ def test_Site_as_dict(label, elm):
             "enabled": True,
         },
         "fract_z": {
-            "@module": "easyCore.Objects.Variable",
+            "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "name": "fract_z",
             "value": 0.0,
             "error": 0.0,
@@ -299,7 +299,7 @@ def test_Site_as_dict(label, elm):
     def check_dict(check, item):
         if isinstance(check, dict) and isinstance(item, dict):
             for this_check_key in check.keys():
-                if this_check_key == "@id":
+                if this_check_key == "unique_name":
                     continue
                 check_dict(check[this_check_key], item[this_check_key])
         else:
@@ -312,15 +312,15 @@ def test_Site_as_dict(label, elm):
 @pytest.mark.parametrize("label, elm", site_details)
 def test_Site_from_dict(label, elm):
     d = {
-        "@module": "easyCrystallography.Components.Site",
+        "@module": "easycrystallography.Components.Site",
         "@class": "Site",
         "@version": "0.1.0",
-        "@id": None,
+        "unique_name": None,
         "label": {
-            "@module": "easyCore.Objects.Variable",
+            "@module": "easyscience.Objects.Variable",
             "@class": "Descriptor",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "name": "label",
             "value": label,
             "units": "dimensionless",
@@ -331,19 +331,19 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "specie": {
-            "@module": "easyCrystallography.Components.Specie",
+            "@module": "easycrystallography.Components.Specie",
             "@class": "Specie",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "specie": elm,
             "value": elm,
             "units": "dimensionless",
         },
         "occupancy": {
-            "@module": "easyCore.Objects.Variable",
+            "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "name": "occupancy",
             "value": 1.0,
             "error": 0.0,
@@ -357,10 +357,10 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "fract_x": {
-            "@module": "easyCore.Objects.Variable",
+            "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "name": "fract_x",
             "value": 0.0,
             "error": 0.0,
@@ -374,10 +374,10 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "fract_y": {
-            "@module": "easyCore.Objects.Variable",
+            "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "name": "fract_y",
             "value": 0.0,
             "error": 0.0,
@@ -391,10 +391,10 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "fract_z": {
-            "@module": "easyCore.Objects.Variable",
+            "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
-            "@version": easyCore.__version__,
-            "@id": None,
+            "@version": easyscience.__version__,
+            "unique_name": None,
             "name": "fract_z",
             "value": 0.0,
             "error": 0.0,
@@ -415,7 +415,7 @@ def test_Site_from_dict(label, elm):
     def check_dict(check, item):
         if isinstance(check, dict) and isinstance(item, dict):
             for this_check_key in check.keys():
-                if this_check_key == "@id" or this_check_key == "specie":
+                if this_check_key == "unique_name" or this_check_key == "specie":
                     continue
                 check_dict(check[this_check_key], item[this_check_key])
         else:
@@ -426,7 +426,7 @@ def test_Site_from_dict(label, elm):
 
 
 def test_site_with_adp():
-    from easyCrystallography.Components.AtomicDisplacement import AtomicDisplacement
+    from easycrystallography.Components.AtomicDisplacement import AtomicDisplacement
     adp = AtomicDisplacement()
     site = Site(adp=adp)
     assert hasattr(site, "adp")
