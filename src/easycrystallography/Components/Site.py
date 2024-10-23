@@ -73,13 +73,14 @@ class Site(BaseObj):
         **kwargs,
     ):
 
+        adp = kwargs.get("adp", None)
         b_iso_or_equiv = kwargs.get("b_iso_or_equiv", None)
         u_iso_or_equiv = kwargs.get("u_iso_or_equiv", None)
 
         if b_iso_or_equiv is not None and u_iso_or_equiv is not None:
             raise AttributeError("Cannot set both Biso and Uiso")
 
-        if b_iso_or_equiv is None and u_iso_or_equiv is None:
+        if adp is None and b_iso_or_equiv is None and u_iso_or_equiv is None:
             adp = AtomicDisplacement("Uiso", Uiso=0)
             kwargs["adp"] = adp
 
