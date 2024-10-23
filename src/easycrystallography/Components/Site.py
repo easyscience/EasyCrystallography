@@ -21,6 +21,8 @@ from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.Variable import Descriptor
 from easyscience.Objects.Variable import Parameter
 
+from easycrystallography.Components.AtomicDisplacement import AtomicDisplacement
+from easycrystallography.Components.Susceptibility import MagneticSusceptibility
 from .AtomicDisplacement import AtomicDisplacement
 from .Lattice import PeriodicLattice
 from .Specie import Specie
@@ -69,6 +71,7 @@ class Site(BaseObj):
         fract_x: Optional[Union[float, Parameter]] = None,
         fract_y: Optional[Union[float, Parameter]] = None,
         fract_z: Optional[Union[float, Parameter]] = None,
+        adp: Optional[Union[str, AtomicDisplacement]] = None,
         interface: Optional[iF] = None,
         **kwargs,
     ):
@@ -76,6 +79,30 @@ class Site(BaseObj):
         b_iso_or_equiv = kwargs.get("b_iso_or_equiv", None)
         if b_iso_or_equiv is not None:
             adp = AtomicDisplacement("Biso", Biso=b_iso_or_equiv)
+            kwargs["adp"] = adp
+
+        u_iso_or_equiv = kwargs.get("u_iso_or_equiv", None)
+        if u_iso_or_equiv is not None:
+            aadp = AtomicDisplacement("Uiso", Uiso=u_iso_or_equiv)
+            kwargs["adp"] = aadp
+
+        msp = kwargs.get("msp", None)
+        if msp is not None:
+            if isinstance(msp, str):
+                msp = MagneticSusceptibility(msp)
+            for parameter in msp.get_parameters():
+                if parameter.name in kwargs.keys():
+                    new_option = kwargs.pop(parameter.name)
+                    parameter.value = new_option
+            kwargs["msp"] = msp
+
+        if adp is not None:
+            if isinstance(adp, str):
+                adp = AtomicDisplacement(adp)
+            for parameter in adp.get_parameters():
+                if parameter.name in kwargs.keys():
+                    new_option = kwargs.pop(parameter.name)
+                    parameter.value = new_option
             kwargs["adp"] = adp
 
         super(Site, self).__init__(
@@ -155,6 +182,20 @@ class Site(BaseObj):
     def is_magnetic(self) -> bool:
         return getattr(self.specie, 'spin', None) is not None or hasattr(self, 'msp')
 
+    def add_adp(self, adp_type: Union[str, AtomicDisplacement], **kwargs):
+        if isinstance(adp_type, str):
+            adp_type = AtomicDisplacement(adp_type, **kwargs)
+        self._add_component("adp", adp_type)
+        if self.interface is not None:
+            self.interface.generate_bindings(self)
+
+    def add_msp(self, msp_type: Union[str, MagneticSusceptibility], **kwargs):
+        if isinstance(msp_type, str):
+            msp_type = MagneticSusceptibility(msp_type, **kwargs)
+        self._add_component("msp", msp_type)
+        #if self.interface is not None:
+        #    self.interface.generate_bindings(self)
+
 
 class PeriodicSite(Site):
     def __init__(
@@ -193,6 +234,10 @@ class PeriodicSite(Site):
     @classmethod
     def from_site(cls, lattice: PeriodicLattice, site: S) -> S:
         kwargs = cls._from_site_kwargs(lattice, site)
+        if hasattr(site, "adp"):
+            kwargs["adp"] = site.adp
+        if hasattr(site, "msp"):
+            kwargs["msp"] = site.msp
         return cls(**kwargs)
 
     def get_orbit(self) -> np.ndarray:
