@@ -21,11 +21,10 @@ from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.Variable import Descriptor
 from easyscience.Objects.Variable import Parameter
 
-from easycrystallography.Components.AtomicDisplacement import AtomicDisplacement
-from easycrystallography.Components.Susceptibility import MagneticSusceptibility
 from .AtomicDisplacement import AtomicDisplacement
 from .Lattice import PeriodicLattice
 from .Specie import Specie
+from .Susceptibility import MagneticSusceptibility
 
 if TYPE_CHECKING:
     from easyscience.Utils.typing import iF
