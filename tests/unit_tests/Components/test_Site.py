@@ -205,8 +205,7 @@ def test_Site_as_dict(label, elm):
             "value": label,
             "units": "dimensionless",
             "description": "A unique identifier for a particular site in the crystal",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_label"
-            ".html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
             "display_name": "label",
             "enabled": True,
         },
@@ -237,8 +236,7 @@ def test_Site_as_dict(label, elm):
             "max": np.inf,
             "fixed": True,
             "description": "The fraction of the atom type present at this site.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic"
-            "/Iatom_site_occupancy.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
             "units": "dimensionless",
             "enabled": True,
         },
@@ -254,8 +252,7 @@ def test_Site_as_dict(label, elm):
             "max": np.inf,
             "fixed": True,
             "description": "Atom-site coordinate as fractions of the unit cell length.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic"
-            "/Iatom_site_fract_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
             "units": "dimensionless",
             "enabled": True,
         },
@@ -271,8 +268,7 @@ def test_Site_as_dict(label, elm):
             "max": np.inf,
             "fixed": True,
             "description": "Atom-site coordinate as fractions of the unit cell length.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic"
-            "/Iatom_site_fract_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
             "units": "dimensionless",
             "enabled": True,
         },
@@ -288,8 +284,7 @@ def test_Site_as_dict(label, elm):
             "max": np.inf,
             "fixed": True,
             "description": "Atom-site coordinate as fractions of the unit cell length.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic"
-            "/Iatom_site_fract_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
             "units": "dimensionless",
             "enabled": True,
         },
@@ -325,8 +320,7 @@ def test_Site_from_dict(label, elm):
             "value": label,
             "units": "dimensionless",
             "description": "A unique identifier for a particular site in the crystal",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_label"
-            ".html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
             "display_name": "label",
             "enabled": True,
         },
@@ -351,8 +345,7 @@ def test_Site_from_dict(label, elm):
             "max": np.inf,
             "fixed": True,
             "description": "The fraction of the atom type present at this site.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic"
-            "/Iatom_site_occupancy.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
             "units": "dimensionless",
             "enabled": True,
         },
@@ -368,8 +361,7 @@ def test_Site_from_dict(label, elm):
             "max": np.inf,
             "fixed": True,
             "description": "Atom-site coordinate as fractions of the unit cell length.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic"
-            "/Iatom_site_fract_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
             "units": "dimensionless",
             "enabled": True,
         },
@@ -385,8 +377,7 @@ def test_Site_from_dict(label, elm):
             "max": np.inf,
             "fixed": True,
             "description": "Atom-site coordinate as fractions of the unit cell length.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic"
-            "/Iatom_site_fract_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
             "units": "dimensionless",
             "enabled": True,
         },
@@ -402,8 +393,7 @@ def test_Site_from_dict(label, elm):
             "max": np.inf,
             "fixed": True,
             "description": "Atom-site coordinate as fractions of the unit cell length.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic"
-            "/Iatom_site_fract_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
             "units": "dimensionless",
             "enabled": True,
         },

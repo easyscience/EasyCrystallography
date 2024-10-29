@@ -20,7 +20,7 @@ from easyscience.Utils.classTools import removeProp
 _SPECIE_DETAILS = {
     "type_symbol": {
         "description": "A code to identify the atom species occupying this site.",
-        "url":         "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_type_symbol.html",
+        "url":         "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
     },
 }
 

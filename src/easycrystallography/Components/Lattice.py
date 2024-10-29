@@ -42,7 +42,7 @@ if TYPE_CHECKING:
 CELL_DETAILS = {
     "length": {
         "description": "Unit-cell length of the selected structure in angstroms.",
-        "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_length_.html",
+        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
         "value": 3,
         "units": "angstrom",
         "min": 0,
@@ -51,7 +51,7 @@ CELL_DETAILS = {
     },
     "angle": {
         "description": "Unit-cell angle of the selected structure in degrees.",
-        "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_angle_.html",
+        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
         "value": 90,
         "units": "deg",
         "min": 0,
