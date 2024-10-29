@@ -28,12 +28,12 @@ if TYPE_CHECKING:
 _ANIO_DETAILS = {
     'msp_type': {
         'description': "A standard code used to describe the type of atomic displacement parameters used for the site.",
-        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_adp_type.html',
+        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
         'value':       'Uani'
     },
     'Cani':     {
         'description': 'Isotropic magnetic susceptibility parameter.',
-        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_aniso_U_.html',
+        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
         'value':       0.0,
         'units':       'T^-1',
         'fixed':       True,

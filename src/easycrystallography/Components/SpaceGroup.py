@@ -28,15 +28,14 @@ SG_DETAILS = {
         "name":        "hermann_mauguin",
         "description": "Hermann-Mauguin symbols given in Table 4.3.2.1 of International Tables for Crystallography "
                        "Vol. A (2002) or a Hermann-Mauguin symbol for a conventional or unconventional setting.",
-        "url":         "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Ispace_group_name_H-M_alt.html",
+        "url":         "https://docs.easydiffraction.org/lib/project/dictionaries/_space_group/",
         "value":       "P 1",
     },
     'setting':             {
         'name':        'coordinate-code',
         'description': 'A qualifier taken from the enumeration list identifying which setting in International Tables '
                        'for Crystallography Volume A (2002) (IT) is used.',
-        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/2/cif_sym.dic/Ispace_group'
-                       '.IT_coordinate_system_code.html',
+        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_space_group/',
         'value':       '\x00',
     },
     'symmetry_ops': {
