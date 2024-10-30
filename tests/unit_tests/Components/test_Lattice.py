@@ -7,6 +7,7 @@ import easyscience
 import numpy as np
 from numbers import Number
 from easycrystallography.Components.Lattice import Lattice, Parameter, CELL_DETAILS
+from easyscience import global_object
 
 pars_dict = {
     "cubic": (5, 5, 5, 90, 90, 90),
@@ -623,6 +624,11 @@ def test_Lattice_as_dict(value: list):
 
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_from_dict(value: list):
+    # ADDED UNTIL UNIQUE_NAME IS FIXED BECAUSE OF THE FOLLOWING ERRORS:
+    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[tetragonal] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the graph.
+    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[monoclinic] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the graph.
+    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[rhombohedral] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the grap
+    global_object.map._clear()
 
     expected = make_dict(value)
     l = Lattice.from_dict(expected)
