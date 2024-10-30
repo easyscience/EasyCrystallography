@@ -1,7 +1,3 @@
-[build-system]
-requires = ['hatchling']
-build-backend = 'hatchling.build'
-
 [project]
 name = 'easycrystallography'
 version = '0.6.0'
@@ -35,22 +31,12 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    'build',
-    'codecov',
-    'flake8',
-    'matplotlib',
-    'pytest',
-    'pytest-cov',
-    'ruff',
-    'tox-gh-actions'
-]
-docs = [
-    'doc8',
-    'readme-renderer',
-    'Sphinx',
-    'sphinx-rtd-theme',
-    'sphinx-autodoc-typehints',
-    'sphinx-gallery'
+    'build',  # for building the package
+    'pytest',  # for testing
+    'pytest-xdist',  # for parallel testing
+    'pytest-cov',  # for coverage
+    'ruff',  # for linting
+    'validate-pyproject[all]',  # for checking pyproject.toml
 ]
 
 [project.urls]
@@ -59,18 +45,23 @@ documentation = 'https://github.com/EasyScience/EasyCrystallography'
 source = 'https://github.com/EasyScience/EasyCrystallography'
 tracker = 'https://github.com/EasyScience/EasyCrystallography/issues'
 
+# Select the build system hatch -- Python project manager
+# https://hatch.pypa.io/
+
+[build-system]
+build-backend = 'hatchling.build'
+requires = ['hatchling']
+
+# Configuration for the hatch
+
 [tool.hatch.metadata]
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ['src/easycrystallography']
 
-[tool.coverage.run]
-source = ['src/easycrystallography']
-
-[tool.github.info]
-organization = 'EasyScience'
-repo = 'EasyCrystallography'
+# Configuration for ruff -- Python linter and code formatter
+# https://docs.astral.sh/ruff/rules/
 
 [tool.ruff]
 line-length = 127
@@ -83,12 +74,13 @@ exclude = [
 [tool.ruff.format]
 quote-style = 'single'
 
+[tool.ruff.lint.isort]
+force-single-line = true
+
 [tool.ruff.lint.per-file-ignores]
-# allow asserts in test files
+# allow asserting in test files
 '*test_*.py' = ['S101']
 
-# Code should be polished to fulfill all cases bellow
-# https://docs.astral.sh/ruff/rules/
 [tool.ruff.lint]
 select = [
     # flake8 settings from existing CI setup
@@ -108,38 +100,3 @@ select = [
     # flake8-bandit
     'S',
 ]
-
-[tool.ruff.lint.isort]
-force-single-line = true
-
-[tool.tox]
-legacy_tox_ini = '''
-[tox]
-isolated_build = True
-envlist = py{39,310,311}
-[gh-actions]
-python =
-    3.9: py39
-    3.10: py310
-    3.11: py311
-[gh-actions:env]
-PLATFORM =
-    ubuntu-latest: linux
-    macos-latest: macos
-    windows-latest: windows
-[testenv]
-passenv =
-    CI
-    GITHUB_ACTIONS
-    GITHUB_ACTION
-    GITHUB_REF
-    GITHUB_REPOSITORY
-    GITHUB_HEAD_REF
-    GITHUB_RUN_ID
-    GITHUB_SHA
-    COVERAGE_FILE
-deps = coverage
-commands =
-    pip install -e '.[dev]'
-    pytest --cov --cov-report=xml
-'''

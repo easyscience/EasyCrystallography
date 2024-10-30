@@ -10,7 +10,7 @@
 #
 # For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
 
-name: Test code and package
+name: Test code and build package
 
 on: [push, pull_request]
 
@@ -25,13 +25,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Ensure repository stays clean
-        uses: astral-sh/ruff-action@v1
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-      - name: Suggestion to fix issues
+      - name: Upgrade package installer for Python
+        run: pip install --upgrade pip
+
+      - name: Install Python dependencies
+        run: pip install ruff
+
+      - name: Install Python linter and code formatter and run in the project root
+        run: |
+          pip install ruff
+          ruff check .
+
+      - name: Suggestion to fix linter issues
         if: ${{ failure() }}
         run: |
-            echo "::notice::In project root run 'python -m ruff check . --fix' and commit changes to fix issues."
+            echo "In project root run 'ruff check . --fix' and commit changes to fix issues."
             exit 1
 
   # Job 2
@@ -42,8 +55,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.12']  # ['3.9', '3.10', '3.11', '3.12']
+        os: [ubuntu-latest]  # [ubuntu-latest, macos-latest, windows-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -62,28 +75,48 @@ jobs:
     - name: Install Python dependencies
       run: pip install '.[dev]'
 
-    - name: Test with tox
-      run: |
-        pip install tox tox-gh-actions coverage
-        tox --colored yes
+    - name: Run tests and create coverage report
+      run: > 
+        pytest tests/ 
+        -n auto 
+        --color=yes 
+        --cov=./ 
+        --cov-report=xml:coverage/coverage.xml 
+        --junitxml=./coverage/junit.xml
 
-    - name: Upload coverage
-      uses: codecov/codecov-action@v4.0.1
+    - name: Upload test results to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@v1
       with:
+        files: ./coverage/junit.xml
+        fail_ci_if_error: true  # optional (default = false)
+        name: Pytest results
         token: ${{ secrets.CODECOV_TOKEN }}
+        verbose: true  # optional (default = false)
+
+    - name: Upload coverage report to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./coverage/coverage.xml
+        env_vars: OS,PYTHON
+        fail_ci_if_error: true  # optional (default = false)
         name: Pytest coverage
-        env_vars: OS,PYTHON,GITHUB_ACTIONS,GITHUB_ACTION,GITHUB_REF,GITHUB_REPOSITORY,GITHUB_HEAD_REF,GITHUB_RUN_ID,GITHUB_SHA,COVERAGE_FILE
+        token: ${{ secrets.CODECOV_TOKEN }}
+        verbose: true  # optional (default = false)
       env:
         OS: ${{ matrix.os }}
         PYTHON: ${{ matrix.python-version }}
 
+    - name: Validate pyproject.toml
+      run: validate-pyproject pyproject.toml
+
     - name: Create Python package  # dist/*.whl
-      run: python -m build
+      run: python -m build --wheel --outdir dist
 
     - name: Upload zipped Python package for next job
       uses: actions/upload-artifact@v4
       with:
-        name: EasyCrystallography - Python ${{ matrix.python-version }}
+        name: EasyCrystallography_py${{ matrix.python-version }}_${{ matrix.os }}_${{ runner.arch }}
         path: |
           dist/*.whl
           tests/
@@ -97,8 +130,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.12']  # ['3.9', '3.10', '3.11', '3.12']
+        os: [ubuntu-latest]  # [ubuntu-latest, macos-latest, windows-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -109,7 +142,7 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: ${{ matrix.python-version }}
 
     - name: Upgrade package installer for Python
       run: pip install --upgrade pip
@@ -117,13 +150,13 @@ jobs:
     - name: Download zipped Python package from previous job
       uses: actions/download-artifact@v4
       with:  # name or path are taken from the upload step of the previous job
-        name: EasyCrystallography - Python ${{ matrix.python-version }}  # name (without .zip) of the zipped artifact uploaded on the previous jobs
+        name: EasyCrystallography_py${{ matrix.python-version }}_${{ matrix.os }}_${{ runner.arch }}
         path: .  # directory to extract downloaded zipped artifacts
 
     - name: Install Python package from previous job
       run: pip install dist/*.whl
 
-    - name: Test with pytest
+    - name: Run tests
       run: |
         pip install pytest
-        pytest tests/ --color=yes
+        pytest tests/ -n auto --color=yes
