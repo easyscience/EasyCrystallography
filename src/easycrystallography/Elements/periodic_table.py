@@ -1,6 +1,7 @@
-#  SPDX-FileCopyrightText: 2024 EasyCrystallography contributors <crystallography@easyscience.software>
-#  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the EasyScience project <https://github.com/EasyScience/EasyCrystallography>
+# SPDX-FileCopyrightText: 2024 EasyCrystallography contributors
+# SPDX-License-Identifier: BSD-3-Clause
+# © 2022-2024 Contributors to the EasyCrystallography project <https://github.com/EasyScience/EasyCrystallography>
+
 import ast
 import json
 import os.path
@@ -18,9 +19,6 @@ from typing import Optional
 import numpy as np
 from easyscience.Objects.core import ComponentSerializer
 from easyscience.Objects.Variable import Descriptor
-
-__author__ = 'github.com/wardsimon'
-__version__ = '0.1.0'
 
 """Module contains classes presenting Element and Species (Element + oxidation state) and PeriodicTable."""
 
