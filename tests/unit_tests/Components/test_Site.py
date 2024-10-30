@@ -195,7 +195,6 @@ def test_Site_as_dict(label, elm):
     expected = {
         "@module": "easycrystallography.Components.Site",
         "@class": "Site",
-        "@version": "0.1.0",
         "unique_name": None,
         "label": {
             "@module": "easyscience.Objects.Variable",
@@ -213,7 +212,6 @@ def test_Site_as_dict(label, elm):
         # Note that we are skipping specie checking as it it covered in another file...
         # 'specie': {
         #      '@module':  'easyCore.Elements.Basic.Specie', '@class': 'Specie',
-        #      '@version': '0.1.0',
         #      'unique_name':      None,
         #      'specie':
         #                  {
@@ -310,7 +308,6 @@ def test_Site_from_dict(label, elm):
     d = {
         "@module": "easycrystallography.Components.Site",
         "@class": "Site",
-        "@version": "0.1.0",
         "unique_name": None,
         "label": {
             "@module": "easyscience.Objects.Variable",

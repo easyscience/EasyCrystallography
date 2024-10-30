@@ -501,7 +501,6 @@ def make_dict(value) -> dict:
     return {
         "@module": "easycrystallography.Components.Lattice",
         "@class": "Lattice",
-        "@version": "0.1.0",
         "length_a": {
             "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
