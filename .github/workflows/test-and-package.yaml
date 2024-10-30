@@ -62,20 +62,20 @@ jobs:
     - name: Install Python dependencies
       run: pip install '.[dev]'
 
-    #- name: Test with tox
-    #  run: |
-    #    pip install tox tox-gh-actions coverage
-    #    tox --colored yes
+    - name: Test with tox
+      run: |
+        pip install tox tox-gh-actions coverage
+        tox --colored yes
 
-    #- name: Upload coverage
-    #  uses: codecov/codecov-action@v4.0.1
-    #  with:
-    #    token: ${{ secrets.CODECOV_TOKEN }}
-    #    name: Pytest coverage
-    #    env_vars: OS,PYTHON,GITHUB_ACTIONS,GITHUB_ACTION,GITHUB_REF,GITHUB_REPOSITORY,GITHUB_HEAD_REF,GITHUB_RUN_ID,GITHUB_SHA,COVERAGE_FILE
-    #  env:
-    #    OS: ${{ matrix.os }}
-    #    PYTHON: ${{ matrix.python-version }}
+    - name: Upload coverage
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        name: Pytest coverage
+        env_vars: OS,PYTHON,GITHUB_ACTIONS,GITHUB_ACTION,GITHUB_REF,GITHUB_REPOSITORY,GITHUB_HEAD_REF,GITHUB_RUN_ID,GITHUB_SHA,COVERAGE_FILE
+      env:
+        OS: ${{ matrix.os }}
+        PYTHON: ${{ matrix.python-version }}
 
     - name: Create Python package  # dist/*.whl
       run: python -m build
