@@ -29,8 +29,8 @@ dependencies = [
     'uncertainties',
     'xarray',
     'gemmi',
-    'easyscience',
     'periodictable',
+    'easyscience==1.1.0',
 ]
 
 [project.optional-dependencies]
