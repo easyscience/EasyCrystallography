@@ -65,6 +65,7 @@ packages = ['src/easycrystallography']
 
 [tool.ruff]
 line-length = 127
+indent-width = 4
 exclude = [
     'docs_old',
     'examples_old',
@@ -73,6 +74,8 @@ exclude = [
 
 [tool.ruff.format]
 quote-style = 'single'
+indent-style = 'space'  # PEP 8 recommends using spaces over tabs for indentation.
+line-ending = 'lf'  # Line endings will be converted to \n. The default line ending on Unix.
 
 [tool.ruff.lint.isort]
 force-single-line = true
