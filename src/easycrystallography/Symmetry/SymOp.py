@@ -7,10 +7,6 @@ __email__ = "shyuep@gmail.com"
 __status__ = "Production"
 __date__ = "Sep 23, 2011"
 
-#  SPDX-FileCopyrightText: 2024 EasyCrystallography contributors <crystallography@easyscience.software>
-#  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the EasyScience project <https://github.com/EasyScience/EasyCrystallography>
-
 from typing import List
 from typing import Tuple
 from typing import Union

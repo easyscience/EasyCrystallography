@@ -1,5 +1,6 @@
-__author__ = "github.com/wardsimon"
-__version__ = "0.1.0"
+# SPDX-FileCopyrightText: 2024 EasyCrystallography contributors
+# SPDX-License-Identifier: BSD-3-Clause
+# © 2022-2024 Contributors to the EasyCrystallography project <https://github.com/EasyScience/EasyCrystallography>
 
 from typing import List
 
@@ -8,6 +9,8 @@ from copy import deepcopy
 import easyscience
 import numpy as np
 from easycrystallography.Components.Site import Site, PeriodicSite, Parameter, _SITE_DETAILS
+from easyscience import global_object
+
 
 site_details = [("Al", "Al"), ("Fe", "Fe3+"), ("TEST", "H")]
 
@@ -88,6 +91,7 @@ def _generate_inputs(do_occ=True):
 @pytest.mark.parametrize("instance", site_details, indirect=True)
 @pytest.mark.parametrize("element, expected", _generate_inputs())
 def test_Site_creation(instance, element: List, expected: dict):
+    global_object.map._clear()
     d = instance(**element)
     for field in expected.keys():
         ref = expected[field]
@@ -124,9 +128,13 @@ def test_Site_default(label, elm):
             assert getattr(item, test_key) == occupancy[key]
 
 
+# FAILED tests/unit_tests/Components/test_Site.py::test_Site_short_pos[element51-expected51-instance1] - RuntimeError: dictionary changed size during iteration
+# FAILED tests/unit_tests/Components/test_Site.py::test_Site_fract_coords[element14-expected14-instance2] - RuntimeError: dictionary changed size during iteration
+# Adding map clear because of these errors happening ONLY in 3.12
 @pytest.mark.parametrize("instance", site_details, indirect=True)
 @pytest.mark.parametrize("element, expected", _generate_inputs(do_occ=False))
 def test_Site_short_pos(instance, element: List, expected: dict):
+    global_object.map._clear()
     d = instance(**element)
     pars = [("x", "fract_x"), ("y", "fract_y"), ("z", "fract_z")]
 
@@ -139,9 +147,14 @@ def test_Site_short_pos(instance, element: List, expected: dict):
         assert expected_value == obtained.raw_value
 
 
+#FAILED tests/unit_tests/Components/test_Site.py::test_Site_fract_dist[second_pt0-element24-expected24-instance0] - RuntimeError: dictionary changed size during iteration
+#FAILED tests/unit_tests/Components/test_Site.py::test_Site_fract_dist[second_pt0-element32-expected32-instance0] - RuntimeError: dictionary changed size during iteration
+#FAILED tests/unit_tests/Components/test_Site.py::test_Site_fract_dist[second_pt1-element48-expected48-instance2] - RuntimeError: dictionary changed size during iteration
+# Adding map clear because of these errors happening ONLY in 3.12
 @pytest.mark.parametrize("instance", site_details, indirect=True)
 @pytest.mark.parametrize("element, expected", _generate_inputs(do_occ=False))
 def test_Site_fract_coords(instance, element: List, expected: dict):
+    global_object.map._clear()
     d = instance(**element)
 
     el_for_check = ["fract_x", "fract_y", "fract_z"]
@@ -161,6 +174,7 @@ def test_Site_fract_coords(instance, element: List, expected: dict):
     "second_pt", ([0.0, 0.0, 0.0], [0.25, 0.1, 0.1], [1 / 8, 1 / 3, 1 / 4])
 )
 def test_Site_fract_dist(instance, element: List, expected: dict, second_pt):
+    global_object.map._clear()
     d = instance(**element)
     other_site = Site("H", "H", 1, *second_pt)
     expected_value = np.linalg.norm(np.array(second_pt) - d.fract_coords)
@@ -170,6 +184,7 @@ def test_Site_fract_dist(instance, element: List, expected: dict, second_pt):
 @pytest.mark.parametrize("label, elm", site_details)
 @pytest.mark.parametrize("element, expected", _generate_inputs(do_occ=False))
 def test_Site_repr(label, elm, element, expected):
+    global_object.map._clear()
     d = Site(label, elm, **element)
 
     el_for_check = ["fract_x", "fract_y", "fract_z"]
@@ -189,12 +204,12 @@ def test_Site_repr(label, elm, element, expected):
 
 @pytest.mark.parametrize("label, elm", site_details)
 def test_Site_as_dict(label, elm):
+    global_object.map._clear()
     s = Site(label, elm)
     obtained = s.as_dict()
     expected = {
         "@module": "easycrystallography.Components.Site",
         "@class": "Site",
-        "@version": "0.1.0",
         "unique_name": None,
         "label": {
             "@module": "easyscience.Objects.Variable",
@@ -212,7 +227,6 @@ def test_Site_as_dict(label, elm):
         # Note that we are skipping specie checking as it it covered in another file...
         # 'specie': {
         #      '@module':  'easyCore.Elements.Basic.Specie', '@class': 'Specie',
-        #      '@version': '0.1.0',
         #      'unique_name':      None,
         #      'specie':
         #                  {
@@ -309,7 +323,6 @@ def test_Site_from_dict(label, elm):
     d = {
         "@module": "easycrystallography.Components.Site",
         "@class": "Site",
-        "@version": "0.1.0",
         "unique_name": None,
         "label": {
             "@module": "easyscience.Objects.Variable",

@@ -1,146 +1,106 @@
-
-[build-system]
-requires = ["hatchling<=1.21.0"] 
-build-backend = "hatchling.build"
-
-[tool.coverage.run]
-source = ['src/easycrystallography']
-
-[tool.github.info]
-organization = "EasyScience"
-repo = "EasyCrystallography"
+# Configuration for the EasyCrystallography project
 
 [project]
-name = "EasyCrystallography"
-version = "0.5.0"
-description = "Crystallography in EasyScience"
-authors = [
-    {name = "Simon Ward"},
-    {name = "Piotr Rozyczko", email = "piotr.rozyczko@ess.eu"}
-    ]
-maintainers = [
-    {name = "Piotr Rozyczko", email = "piotr.rozyczko@ess.eu"}
-]
-
-readme = "README.md"
-license = "BSD-3-Clause"
-
-
+name = 'easycrystallography'
+version = '0.6.0'
+description = 'Crystallography in EasyScience'
+authors = [{name = 'EasyCrystallography contributors'}]
+readme = 'README.md'
+license = { file = 'LICENSE' }
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: BSD License",
-    "Operating System :: OS Independent",
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "Topic :: Scientific/Engineering :: Physics",
+    'Topic :: Scientific/Engineering',
+    'Development Status :: 4 - Beta',
+    'License :: OSI Approved :: BSD License',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12'
 ]
-
-requires-python = ">=3.9,<3.13"
+requires-python = '>=3.9,<3.13'
 dependencies = [
-    "asteval",
-    "numpy<2.0",
-    "pint",
-    "uncertainties",
-    "xarray",
-    "gemmi",
-    "easyscience",
-    "periodictable",
+    'asteval',
+    'numpy<2.0',
+    'pint',
+    'uncertainties',
+    'xarray',
+    'gemmi',
+    'periodictable',
+    'easyscience',
 ]
 
 [project.optional-dependencies]
 dev = [
-    "build",
-    "codecov",
-    "flake8",
-    "matplotlib",
-    "pytest",
-    "pytest-cov",
-    "ruff",
-    "tox-gh-actions"
+    'build',  # for building the package
+    'pytest',  # for testing
+    'pytest-xdist',  # for parallel testing
+    'pytest-cov',  # for coverage
+    'ruff',  # for linting
 ]
-docs = [
-    "doc8",
-    "readme-renderer",
-    "Sphinx",
-    "sphinx-rtd-theme",
-    "sphinx-autodoc-typehints", 
-    "sphinx-gallery"
-]
+
+[project.urls]
+homepage = 'https://github.com/EasyScience/EasyCrystallography'
+documentation = 'https://easyscience.github.io/EasyCrystallography'
+source = 'https://github.com/EasyScience/EasyCrystallography'
+tracker = 'https://github.com/EasyScience/EasyCrystallography/issues'
+
+# Select the build system hatch -- Python project manager
+# https://hatch.pypa.io/
+
+[build-system]
+build-backend = 'hatchling.build'
+requires = ['hatchling']
+
+# Configuration for the hatch
 
 [tool.hatch.metadata]
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/easycrystallography"]
+packages = ['src/easycrystallography']
 
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-isolated_build = True
-envlist = py{39,310,311}
-[gh-actions]
-python =
-    3.9: py39
-    3.10: py310
-    3.11: py311
-[gh-actions:env]
-PLATFORM =
-    ubuntu-latest: linux
-    macos-latest: macos
-    windows-latest: windows
-[testenv]
-passenv =
-    CI
-    GITHUB_ACTIONS
-    GITHUB_ACTION
-    GITHUB_REF
-    GITHUB_REPOSITORY
-    GITHUB_HEAD_REF
-    GITHUB_RUN_ID
-    GITHUB_SHA
-    COVERAGE_FILE
-deps = coverage
-commands =
-    pip install -e '.[dev]'
-    pytest --cov --cov-report=xml
-"""
+# Configuration for ruff -- Python linter and code formatter
+# https://docs.astral.sh/ruff/rules/
+
 [tool.ruff]
 line-length = 127
+indent-width = 4
 exclude = [
-    "docs",
-    "examples_old",
-    "tests"
+    'docs_old',
+    'examples_old',
+    'tests'
 ]
 
 [tool.ruff.format]
-quote-style = "single"
-
-[tool.ruff.lint.per-file-ignores]
-# allow asserts in test files
-"*test_*.py" = ["S101"]
-
-[tool.ruff.lint]
-#ignore-init-module-imports = true
-select = [
-    # flake8 settings from existing CI setup
-    "E9", "F63", "F7", "F82",
-    # Code should be polished to fulfill all cases bellow
-    # https://docs.astral.sh/ruff/rules/
-    # pycodestyle
-    "E",
-    # Pyflakes
-    "F",
-    # pyupgrade
-#    "UP",
-    # flake8-bugbear
-#    "B",
-    # flake8-simplify
-#    "SIM",
-    # isort
-    "I",
-    # flake8-bandit
-    "S",
-]
+quote-style = 'single'
+indent-style = 'space'  # PEP 8 recommends using spaces over tabs for indentation.
+line-ending = 'lf'  # Line endings will be converted to \n. The default line ending on Unix.
 
 [tool.ruff.lint.isort]
 force-single-line = true
+
+[tool.ruff.lint.per-file-ignores]
+# allow asserting in test files
+'*test_*.py' = ['S101']
+
+[tool.ruff.lint]
+select = [
+    # flake8 settings from existing CI setup
+    'E9', 'F63', 'F7', 'F82',
+    # pycodestyle
+    'E', 'W',
+    # Pyflakes
+    'F',
+    # pyupgrade
+    #'UP',
+    # flake8-bugbear
+    #'B',
+    # flake8-simplify
+    #'SIM',
+    # isort
+    'I',
+    # flake8-bandit
+    'S',
+]
