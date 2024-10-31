@@ -43,7 +43,7 @@ dev = [
 homepage = 'https://github.com/EasyScience/EasyCrystallography'
 documentation = 'https://easyscience.github.io/EasyCrystallography'
 source = 'https://github.com/EasyScience/EasyCrystallography'
-tracker = 'https://github.com/EasyScience/EasyCrystallography'
+tracker = 'https://github.com/EasyScience/EasyCrystallography/issues'
 
 # Select the build system hatch -- Python project manager
 # https://hatch.pypa.io/
@@ -89,7 +89,7 @@ select = [
     # flake8 settings from existing CI setup
     'E9', 'F63', 'F7', 'F82',
     # pycodestyle
-    'E',
+    'E', 'W',
     # Pyflakes
     'F',
     # pyupgrade
