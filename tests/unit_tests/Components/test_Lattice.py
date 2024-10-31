@@ -149,9 +149,11 @@ def test_Lattice_from_pars(value: list, ang_unit: str):
             else:
                 assert i == r
 
-
+#FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_matrix[monoclinic] - RuntimeError: dictionary changed size during iteration
+# Adding map clear because of these errors happening ONLY in 3.12
 @pytest.mark.parametrize("value", matrix_pars)
 def test_Lattice_from_matrix(value):
+    global_object.map._clear()
     args = value[0:-1]
     matrix = value[-1]
     l = Lattice.from_matrix(matrix)
