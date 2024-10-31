@@ -41,9 +41,9 @@ dev = [
 
 [project.urls]
 homepage = 'https://github.com/EasyScience/EasyCrystallography'
-documentation = 'https://github.com/EasyScience/EasyCrystallography'
+documentation = 'https://easyscience.github.io/EasyCrystallography'
 source = 'https://github.com/EasyScience/EasyCrystallography'
-tracker = 'https://github.com/EasyScience/EasyCrystallography/issues'
+tracker = 'https://github.com/EasyScience/EasyCrystallography'
 
 # Select the build system hatch -- Python project manager
 # https://hatch.pypa.io/
