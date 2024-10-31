@@ -5,8 +5,11 @@
 name: Run open source static analysis
 
 on:
-  # Runs on pull requests to a repository
+  # Runs on pull requests
   pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   ossar-analysis:

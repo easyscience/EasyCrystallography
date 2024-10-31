@@ -3,13 +3,14 @@
 name: Discover vulnerabilities with CodeQL
 
 on:
+  # Runs on push or pull requests
   push:
     branches: [ master, develop ]
   pull_request:
-    # The branches below must be a subset of the branches above
     branches: [ master ]
-  schedule:
-    - cron: '0 16 * * 5'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   analyze:
