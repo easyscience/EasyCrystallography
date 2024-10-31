@@ -4,9 +4,6 @@
 
 from __future__ import annotations
 
-__author__ = 'github.com/wardsimon'
-__version__ = '0.1.0'
-
 from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import List
