@@ -1,3 +1,5 @@
+# Configuration for the EasyCrystallography project
+
 [project]
 name = 'easycrystallography'
 version = '0.6.0'

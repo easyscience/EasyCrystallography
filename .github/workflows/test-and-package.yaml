@@ -12,12 +12,14 @@
 
 name: Test code and build package
 
-on: [push, pull_request]
+# Trigger the workflow on push, pull request and manual trigger
+on: [push, pull_request, workflow_call]
 
 # Allow only one concurrent workflow, skipping runs queued between the run in-progress and latest queued.
+# And cancel in-progress runs.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
 
@@ -59,8 +61,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
         os: [ubuntu-24.04, windows-2022, macos-13, macos-14]
+        python-version: ['3.9', '3.10', '3.11', '3.12']
 
     runs-on: ${{ matrix.os }}
 
@@ -80,13 +82,13 @@ jobs:
       run: pip install '.[dev]'
 
     - name: Run tests and create coverage report
-      run: > 
-        pytest tests/ 
-        -n auto 
-        --color=yes 
-        --cov=./ 
-        --cov-report=xml:coverage/coverage.xml 
+      run: >
+        pytest tests/
+        --cov=./
+        --cov-report=xml:coverage/coverage.xml
         --junitxml=./coverage/junit.xml
+        --color=yes
+        -n auto
 
     - name: Upload test results to Codecov
       if: ${{ !cancelled() }}
@@ -129,8 +131,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
         os: [ubuntu-24.04, windows-2022, macos-13, macos-14]
+        python-version: ['3.9', '3.10', '3.11', '3.12']
 
     runs-on: ${{ matrix.os }}
 
