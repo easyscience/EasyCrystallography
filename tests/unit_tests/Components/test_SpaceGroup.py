@@ -124,9 +124,11 @@ def test_SpaceGroup_fromPars_HM_noSpace(sg_in):
                 f_value[0] = known_conversions[f_value[0]]
             assert getattr(f, g_item) in f_value
 
-
+# FAILED tests/unit_tests/Components/test_SpaceGroup.py::test_SpaceGroup_fromPars_HM_noSpace[P-42c] - RuntimeError: dictionary changed size during iteration
+# Adding map clear because of these errors happening ONLY in 3.12
 @pytest.mark.parametrize('sg_in', SYM, ids=[sg['universal_h_m'] for sg in SYM])
 def test_SpaceGroup_fromPars_HM_noSpace(sg_in):
+    global_object.map._clear()
     if sg_in['hermann_mauguin'] in ['C2eb', 'R12/c1("rhombohedral"setting)', 'B1211', 'B121/m1', 'P4bm',
                                     'C1c1', 'Pmc21', 'Cmm2', 'P121/c1', 'Pmma', 'P12/c1', 'Pmmm', 'P1211', 'Pnma']:
         return  # This is a known issue
