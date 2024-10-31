@@ -4,6 +4,7 @@
 name: Verify PR labels
 
 on:
+  # Runs on pull requests to a repository
   pull_request_target:
     types: [opened, labeled, unlabeled, synchronize]
 
