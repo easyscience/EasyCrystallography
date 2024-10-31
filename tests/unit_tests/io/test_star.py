@@ -1,12 +1,10 @@
-#  SPDX-FileCopyrightText: 2022 EasyScience contributors  <core@easyscience.software>
-#  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022 Contributors to the EasyScience project <https://github.com/easyScience/EasyScience>
-
-__author__ = "github.com/wardsimon"
-__version__ = "0.0.1"
+# SPDX-FileCopyrightText: 2024 EasyCrystallography contributors
+# SPDX-License-Identifier: BSD-3-Clause
+# © 2022-2024 Contributors to the EasyCrystallography project <https://github.com/EasyScience/EasyCrystallography>
 
 import pytest
 
+from easyscience import global_object
 from easyscience.models.polynomial import Line
 from easyscience.Objects.Groups import BaseCollection
 from easyscience.Objects.Variable import Descriptor
@@ -61,7 +59,10 @@ def test_ItemHolder_with_error(value, error, precision, expected):
         "1.234560e-05 @5",
     ],
 )
+# FAILED tests/unit_tests/io/test_star.py::test_ItemHolder_fixed[1.234560e-01 @3-fixed] - RuntimeError: dictionary changed size during iteration
+# Adding map clear because of these errors happening ONLY in 3.12
 def test_ItemHolder_fixed(fixed, value, precision, expected):
+    global_object.map._clear()
     p = Parameter("p", value, fixed=fixed)
     s = ItemHolder(p, decimal_places=precision)
     if not p.fixed:

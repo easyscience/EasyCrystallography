@@ -1,11 +1,13 @@
-__author__ = "github.com/wardsimon"
-__version__ = "0.1.0"
+# SPDX-FileCopyrightText: 2024 EasyCrystallography contributors
+# SPDX-License-Identifier: BSD-3-Clause
+# © 2022-2024 Contributors to the EasyCrystallography project <https://github.com/EasyScience/EasyCrystallography>
 
 import pytest
 import easyscience
 import numpy as np
 from numbers import Number
 from easycrystallography.Components.Lattice import Lattice, Parameter, CELL_DETAILS
+from easyscience import global_object
 
 pars_dict = {
     "cubic": (5, 5, 5, 90, 90, 90),
@@ -147,9 +149,11 @@ def test_Lattice_from_pars(value: list, ang_unit: str):
             else:
                 assert i == r
 
-
+#FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_matrix[monoclinic] - RuntimeError: dictionary changed size during iteration
+# Adding map clear because of these errors happening ONLY in 3.12
 @pytest.mark.parametrize("value", matrix_pars)
 def test_Lattice_from_matrix(value):
+    global_object.map._clear()
     args = value[0:-1]
     matrix = value[-1]
     l = Lattice.from_matrix(matrix)
@@ -500,7 +504,6 @@ def make_dict(value) -> dict:
     return {
         "@module": "easycrystallography.Components.Lattice",
         "@class": "Lattice",
-        "@version": "0.1.0",
         "length_a": {
             "@module": "easyscience.Objects.Variable",
             "@class": "Parameter",
@@ -512,7 +515,7 @@ def make_dict(value) -> dict:
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell length of the selected structure in angstroms.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_length_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
             "units": "angstrom",
             "unique_name": "149027786693506016496254445195239597714",
             "enabled": True,
@@ -528,7 +531,7 @@ def make_dict(value) -> dict:
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell length of the selected structure in angstroms.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_length_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
             "units": "angstrom",
             "unique_name": "294836968667493729920294930317191977696",
             "enabled": True,
@@ -544,7 +547,7 @@ def make_dict(value) -> dict:
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell length of the selected structure in angstroms.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_length_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
             "units": "angstrom",
             "unique_name": "275642519607899521714432039990092728990",
             "enabled": True,
@@ -560,7 +563,7 @@ def make_dict(value) -> dict:
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell angle of the selected structure in degrees.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_angle_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
             "units": "degree",
             "unique_name": "161899496656810433045540450883723049023",
             "enabled": True,
@@ -576,7 +579,7 @@ def make_dict(value) -> dict:
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell angle of the selected structure in degrees.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_angle_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
             "units": "degree",
             "unique_name": "186637124621565458307862080073460500737",
             "enabled": True,
@@ -592,7 +595,7 @@ def make_dict(value) -> dict:
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell angle of the selected structure in degrees.",
-            "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Icell_angle_.html",
+            "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
             "units": "degree",
             "unique_name": "225244117838730303286513043607480352526",
             "enabled": True,
@@ -623,6 +626,11 @@ def test_Lattice_as_dict(value: list):
 
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_from_dict(value: list):
+    # ADDED UNTIL UNIQUE_NAME IS FIXED BECAUSE OF THE FOLLOWING ERRORS:
+    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[tetragonal] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the graph.
+    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[monoclinic] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the graph.
+    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[rhombohedral] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the grap
+    global_object.map._clear()
 
     expected = make_dict(value)
     l = Lattice.from_dict(expected)

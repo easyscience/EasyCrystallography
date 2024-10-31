@@ -1,0 +1,106 @@
+# Project information
+site_name: EasyCrystallography
+site_url: https://easyscience.github.io/EasyCrystallography
+
+# Repository
+repo_url: https://github.com/EasyScience/EasyCrystallography
+edit_uri: edit/develop/docs/
+
+# Copyright
+copyright: © 2024 EasyCrystallography
+
+# Configuration
+theme:
+  name: material
+  custom_dir: docs/overrides
+  features:
+    - content.action.edit
+    #- content.action.view
+    - content.code.annotate
+    - content.code.copy  # Auto generated button to copy a code block's content
+    - content.tooltips
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top  # Back-to-top button
+    - navigation.tracking  # Anchor tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      toggle:
+        icon: fontawesome/solid/sun
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      toggle:
+        icon: fontawesome/solid/moon
+        name: Switch to light mode
+  font:
+    text: Mulish
+    code: Roboto Mono
+  icon:
+    logo: logo-lib
+    edit: material/file-edit-outline
+  favicon: assets/favicon.ico
+
+# Additional configuration
+extra:
+  generator: false  # Disable `Made with Material for MkDocs` (bottom left)
+  social:  # Icons (bottom right)
+    - icon: fontawesome/brands/github
+      link: https://github.com/EasyScience/EasyCrystallography
+    - icon: easyscience
+      link: https://easyscience.software
+
+# Customization
+extra_css:
+  - assets/stylesheets/extra.css
+extra_javascript:
+  - assets/javascripts/extra.js
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - attr_list
+  - def_list
+  - footnotes
+  - pymdownx.snippets
+  - pymdownx.highlight  # whether highlighting should be carried out during build time by Pygments
+  - pymdownx.superfences  # whether highlighting should be carried out during build time by Pygments
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - toc:
+      toc_depth: 3
+
+# Plugins
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            show_source: false
+            show_submodules: true
+
+# Page tree
+nav:
+  - Introduction: index.md
+  - Installation:
+    - installation/standard.md
+  - Modules:
+      - modules/Components.md
+      - modules/Databases.md
+      - modules/Elements.md
+      - modules/io.md
+      - modules/Structures.md
+      - modules/Symmetry.md

@@ -1,11 +1,8 @@
-#  SPDX-FileCopyrightText: 2024 EasyCrystallography contributors <crystallography@easyscience.software>
-#  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the EasyScience project <https://github.com/EasyScience/EasyCrystallography>
+# SPDX-FileCopyrightText: 2024 EasyCrystallography contributors
+# SPDX-License-Identifier: BSD-3-Clause
+# © 2022-2024 Contributors to the EasyCrystallography project <https://github.com/EasyScience/EasyCrystallography>
 
 from __future__ import annotations
-
-__author__ = 'github.com/wardsimon'
-__version__ = '0.1.0'
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
@@ -24,6 +21,7 @@ from easyscience.Objects.Variable import Parameter
 from .AtomicDisplacement import AtomicDisplacement
 from .Lattice import PeriodicLattice
 from .Specie import Specie
+from .Susceptibility import MagneticSusceptibility
 
 if TYPE_CHECKING:
     from easyscience.Utils.typing import iF
@@ -33,18 +31,18 @@ _SITE_DETAILS = {
     "label": {
         "value": "H",
         "description": "A unique identifier for a particular site in the crystal",
-        "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_label.html",
+        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
     },
     "position": {
         "value": 0.0,
         "description": "Atom-site coordinate as fractions of the unit cell length.",
-        "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_fract_.html",
+        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
         "fixed": True,
     },
     "occupancy": {
         "value": 1.0,
         "description": "The fraction of the atom type present at this site.",
-        "url": "https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_occupancy.html",
+        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
         "fixed": True,
     },
 }
@@ -73,9 +71,44 @@ class Site(BaseObj):
         **kwargs,
     ):
 
+        adp = kwargs.get("adp", None)
         b_iso_or_equiv = kwargs.get("b_iso_or_equiv", None)
+        u_iso_or_equiv = kwargs.get("u_iso_or_equiv", None)
+
+        if b_iso_or_equiv is not None and u_iso_or_equiv is not None:
+            raise AttributeError("Cannot set both Biso and Uiso")
+
+        if adp is None and b_iso_or_equiv is None and u_iso_or_equiv is None:
+            adp = AtomicDisplacement("Uiso", Uiso=0)
+            kwargs["adp"] = adp
+
         if b_iso_or_equiv is not None:
             adp = AtomicDisplacement("Biso", Biso=b_iso_or_equiv)
+            kwargs["adp"] = adp
+
+        u_iso_or_equiv = kwargs.get("u_iso_or_equiv", None)
+
+        if u_iso_or_equiv is not None:
+            aadp = AtomicDisplacement("Uiso", Uiso=u_iso_or_equiv)
+            kwargs["adp"] = aadp
+
+        msp = kwargs.get("msp", None)
+        if msp is not None:
+            if isinstance(msp, str):
+                msp = MagneticSusceptibility(msp)
+            for parameter in msp.get_parameters():
+                if parameter.name in kwargs.keys():
+                    new_option = kwargs.pop(parameter.name)
+                    parameter.value = new_option
+            kwargs["msp"] = msp
+
+        if adp is not None:
+            if isinstance(adp, str):
+                adp = AtomicDisplacement(adp)
+            for parameter in adp.get_parameters():
+                if parameter.name in kwargs.keys():
+                    new_option = kwargs.pop(parameter.name)
+                    parameter.value = new_option
             kwargs["adp"] = adp
 
         super(Site, self).__init__(
@@ -152,8 +185,38 @@ class Site(BaseObj):
         return self.fract_z
 
     @property
+    def b_iso_or_equiv(self) -> Parameter:
+        if not hasattr(self, 'adp'):
+            return None
+        if not hasattr(self.adp, 'Biso'):
+            return None
+        return self.adp.Biso
+
+    @property
+    def u_iso_or_equiv(self) -> Parameter:
+        if not hasattr(self, 'adp'):
+            return None
+        if not hasattr(self.adp, 'Uiso'):
+            return None
+        return self.adp.Uiso
+
+    @property
     def is_magnetic(self) -> bool:
         return getattr(self.specie, 'spin', None) is not None or hasattr(self, 'msp')
+
+    def add_adp(self, adp_type: Union[str, AtomicDisplacement], **kwargs):
+        if isinstance(adp_type, str):
+            adp_type = AtomicDisplacement(adp_type, **kwargs)
+        self._add_component("adp", adp_type)
+        if self.interface is not None:
+            self.interface.generate_bindings(self)
+
+    def add_msp(self, msp_type: Union[str, MagneticSusceptibility], **kwargs):
+        if isinstance(msp_type, str):
+            msp_type = MagneticSusceptibility(msp_type, **kwargs)
+        self._add_component("msp", msp_type)
+        #if self.interface is not None:
+        #    self.interface.generate_bindings(self)
 
 
 class PeriodicSite(Site):
@@ -193,6 +256,10 @@ class PeriodicSite(Site):
     @classmethod
     def from_site(cls, lattice: PeriodicLattice, site: S) -> S:
         kwargs = cls._from_site_kwargs(lattice, site)
+        if hasattr(site, "adp"):
+            kwargs["adp"] = site.adp
+        if hasattr(site, "msp"):
+            kwargs["msp"] = site.msp
         return cls(**kwargs)
 
     def get_orbit(self) -> np.ndarray:

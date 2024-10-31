@@ -1,12 +1,8 @@
-#  SPDX-FileCopyrightText: 2024 EasyCrystallography contributors <crystallography@easyscience.software>
-#  SPDX-License-Identifier: BSD-3-Clause
-#  © 2022-2023  Contributors to the EasyScience project <https://github.com/EasyScience/EasyCrystallography>
-
+# SPDX-FileCopyrightText: 2024 EasyCrystallography contributors
+# SPDX-License-Identifier: BSD-3-Clause
+# © 2022-2024 Contributors to the EasyCrystallography project <https://github.com/EasyScience/EasyCrystallography>
 
 from __future__ import annotations
-
-__author__ = 'github.com/wardsimon'
-__version__ = '0.1.0'
 
 from typing import TYPE_CHECKING
 from typing import ClassVar
@@ -28,14 +24,14 @@ if TYPE_CHECKING:
 _ANIO_DETAILS = {
     'adp_type': {
         'description': "A standard code used to describe the type of atomic displacement parameters used for the site.",
-        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_adp_type.html',
+        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
         'value':       'Uani'
     },
     'Uani':     {
         'description': 'Isotropic atomic displacement parameter, or equivalent isotropic atomic  displacement '
                        'parameter, U(equiv), in angstroms squared, calculated from anisotropic atomic displacement  '
                        'parameters.',
-        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_aniso_U_.html',
+        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
         'value':       0.0,
         'units':       'angstrom^2',
         'fixed':       True,
@@ -43,7 +39,7 @@ _ANIO_DETAILS = {
     'Uiso':     {
         'description': 'The standard anisotropic atomic displacement components in angstroms squared which appear in '
                        'the structure-factor term.',
-        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_U_iso_or_equiv.html',
+        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
         'value':       0.0,
         'min':         0,
         'max':         np.inf,
@@ -53,7 +49,7 @@ _ANIO_DETAILS = {
     'Bani':     {
         'description': 'The standard anisotropic atomic displacement components in angstroms squared which appear in '
                        'the structure-factor term.',
-        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_aniso_B_.html',
+        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
         'value':       0.0,
         'units':       'angstrom^2',
         'fixed':       True,
@@ -62,7 +58,7 @@ _ANIO_DETAILS = {
         'description': 'Isotropic atomic displacement parameter, or equivalent isotropic atomic displacement '
                        'parameter, B(equiv), in angstroms squared, calculated from anisotropic displacement '
                        'components.',
-        'url':         'https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Iatom_site_B_iso_or_equiv.html',
+        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
         'value':       0.0,
         'min':         0,
         'max':         np.inf,
