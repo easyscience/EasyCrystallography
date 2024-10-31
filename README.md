@@ -4,7 +4,7 @@ EasyCrystallography is a library used to generate and manipulate crystal structu
 
 * Documentation: https://easyscience.github.io/EasyCrystallography
 * Source code: https://github.com/EasyScience/EasyCrystallography
-* Bug reports: https://github.com/EasyScience/EasyCrystallography
+* Bug reports: https://github.com/EasyScience/EasyCrystallography/issues
 
 ## Contributing
 
