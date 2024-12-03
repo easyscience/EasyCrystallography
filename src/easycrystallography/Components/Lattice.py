@@ -37,32 +37,29 @@ if TYPE_CHECKING:
     from easyscience.Utils.typing import iF
 
 CELL_DETAILS = {
-    "length": {
-        "description": "Unit-cell length of the selected structure in angstroms.",
-        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
-        "value": 3,
-        "units": "angstrom",
-        "min": 0,
-        "max": np.Inf,
-        "fixed": True,
+    'length': {
+        'description': 'Unit-cell length of the selected structure in angstroms.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_cell/',
+        'value': 3,
+        'units': 'angstrom',
+        'min': 0,
+        'max': np.Inf,
+        'fixed': True,
     },
-    "angle": {
-        "description": "Unit-cell angle of the selected structure in degrees.",
-        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
-        "value": 90,
-        "units": "deg",
-        "min": 0,
-        "max": np.Inf,
-        "fixed": True,
+    'angle': {
+        'description': 'Unit-cell angle of the selected structure in degrees.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_cell/',
+        'value': 90,
+        'units': 'deg',
+        'min': 0,
+        'max': np.Inf,
+        'fixed': True,
     },
 }
 
 
 class Lattice(BaseObj):
-
-    _REDIRECT = {
-        'ang_unit': None
-    }
+    _REDIRECT = {'ang_unit': None}
 
     length_a: ClassVar[Parameter]
     length_b: ClassVar[Parameter]
@@ -83,19 +80,18 @@ class Lattice(BaseObj):
         ang_unit: str = 'deg',
         **kwargs,
     ):
-
         THESE_CELL_DETAILS = deepcopy(CELL_DETAILS)
         THESE_CELL_DETAILS['angle']['units'] = ang_unit
 
         super().__init__(
-            "lattice",
-            length_a=Parameter("length_a", **THESE_CELL_DETAILS["length"]),
-            length_b=Parameter("length_b", **THESE_CELL_DETAILS["length"]),
-            length_c=Parameter("length_c", **THESE_CELL_DETAILS["length"]),
-            angle_alpha=Parameter("angle_alpha", **THESE_CELL_DETAILS["angle"]),
-            angle_beta=Parameter("angle_beta", **THESE_CELL_DETAILS["angle"]),
-            angle_gamma=Parameter("angle_gamma", **THESE_CELL_DETAILS["angle"]),
-            **kwargs
+            'lattice',
+            length_a=Parameter('length_a', **THESE_CELL_DETAILS['length']),
+            length_b=Parameter('length_b', **THESE_CELL_DETAILS['length']),
+            length_c=Parameter('length_c', **THESE_CELL_DETAILS['length']),
+            angle_alpha=Parameter('angle_alpha', **THESE_CELL_DETAILS['angle']),
+            angle_beta=Parameter('angle_beta', **THESE_CELL_DETAILS['angle']),
+            angle_gamma=Parameter('angle_gamma', **THESE_CELL_DETAILS['angle']),
+            **kwargs,
         )
         if length_a is not None:
             self.length_a = length_a
@@ -135,7 +131,7 @@ class Lattice(BaseObj):
         """
 
         matrix = np.array(matrix, dtype=np.float64).reshape((3, 3))
-        lengths = np.sqrt(np.sum(matrix ** 2, axis=1))
+        lengths = np.sqrt(np.sum(matrix**2, axis=1))
         angles = np.zeros(3)
         for i in range(3):
             j = (i + 1) % 3
@@ -172,9 +168,7 @@ class Lattice(BaseObj):
         return cls(a, a, c, 90, 90, 90, interface=interface)
 
     @classmethod
-    def orthorhombic(
-        cls, a: float, b: float, c: float, interface: Optional[iF] = None
-    ) -> L:
+    def orthorhombic(cls, a: float, b: float, c: float, interface: Optional[iF] = None) -> L:
         """
         Convenience constructor for an orthorhombic lattice.
 
@@ -230,9 +224,7 @@ class Lattice(BaseObj):
         return cls(a, a, c, 90, 90, 120, interface=interface)
 
     @classmethod
-    def rhombohedral(
-        cls, a: float, alpha: float, interface: Optional[iF] = None
-    ) -> L:
+    def rhombohedral(cls, a: float, alpha: float, interface: Optional[iF] = None) -> L:
         """
         Convenience constructor for a rhombohedral lattice of dimensions a x a x a.
 
@@ -418,9 +410,7 @@ class Lattice(BaseObj):
         """
         m = self.matrix
         vol = float(abs(np.dot(np.cross(m[0], m[1]), m[2])))
-        return ureg.Quantity(
-            vol, units=self.length_a.unit * self.length_b.unit * self.length_c.unit
-        )
+        return ureg.Quantity(vol, units=self.length_a.unit * self.length_b.unit * self.length_c.unit)
 
     @property
     def inv_matrix(self) -> np.ndarray:
@@ -467,9 +457,7 @@ class Lattice(BaseObj):
         :return: New cell in the *crystallographic* reciprocal lattice
         :rtype: Lattice
         """
-        return self.__class__.from_matrix(
-            self.reciprocal_lattice.matrix / (2 * np.pi), interface=self.interface
-        )
+        return self.__class__.from_matrix(self.reciprocal_lattice.matrix / (2 * np.pi), interface=self.interface)
 
     def scale(self, new_volume: float) -> L:
         """
@@ -488,9 +476,7 @@ class Lattice(BaseObj):
         geo_factor = np.abs(np.dot(np.cross(versors[0], versors[1]), versors[2]))
         ratios = np.array(lengths) / lengths[2]
         new_c = (new_volume / (geo_factor * np.prod(ratios))) ** (1 / 3.0)
-        return self.__class__.from_matrix(
-            versors * (new_c * ratios), interface=self.interface
-        )
+        return self.__class__.from_matrix(versors * (new_c * ratios), interface=self.interface)
 
     def scale_lengths(self, length_scales: Union[float, Vector3Like]) -> L:
         """
@@ -505,9 +491,7 @@ class Lattice(BaseObj):
         if isinstance(length_scales, float):
             length_scales = 3 * [length_scales]
         new_lengths = np.array(length_scales) * np.array(self.lengths)
-        return self.__class__(
-            *new_lengths, *self.angles, interface=self.interface
-        )
+        return self.__class__(*new_lengths, *self.angles, interface=self.interface)
 
     # Get functions
     def get_cartesian_coords(self, fractional_coords: Vector3Like) -> np.ndarray:
@@ -532,9 +516,7 @@ class Lattice(BaseObj):
         """
         return np.dot(cart_coords, self.inv_matrix)
 
-    def get_vector_along_lattice_directions(
-        self, cart_coords: Vector3Like
-    ) -> np.ndarray:
+    def get_vector_along_lattice_directions(self, cart_coords: Vector3Like) -> np.ndarray:
         """
         Returns the coordinates along lattice directions given cartesian coordinates.
         Note, this is different than a projection of the cartesian vector along the
@@ -572,9 +554,7 @@ class Lattice(BaseObj):
         """
         return all([abs(a - 90) < 1e-5 for a in self.angles])
 
-    def is_hexagonal(
-        self, hex_angle_tol: float = 5, hex_length_tol: float = 0.01
-    ) -> bool:
+    def is_hexagonal(self, hex_angle_tol: float = 5, hex_length_tol: float = 0.01) -> bool:
         """
         Returns true if the Lattice is hexagonal.
 
@@ -586,25 +566,17 @@ class Lattice(BaseObj):
         lengths = self.lengths
         angles = self.angles
         right_angles = [i for i in range(3) if abs(angles[i] - 90) < hex_angle_tol]
-        hex_angles = [
-            i
-            for i in range(3)
-            if abs(angles[i] - 60) < hex_angle_tol
-            or abs(angles[i] - 120) < hex_angle_tol
-        ]
+        hex_angles = [i for i in range(3) if abs(angles[i] - 60) < hex_angle_tol or abs(angles[i] - 120) < hex_angle_tol]
 
         return (
             len(right_angles) == 2
             and len(hex_angles) == 1
-            and abs(lengths[right_angles[0]] - lengths[right_angles[1]])
-            < hex_length_tol
+            and abs(lengths[right_angles[0]] - lengths[right_angles[1]]) < hex_length_tol
         )
 
     @staticmethod
     @memoized
-    def __matrix(
-        a: float, b: float, c: float, alpha: float, beta: float, gamma: float
-    ) -> np.ndarray:
+    def __matrix(a: float, b: float, c: float, alpha: float, beta: float, gamma: float) -> np.ndarray:
         """
         Calculating the crystallographic matrix is time consuming and we use it often, so we have memoized it.
         :param a: *a* lattice parameter
@@ -643,9 +615,9 @@ class Lattice(BaseObj):
     # noinspection PyStringFormat
     def __repr__(self) -> str:
         return (
-            "<Lattice: (a: {:.2f} {:~P}, b: {:.2f} {:~P}, c: {:.2f}{:~P}, alpha: {:.2f} {:~P}, beta: {:.2f} {:~P}, "
-            ""
-            "gamma: {:.2f} {:~P}>".format(
+            '<Lattice: (a: {:.2f} {:~P}, b: {:.2f} {:~P}, c: {:.2f}{:~P}, alpha: {:.2f} {:~P}, beta: {:.2f} {:~P}, '
+            ''
+            'gamma: {:.2f} {:~P}>'.format(
                 self.length_a.raw_value,
                 self.length_a.unit,
                 self.length_b.raw_value,
@@ -661,7 +633,7 @@ class Lattice(BaseObj):
             )
         )
 
-    def __format__(self, fmt_spec=""):
+    def __format__(self, fmt_spec=''):
         """
         Support format printing. Supported formats are:
 
@@ -677,15 +649,15 @@ class Lattice(BaseObj):
         """
         m = (self.lengths, self.angles)
 
-        if fmt_spec.endswith("m"):
-            fmt = "[[{}, {}, {}], [{}, {}, {}], [{}, {}, {}]]"
+        if fmt_spec.endswith('m'):
+            fmt = '[[{}, {}, {}], [{}, {}, {}], [{}, {}, {}]]'
             m = self.matrix.tolist()
             fmt_spec = fmt_spec[:-1]
-        elif fmt_spec.endswith("l"):
-            fmt = "{{{}, {}, {}, {}, {}, {}}}"
+        elif fmt_spec.endswith('l'):
+            fmt = '{{{}, {}, {}, {}, {}, {}}}'
             fmt_spec = fmt_spec[:-1]
         else:
-            fmt = "({} {} {}), ({} {} {})"
+            fmt = '({} {} {}), ({} {} {})'
             fmt_spec = fmt_spec[:-1]
         return fmt.format(*[format(c, fmt_spec) for row in m for c in row])
 
@@ -697,9 +669,7 @@ class Lattice(BaseObj):
         :return: Deep copy of self
         :rtype:
         """
-        return self.__class__(
-            *self.lengths, *self.angles, interface=self.interface
-        )
+        return self.__class__(*self.lengths, *self.angles, interface=self.interface)
 
     def get_points_in_sphere(
         self,
@@ -707,7 +677,10 @@ class Lattice(BaseObj):
         center: Vector3Like,
         r: float,
         zip_results=True,
-    ) -> Union[List[Tuple[np.ndarray, float, int, np.ndarray]], List[np.ndarray],]:
+    ) -> Union[
+        List[Tuple[np.ndarray, float, int, np.ndarray]],
+        List[np.ndarray],
+    ]:
         """
         Find all points within a sphere from the point taking into account
         periodic boundary conditions. This includes sites in other periodic
@@ -750,11 +723,10 @@ class Lattice(BaseObj):
         return [np.array(i) for i in list(zip(*neighbors))]
 
 
-L = TypeVar("L", bound=Lattice)
+L = TypeVar('L', bound=Lattice)
 
 
 class PeriodicLattice(Lattice):
-
     spacegroup: ClassVar[SpaceGroup]
 
     def __init__(
@@ -766,7 +738,7 @@ class PeriodicLattice(Lattice):
         angle_beta: Optional[Union[Parameter, float]] = None,
         angle_gamma: Optional[Union[Parameter, float]] = None,
         spacegroup: Optional[Union[SpaceGroup, str]] = None,
-        interface: Optional[iF] = None
+        interface: Optional[iF] = None,
     ):
         super().__init__(
             length_a=length_a,
@@ -795,9 +767,7 @@ class PeriodicLattice(Lattice):
         self.enforce_sym()
 
     @classmethod
-    def from_lattice_and_spacegroup(
-        cls: Type[L], lattice: Lattice, spacegroup: SpaceGroup
-    ):
+    def from_lattice_and_spacegroup(cls: Type[L], lattice: Lattice, spacegroup: SpaceGroup):
         length_a = lattice.length_a.raw_value
         length_b = lattice.length_b.raw_value
         length_c = lattice.length_c.raw_value
@@ -820,7 +790,7 @@ class PeriodicLattice(Lattice):
     def from_matrix(
         cls: Type[L],
         matrix: Union[List[float], List[List[float]], np.ndarray],
-        interface: Optional[iF] = None
+        interface: Optional[iF] = None,
     ) -> L:
         """
         Construct a crystallographic unit cell from the lattice matrix
@@ -831,9 +801,7 @@ class PeriodicLattice(Lattice):
         :return: Crystallographic unit cell container
         :rtype: Lattice
         """
-        raise NotImplementedError(
-            "A periodic Lattice can not be created from just a matrix"
-        )
+        raise NotImplementedError('A periodic Lattice can not be created from just a matrix')
 
     def clear_sym(self):
         pars = [
@@ -845,11 +813,7 @@ class PeriodicLattice(Lattice):
             self.angle_gamma,
         ]
         for par in pars:
-            new_con = {
-                con: par.user_constraints[con]
-                for con in par.user_constraints.keys()
-                if not con.startswith("sg_")
-            }
+            new_con = {con: par.user_constraints[con] for con in par.user_constraints.keys() if not con.startswith('sg_')}
             par.user_constraints = new_con
             if not par.enabled:
                 par.enabled = True
@@ -861,14 +825,33 @@ class PeriodicLattice(Lattice):
         # SG system
         crys_system = self.spacegroup.crystal_system
         self.clear_sym()
-        trig_test = crys_system == "trigonal" and (
-                self.spacegroup.setting_str.endswith("H") or
-                self.spacegroup.int_number in [143, 144, 145, 147, 149, 150, 151, 152,
-                                               153, 154, 156, 157, 158, 159, 162, 163,
-                                               164, 165])
+        trig_test = crys_system == 'trigonal' and (
+            self.spacegroup.setting_str.endswith('H')
+            or self.spacegroup.int_number
+            in [
+                143,
+                144,
+                145,
+                147,
+                149,
+                150,
+                151,
+                152,
+                153,
+                154,
+                156,
+                157,
+                158,
+                159,
+                162,
+                163,
+                164,
+                165,
+            ]
+        )
 
         # Go through the cell systems
-        if crys_system == "cubic":
+        if crys_system == 'cubic':
             self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
             self.length_a.user_constraints['sg_1']()
             self.length_a.user_constraints['sg_2'] = ObjConstraint(self.length_c, '', self.length_a)
@@ -879,35 +862,25 @@ class PeriodicLattice(Lattice):
             self.angle_beta.enabled = False
             self.angle_gamma = 90
             self.angle_gamma.enabled = False
-        elif crys_system == "hexagonal" or trig_test:
-            self.length_a.user_constraints["sg_1"] = ObjConstraint(
-                self.length_b, "", self.length_a
-            )
-            self.length_a.user_constraints["sg_1"]()
+        elif crys_system == 'hexagonal' or trig_test:
+            self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
+            self.length_a.user_constraints['sg_1']()
             self.angle_alpha = 90
             self.angle_alpha.enabled = False
             self.angle_beta = 90
             self.angle_beta.enabled = False
             self.angle_gamma = 120
             self.angle_gamma.enabled = False
-        elif crys_system == "trigonal" and not trig_test:
-            self.length_a.user_constraints["sg_1"] = ObjConstraint(
-                self.length_b, "", self.length_a
-            )
-            self.length_a.user_constraints["sg_1"]()
-            self.length_a.user_constraints["sg_2"] = ObjConstraint(
-                self.length_c, "", self.length_a
-            )
-            self.length_a.user_constraints["sg_2"]()
-            self.angle_alpha.user_constraints["sg_1"] = ObjConstraint(
-                self.angle_beta, "", self.angle_alpha
-            )
-            self.angle_alpha.user_constraints["sg_1"]()
-            self.angle_alpha.user_constraints["sg_2"] = ObjConstraint(
-                self.angle_gamma, "", self.angle_alpha
-            )
-            self.angle_alpha.user_constraints["sg_2"]()
-        elif crys_system == "tetragonal":
+        elif crys_system == 'trigonal' and not trig_test:
+            self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
+            self.length_a.user_constraints['sg_1']()
+            self.length_a.user_constraints['sg_2'] = ObjConstraint(self.length_c, '', self.length_a)
+            self.length_a.user_constraints['sg_2']()
+            self.angle_alpha.user_constraints['sg_1'] = ObjConstraint(self.angle_beta, '', self.angle_alpha)
+            self.angle_alpha.user_constraints['sg_1']()
+            self.angle_alpha.user_constraints['sg_2'] = ObjConstraint(self.angle_gamma, '', self.angle_alpha)
+            self.angle_alpha.user_constraints['sg_2']()
+        elif crys_system == 'tetragonal':
             self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
             self.length_a.user_constraints['sg_1']()
             self.angle_alpha = 90
@@ -916,14 +889,14 @@ class PeriodicLattice(Lattice):
             self.angle_beta.enabled = False
             self.angle_gamma = 90
             self.angle_gamma.enabled = False
-        elif crys_system == "orthorhombic":
+        elif crys_system == 'orthorhombic':
             self.angle_alpha = 90
             self.angle_alpha.enabled = False
             self.angle_beta = 90
             self.angle_beta.enabled = False
             self.angle_gamma = 90
             self.angle_gamma.enabled = False
-        elif crys_system == "monoclinic":
+        elif crys_system == 'monoclinic':
             self.angle_alpha = 90
             self.angle_alpha.enabled = False
             self.angle_gamma = 90
@@ -949,7 +922,12 @@ class PeriodicLattice(Lattice):
         :return: Deep copy of self
         :rtype: PeriodicLattice
         """
-        return self.__class__(*self.lengths, *self.angles, self.spacegroup.hermann_mauguin, interface=self.interface)
+        return self.__class__(
+            *self.lengths,
+            *self.angles,
+            self.spacegroup.hermann_mauguin,
+            interface=self.interface,
+        )
 
     def __new_SG_setter(self, obj, value):
         self.clear_sym()
@@ -986,7 +964,7 @@ def get_integer_index(miller_index: Sequence[float], round_dp: int = 4, verbose:
     # need to recalculate this after rounding as values may have changed
     int_miller_index = np.int_(np.round(mi, 1))
     if np.any(np.abs(mi - int_miller_index) > 1e-6) and verbose:
-        warnings.warn("Non-integer encountered in Miller index")
+        warnings.warn('Non-integer encountered in Miller index')
     else:
         mi = int_miller_index
 
@@ -1001,20 +979,21 @@ def get_integer_index(miller_index: Sequence[float], round_dp: int = 4, verbose:
 
     # if only one index is negative, make sure it is the smallest
     # e.g. (-2 1 0) -> (2 -1 0)
-    if (
-            sum(mi != 0) == 2
-            and n_minus(mi) == 1
-            and abs(min(mi)) > max(mi)
-    ):
+    if sum(mi != 0) == 2 and n_minus(mi) == 1 and abs(min(mi)) > max(mi):
         mi *= -1
 
     return tuple(mi)  # type: ignore
 
 
-def get_points_in_spheres(all_coords: np.ndarray, center_coords: np.ndarray, r: float,
-                          pbc: Union[bool, List[bool]] = True, numerical_tol: float = 1e-8,
-                          lattice: Lattice = None, return_fcoords: bool = False,
-                          ) -> List[List[Tuple[np.ndarray, float, int, np.ndarray]]]:
+def get_points_in_spheres(
+    all_coords: np.ndarray,
+    center_coords: np.ndarray,
+    r: float,
+    pbc: Union[bool, List[bool]] = True,
+    numerical_tol: float = 1e-8,
+    lattice: Lattice = None,
+    return_fcoords: bool = False,
+) -> List[List[Tuple[np.ndarray, float, int, np.ndarray]]]:
     """
     For each point in `center_coords`, get all the neighboring points in `all_coords` that are within the
     cutoff radius `r`.
@@ -1033,7 +1012,7 @@ def get_points_in_spheres(all_coords: np.ndarray, center_coords: np.ndarray, r: 
         pbc = [pbc] * 3
     pbc = np.array(pbc, dtype=bool)
     if return_fcoords and lattice is None:
-        raise ValueError("Lattice needs to be supplied to compute fractional coordinates")
+        raise ValueError('Lattice needs to be supplied to compute fractional coordinates')
     center_coords_min = np.min(center_coords, axis=0)
     center_coords_max = np.max(center_coords, axis=0)
     # The lower bound of all considered atom coords
@@ -1041,7 +1020,7 @@ def get_points_in_spheres(all_coords: np.ndarray, center_coords: np.ndarray, r: 
     global_max = center_coords_max + r + numerical_tol
     if np.any(pbc):
         if lattice is None:
-            raise ValueError("Lattice needs to be supplied when considering periodic boundary")
+            raise ValueError('Lattice needs to be supplied when considering periodic boundary')
         recp_len = np.array(lattice.reciprocal_lattice.lengths)
         maxr = np.ceil((r + 0.15) * recp_len / (2 * math.pi))
         frac_coords = lattice.get_fractional_coords(center_coords)
@@ -1059,9 +1038,9 @@ def get_points_in_spheres(all_coords: np.ndarray, center_coords: np.ndarray, r: 
         # only wrap periodic boundary
         for k in range(3):
             if pbc[k]:  # type: ignore
-                all_fcoords.append(np.mod(image_offsets[:, k:k + 1], 1))
+                all_fcoords.append(np.mod(image_offsets[:, k : k + 1], 1))
             else:
-                all_fcoords.append(image_offsets[:, k:k + 1])
+                all_fcoords.append(image_offsets[:, k : k + 1])
         all_fcoords = np.concatenate(all_fcoords, axis=1)
         image_offsets = image_offsets - all_fcoords
         coords_in_cell = np.dot(all_fcoords, matrix)
@@ -1071,8 +1050,10 @@ def get_points_in_spheres(all_coords: np.ndarray, center_coords: np.ndarray, r: 
         valid_indices = []
         for image in itertools.product(*all_ranges):
             coords = np.dot(image, matrix) + coords_in_cell
-            valid_index_bool = np.all(np.bitwise_and(coords > global_min[None, :], coords < global_max[None, :]),
-                                      axis=1)
+            valid_index_bool = np.all(
+                np.bitwise_and(coords > global_min[None, :], coords < global_max[None, :]),
+                axis=1,
+            )
             ind = np.arange(len(all_coords))
             if np.any(valid_index_bool):
                 valid_coords.append(coords[valid_index_bool])
@@ -1097,8 +1078,7 @@ def get_points_in_spheres(all_coords: np.ndarray, center_coords: np.ndarray, r: 
     cube_to_coords = collections.defaultdict(list)  # type: Dict[int, List]
     cube_to_images = collections.defaultdict(list)  # type: Dict[int, List]
     cube_to_indices = collections.defaultdict(list)  # type: Dict[int, List]
-    for i, j, k, m in zip(all_cube_index.ravel(), valid_coords,
-                          valid_images, valid_indices):
+    for i, j, k, m in zip(all_cube_index.ravel(), valid_coords, valid_images, valid_indices):
         cube_to_coords[i].append(j)
         cube_to_images[i].append(k)
         cube_to_indices[i].append(m)
@@ -1133,8 +1113,7 @@ def get_points_in_spheres(all_coords: np.ndarray, center_coords: np.ndarray, r: 
 
 
 # The following internal methods are used in the get_points_in_sphere method.
-def _compute_cube_index(coords: np.ndarray, global_min: float, radius: float
-                        ) -> np.ndarray:
+def _compute_cube_index(coords: np.ndarray, global_min: float, radius: float) -> np.ndarray:
     """
     Compute the cube index from coordinates
     Args:
@@ -1165,12 +1144,10 @@ def _three_to_one(label3d: np.ndarray, ny: int, nz: int) -> np.ndarray:
     """
     The reverse of _one_to_three
     """
-    return np.array(label3d[:, 0] * ny * nz +
-                    label3d[:, 1] * nz + label3d[:, 2]).reshape((-1, 1))
+    return np.array(label3d[:, 0] * ny * nz + label3d[:, 1] * nz + label3d[:, 2]).reshape((-1, 1))
 
 
-def find_neighbors(label: np.ndarray, nx: int, ny: int, nz: int
-                   ) -> List[np.ndarray]:
+def find_neighbors(label: np.ndarray, nx: int, ny: int, nz: int) -> List[np.ndarray]:
     """
     Given a cube index, find the neighbor cube indices
     Args:
@@ -1182,8 +1159,7 @@ def find_neighbors(label: np.ndarray, nx: int, ny: int, nz: int
     """
 
     array = [[-1, 0, 1]] * 3
-    neighbor_vectors = np.array(list(itertools.product(*array)),
-                                dtype=int)
+    neighbor_vectors = np.array(list(itertools.product(*array)), dtype=int)
     if np.shape(label)[1] == 1:
         label3d = _one_to_three(label, ny, nz)
     else:

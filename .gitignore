@@ -22,6 +22,9 @@ coverage.xml
 # Jupyter
 .ipynb_checkpoints
 
+# npm
+node_modules
+
 # macOS
 .DS_Store
 *.app

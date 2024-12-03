@@ -43,14 +43,14 @@ class Phase(BaseObj):
     }
 
     def __init__(
-            self,
-            name: str,
-            space_group: Optional[Union[SpaceGroup, str]] = None,
-            cell: Optional[Union[Lattice, PeriodicLattice]] = None,
-            atoms: Optional[Atoms] = None,
-            scale: Optional[Parameter] = None,
-            interface: Optional[iF] = None,
-            enforce_sym: bool = True,
+        self,
+        name: str,
+        space_group: Optional[Union[SpaceGroup, str]] = None,
+        cell: Optional[Union[Lattice, PeriodicLattice]] = None,
+        atoms: Optional[Atoms] = None,
+        scale: Optional[Parameter] = None,
+        interface: Optional[iF] = None,
+        enforce_sym: bool = True,
     ):
         self.name = name
         if space_group is None:
@@ -60,13 +60,11 @@ class Phase(BaseObj):
         if isinstance(cell, Lattice):
             cell = PeriodicLattice.from_lattice_and_spacegroup(cell, space_group)
         if atoms is None:
-            atoms = Atoms("atoms")
+            atoms = Atoms('atoms')
         if scale is None:
-            scale = Parameter("scale", 1, min=0)
+            scale = Parameter('scale', 1, min=0)
 
-        super(Phase, self).__init__(
-            name, cell=cell, _spacegroup=space_group, atoms=atoms, scale=scale
-        )
+        super(Phase, self).__init__(name, cell=cell, _spacegroup=space_group, atoms=atoms, scale=scale)
         if not enforce_sym:
             self.cell.clear_sym()
         self._enforce_sym = enforce_sym
@@ -92,9 +90,7 @@ class Phase(BaseObj):
     def remove_atom(self, key):
         del self.atoms[key]
 
-    def all_orbits(
-            self, extent=None, magnetic_only: bool = False
-    ) -> Dict[str, np.ndarray]:
+    def all_orbits(self, extent=None, magnetic_only: bool = False) -> Dict[str, np.ndarray]:
         """
         Generate all atomic positions from the atom array and symmetry operations over an extent.
 
@@ -117,17 +113,14 @@ class Phase(BaseObj):
         orbits = self.get_orbits(magnetic_only=magnetic_only)
         for orbit_key in orbits.keys():
             orbit = orbits[orbit_key]
-            site_positions = (
-                    np.apply_along_axis(np.add, 1, offsets, orbit).reshape((-1, 3))
-                    - self.center
-            )
+            site_positions = np.apply_along_axis(np.add, 1, offsets, orbit).reshape((-1, 3)) - self.center
             orbits[orbit_key] = (
-                    site_positions[
+                site_positions[
                     np.all(site_positions >= -self.atom_tolerance, axis=1)
                     & np.all(site_positions <= extent + self.atom_tolerance, axis=1),
                     :,
-                    ]
-                    + self.center
+                ]
+                + self.center
             )
         return orbits
 
@@ -227,9 +220,7 @@ class Phase(BaseObj):
                 range(0, extent[2] + 1),
             )
         ).T.reshape(-1, 3)
-        return np.apply_along_axis(
-            np.add, 1, offsets, np.array(sym_op(site.fract_coords))
-        ).reshape((-1, 3))
+        return np.apply_along_axis(np.add, 1, offsets, np.array(sym_op(site.fract_coords))).reshape((-1, 3))
 
     def all_sites(self, extent=None) -> Dict[str, np.ndarray]:
         """
@@ -249,12 +240,12 @@ class Phase(BaseObj):
             unique_sites = self._generate_positions(site, extent)
             site_positions = unique_sites - self.center
             sites[site.label.raw_value] = (
-                    site_positions[
+                site_positions[
                     np.all(site_positions >= -self.atom_tolerance, axis=1)
                     & np.all(site_positions <= extent + self.atom_tolerance, axis=1),
                     :,
-                    ]
-                    + self.center
+                ]
+                + self.center
             )
         return sites
 
@@ -281,12 +272,13 @@ class Phase(BaseObj):
             s = r.structures(cif_string, phase_class=cls)
         return s
 
+
 class Phases(BaseCollection):
     _SITE_CLASS = Site
     _ATOM_CLASS = Atoms
     _PHASE_CLASS = Phase
 
-    def __init__(self, name: str = "phases", *args, interface: Optional[iF] = None, **kwargs):
+    def __init__(self, name: str = 'phases', *args, interface: Optional[iF] = None, **kwargs):
         """
         Generate a collection of crystals.
 
@@ -296,17 +288,15 @@ class Phases(BaseCollection):
         :type args: *Phase
         """
         if not isinstance(name, str):
-            raise AttributeError("Name should be a string!")
+            raise AttributeError('Name should be a string!')
 
         super(Phases, self).__init__(name, *args, **kwargs)
         self.interface = interface
 
     def __repr__(self) -> str:
-        return f"Collection of {len(self)} phases: {self.phase_names}"
+        return f'Collection of {len(self)} phases: {self.phase_names}'
 
-    def __getitem__(
-            self, idx: Union[int, slice]
-    ) -> Union[Parameter, Descriptor, BaseObj, BaseCollection]:
+    def __getitem__(self, idx: Union[int, slice]) -> Union[Parameter, Descriptor, BaseObj, BaseCollection]:
         if isinstance(idx, str) and idx in self.phase_names:
             idx = self.phase_names.index(idx)
         return super(Phases, self).__getitem__(idx)
@@ -318,9 +308,9 @@ class Phases(BaseCollection):
 
     def append(self, item: Phase):
         if not isinstance(item, Phase):
-            raise TypeError("Item must be a Phase")
+            raise TypeError('Item must be a Phase')
         if item.name in self.phase_names:
-            raise AttributeError(f"A phase of name {item.name} already exists.")
+            raise AttributeError(f'A phase of name {item.name} already exists.')
         super(Phases, self).append(item)
 
     @property

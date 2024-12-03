@@ -29,6 +29,7 @@ class CIF_Template:
     """
     This class is an abstract class for a CIF template.
     """
+
     def __init__(self, decimal_places: int = 8):
         self.decimal_places = decimal_places
 
@@ -62,11 +63,11 @@ class CIF_Template:
         start_str = block.as_string()
         self.add_to_cif_block(obj, block)
         final_str = block.as_string()
-        return final_str[len(start_str):]
+        return final_str[len(start_str) :]
 
     @abstractmethod
     def add_to_cif_block(self, obj: B, block: gemmi.cif.Block) -> NoReturn:
-       pass
+        pass
 
     @abstractmethod
     def from_cif_string(self, cif_string: str) -> List[B]:
@@ -81,7 +82,7 @@ class CIF_Template:
         if isinstance(obj.raw_value, Number):
             if abs(value - int(value)) > 0.0:
                 decimal_places = len(str(value).split('.')[1])
-            initial_str = "{:." + str(decimal_places) + "f}"
+            initial_str = '{:.' + str(decimal_places) + 'f}'
             s = initial_str.format(round(value, decimal_places))
             if error is not None:
                 xe_exp = int(floor(log10(error)))
@@ -95,17 +96,17 @@ class CIF_Template:
                 no_int = round(value * 10 ** (-no_exp))
 
                 # format - nom(unc)
-                fmt = "%%.%df" % max(0, -no_exp)
-                s = (fmt + "(%.0f)") % (
-                    no_int * 10 ** no_exp,
+                fmt = '%%.%df' % max(0, -no_exp)
+                s = (fmt + '(%.0f)') % (
+                    no_int * 10**no_exp,
                     un_int * 10 ** max(0, un_exp),
                 )
         elif isinstance(value, str):
-            s = "{:s}".format(value)
+            s = '{:s}'.format(value)
         else:
-            s = "{:s}".format(str(value))
+            s = '{:s}'.format(str(value))
         if getattr(obj, 'fixed', None) is not None and not obj.fixed and error is None:
-            s += "()"
+            s += '()'
         return CIF_Template._format_field(s)
 
     @staticmethod
@@ -113,11 +114,11 @@ class CIF_Template:
         in_string = in_string.strip()
         if "'" in in_string:
             in_string = in_string.replace("'", '')
-        if "\"" in in_string:
-            in_string = in_string.replace("\"", '')
+        if '"' in in_string:
+            in_string = in_string.replace('"', '')
         fixed = None
         error = None
-        tokens = in_string.split("(")
+        tokens = in_string.split('(')
         try:
             value = float(tokens[0])
         except ValueError:
@@ -125,23 +126,19 @@ class CIF_Template:
             return value, error, fixed
         if len(tokens) > 1:
             fixed = False
-            if tokens[1][0] != ")":
-                error = (10 ** -(len(f"{tokens[0]}".split(".")[1]) - 1)) * int(tokens[1][:-1])
+            if tokens[1][0] != ')':
+                error = (10 ** -(len(f'{tokens[0]}'.split('.')[1]) - 1)) * int(tokens[1][:-1])
         return value, error, fixed
 
     @staticmethod
     def _format_field(v):
         v = v.__str__().strip()
         if len(v) > _MAX_LEN:
-            return ";\n" + textwrap.fill(v, _MAX_LEN) + "\n;"
+            return ';\n' + textwrap.fill(v, _MAX_LEN) + '\n;'
         # add quotes if necessary
-        if v == "":
+        if v == '':
             return '""'
-        if (
-            (" " in v or v[0] == "_")
-            and not (v[0] == "'" and v[-1] == "'")
-            and not (v[0] == '"' and v[-1] == '"')
-        ):
+        if (' ' in v or v[0] == '_') and not (v[0] == "'" and v[-1] == "'") and not (v[0] == '"' and v[-1] == '"'):
             if "'" in v:
                 q = '"'
             else:

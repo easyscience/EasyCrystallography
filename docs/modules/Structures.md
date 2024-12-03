@@ -1,2 +1,1 @@
 # ::: src.easycrystallography.Structures
-

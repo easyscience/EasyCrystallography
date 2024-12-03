@@ -66,11 +66,7 @@ class CifFileReader(AbstractStructureReader):
         block = self._block_finder(data_name)
         if phase_class is None:
             from easycrystallography.Structures.Phase import Phase as phase_class
-        components = {
-            'cell': Lattice,
-            'spacegroup': SpaceGroup,
-            'atoms': Atoms
-        }
+        components = {'cell': Lattice, 'spacegroup': SpaceGroup, 'atoms': Atoms}
         kwargs = {'name': block.name}
         for key, value in components.items():
             kwargs[key] = self.read(block, value().CLASS_READER)
@@ -81,18 +77,14 @@ class CifFileReader(AbstractStructureReader):
             from easycrystallography.Structures.Phase import Phase as phase_class
         if phases_class is None:
             from easycrystallography.Structures.Phase import Phases as phases_class
-        components = {
-            'cell':       Lattice,
-            'spacegroup': SpaceGroup,
-            'atoms':      Atoms
-        }
+        components = {'cell': Lattice, 'spacegroup': SpaceGroup, 'atoms': Atoms}
         phases = []
         document = self._block_finder(-1)
         for block in document:
             kwargs = {'name': block.name}
             for key, value in components.items():
                 kwargs[key] = self.read(block, value().CLASS_READER)
-            phases.append( phase_class(**kwargs))
+            phases.append(phase_class(**kwargs))
         return phases_class('from_cif', *phases)
 
     def read(self, in_str: str, reader_class):
@@ -170,20 +162,12 @@ class CifFileWriter(AbstractStructureWriter):
         if data_name is None:
             data_name = obj.name
         block = self.get_data_block(data_name)
-        components = {
-            'cell':       Lattice,
-            'spacegroup': SpaceGroup,
-            'atoms':      Atoms
-        }
+        components = {'cell': Lattice, 'spacegroup': SpaceGroup, 'atoms': Atoms}
         for key, value in components.items():
             self.write(getattr(obj, key), value().CLASS_WRITER, block)
 
     def structures(self, objs):
-        components = {
-            'cell':       Lattice,
-            'spacegroup': SpaceGroup,
-            'atoms':      Atoms
-        }
+        components = {'cell': Lattice, 'spacegroup': SpaceGroup, 'atoms': Atoms}
         for obj in objs:
             data_name = obj.name
             block = self.get_data_block(data_name)
@@ -195,6 +179,7 @@ class CifStringReader(AbstractStructureReader):
     """
     Reads a structure from a CIF String.
     """
+
     def __init__(self) -> None:
         """
         Initializes the CIF structure reader.
@@ -220,14 +205,15 @@ class CifStringReader(AbstractStructureReader):
     def symmetry(self, in_str):
         return self.read(in_str, SpaceGroup().STRING_READER)
 
-    def structure(self, in_str: Optional[str] = None, block_name: Optional[str] = None, phase_class: Optional = None):
+    def structure(
+        self,
+        in_str: Optional[str] = None,
+        block_name: Optional[str] = None,
+        phase_class: Optional = None,
+    ):
         if phase_class is None:
             from easycrystallography.Structures.Phase import Phase as phase_class
-        components = {
-            'cell': Lattice,
-            'spacegroup': SpaceGroup,
-            'atoms': Atoms
-        }
+        components = {'cell': Lattice, 'spacegroup': SpaceGroup, 'atoms': Atoms}
         document = cif.read_string(in_str)
         data_names = [block.name for block in document]
         idx = 0
@@ -244,13 +230,10 @@ class CifStringReader(AbstractStructureReader):
 
     def structures(self, document, phase_class: Optional = None):
         from easycrystallography.Structures.Phase import Phases
+
         if phase_class is None:
             from easycrystallography.Structures.Phase import Phase as phase_class
-        components = {
-            'cell':       Lattice,
-            'spacegroup': SpaceGroup,
-            'atoms':      Atoms
-        }
+        components = {'cell': Lattice, 'spacegroup': SpaceGroup, 'atoms': Atoms}
         phases = []
         document = cif.read_string(document)
         for block in document:
@@ -303,21 +286,13 @@ class CifStringWriter(AbstractStructureWriter):
         if data_name is None:
             data_name = obj.name
         block = d.add_new_block(data_name)
-        components = {
-            'cell':       Lattice,
-            'space_group': SpaceGroup,
-            'atoms':      Atoms
-        }
+        components = {'cell': Lattice, 'space_group': SpaceGroup, 'atoms': Atoms}
         for key, value in components.items():
             self.write(getattr(obj, key), value().CLASS_WRITER, block)
         return d.as_string(cif.Style.Simple)
 
     def structures(self, objs):
-        components = {
-            'cell':       Lattice,
-            'space_group': SpaceGroup,
-            'atoms':      Atoms
-        }
+        components = {'cell': Lattice, 'space_group': SpaceGroup, 'atoms': Atoms}
         d = cif.Document()
         for obj in objs:
             data_name = obj.name
@@ -336,7 +311,6 @@ class CifStringWriter(AbstractStructureWriter):
 
 
 class CifStringParser(AbstractStructureParser):
-
     def __init__(self):
         super(CifStringParser, self).__init__(CifStringReader, CifStringWriter)
 

@@ -216,7 +216,7 @@ def test_SpaceGroup_as_dict():
                                        'enabled':      True,
                                        'name':         'coordinate-code',
                                        'display_name': 'coordinate-code',
-                                       'url': 'https://docs.easydiffraction.org/lib/project/dictionaries/_space_group/',
+                                       'url': 'https://docs.easydiffraction.org/lib/dictionaries/_space_group/',
                                        'description':  'A qualifier taken from the enumeration list identifying which '
                                                        'setting in International Tables for Crystallography Volume A '
                                                        '(2002) (IT) is used.',
@@ -228,7 +228,7 @@ def test_SpaceGroup_as_dict():
                                        'enabled':      True,
                                        'name':         'hermann_mauguin',
                                        'display_name': 'hermann_mauguin',
-                                       'url':          'https://docs.easydiffraction.org/lib/project/dictionaries/_space_group/',
+                                       'url':          'https://docs.easydiffraction.org/lib/dictionaries/_space_group/',
                                        'description':  'Hermann-Mauguin symbols given in Table 4.3.2.1 of '
                                                        'International Tables for Crystallography Vol. A (2002) or a '
                                                        'Hermann-Mauguin symbol for a conventional or unconventional '

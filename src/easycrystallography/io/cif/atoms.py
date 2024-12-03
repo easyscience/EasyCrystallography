@@ -23,29 +23,28 @@ if TYPE_CHECKING:
 
 
 class AtomicDisplacement(CIF_Template):
-
-    _CIF_SECTION_NAME: ClassVar[str] = "_atom_site"
+    _CIF_SECTION_NAME: ClassVar[str] = '_atom_site'
 
     _CIF_ADP_ISO_CONVERSIONS = [
-        ("label", "_label", ".label"),
-        ("adp_type", "_adp_type", ".adp_type"),
-        ("Biso", "_B_iso_or_equiv", ".B_iso_or_equiv"),
-        ("Uiso", "_U_iso_or_equiv", ".U_iso_or_equiv"),
+        ('label', '_label', '.label'),
+        ('adp_type', '_adp_type', '.adp_type'),
+        ('Biso', '_B_iso_or_equiv', '.B_iso_or_equiv'),
+        ('Uiso', '_U_iso_or_equiv', '.U_iso_or_equiv'),
     ]
     _CIF_ADP_ANISO_CONVERSIONS = [
-        ("label", "_aniso_label"),
-        ("B_11", "_aniso_B_11"),
-        ("B_12", "_aniso_B_12"),
-        ("B_13", "_aniso_B_13"),
-        ("B_22", "_aniso_B_22"),
-        ("B_23", "_aniso_B_23"),
-        ("B_33", "_aniso_B_33"),
-        ("U_11", "_aniso_U_11"),
-        ("U_12", "_aniso_U_12"),
-        ("U_13", "_aniso_U_13"),
-        ("U_22", "_aniso_U_22"),
-        ("U_23", "_aniso_U_23"),
-        ("U_33", "_aniso_U_33"),
+        ('label', '_aniso_label'),
+        ('B_11', '_aniso_B_11'),
+        ('B_12', '_aniso_B_12'),
+        ('B_13', '_aniso_B_13'),
+        ('B_22', '_aniso_B_22'),
+        ('B_23', '_aniso_B_23'),
+        ('B_33', '_aniso_B_33'),
+        ('U_11', '_aniso_U_11'),
+        ('U_12', '_aniso_U_12'),
+        ('U_13', '_aniso_U_13'),
+        ('U_22', '_aniso_U_22'),
+        ('U_23', '_aniso_U_23'),
+        ('U_33', '_aniso_U_33'),
     ]
 
     def __init__(self, reference_class=_AtomicDisplacement):
@@ -53,18 +52,19 @@ class AtomicDisplacement(CIF_Template):
         self._CIF_CLASS = reference_class
 
     def from_cif_block(self, block: gemmi.cif.Block) -> Dict[str, B]:
-
         atom_dict = {}
         # ADP CHECKER
         keys = [
             self._CIF_SECTION_NAME + name[1] if 'label' in name[1] else '?' + self._CIF_SECTION_NAME + name[1]
-            for name in self._CIF_ADP_ISO_CONVERSIONS]
+            for name in self._CIF_ADP_ISO_CONVERSIONS
+        ]
         table = block.find(keys)
         if table.loop is None:
             # this means it might be the dictionary CIF
             keys = [
                 self._CIF_SECTION_NAME + name[2] if 'label' in name[2] else '?' + self._CIF_SECTION_NAME + name[2]
-                for name in self._CIF_ADP_ISO_CONVERSIONS]
+                for name in self._CIF_ADP_ISO_CONVERSIONS
+            ]
             table = block.find(keys)
         for row in table:
             kwargs = {}
@@ -99,7 +99,8 @@ class AtomicDisplacement(CIF_Template):
 
         keys = [
             self._CIF_SECTION_NAME + name[1] if 'label' in name[1] else '?' + self._CIF_SECTION_NAME + name[1]
-            for name in self._CIF_ADP_ANISO_CONVERSIONS]
+            for name in self._CIF_ADP_ANISO_CONVERSIONS
+        ]
         table = block.find(keys)
         for row in table:
             kwargs = {}
@@ -154,7 +155,7 @@ class AtomicDisplacement(CIF_Template):
                 continue
             line = [self.variable_to_string(atom.__getattribute__(self._CIF_ADP_ANISO_CONVERSIONS[0][0]))]
             # names.append(self._CIF_ADP_ANISO_CONVERSIONS[values_offset+i][1])
-            for keys in self._CIF_ADP_ANISO_CONVERSIONS[values_offset:values_offset + 6]:
+            for keys in self._CIF_ADP_ANISO_CONVERSIONS[values_offset : values_offset + 6]:
                 key, cif_key = keys
                 s = self.variable_to_string(atom.adp.__getattribute__(key))
                 line.append(s)
@@ -189,8 +190,8 @@ class AtomicDisplacement(CIF_Template):
         return [[labels]] * len(objs), objs
 
     def from_cif_string(self, cif_string: str) -> List[Dict[str, B]]:
-        if "data_" not in cif_string:
-            cif_string = "data_temp\n" + cif_string
+        if 'data_' not in cif_string:
+            cif_string = 'data_temp\n' + cif_string
         cif_blocks = gemmi.cif.read_string(cif_string)
         objs = []
         for block in cif_blocks:
@@ -199,17 +200,16 @@ class AtomicDisplacement(CIF_Template):
 
 
 class MagneticSusceptibility(CIF_Template):
-
-    _CIF_SECTION_NAME: ClassVar[str] = "_atom_site"
+    _CIF_SECTION_NAME: ClassVar[str] = '_atom_site'
     _CIF_MSP_ANISO_CONVERSIONS = [
-        ("label", "_susceptibility_label"),
-        ("msp_type", "_susceptibility_chi_type"),
-        ("chi_11", "_susceptibility_chi_11"),
-        ("chi_12", "_susceptibility_chi_12"),
-        ("chi_13", "_susceptibility_chi_13"),
-        ("chi_22", "_susceptibility_chi_22"),
-        ("chi_23", "_susceptibility_chi_23"),
-        ("chi_33", "_susceptibility_chi_33"),
+        ('label', '_susceptibility_label'),
+        ('msp_type', '_susceptibility_chi_type'),
+        ('chi_11', '_susceptibility_chi_11'),
+        ('chi_12', '_susceptibility_chi_12'),
+        ('chi_13', '_susceptibility_chi_13'),
+        ('chi_22', '_susceptibility_chi_22'),
+        ('chi_23', '_susceptibility_chi_23'),
+        ('chi_33', '_susceptibility_chi_33'),
     ]
 
     def __init__(self, reference_class=_MagneticSusceptibility):
@@ -217,11 +217,11 @@ class MagneticSusceptibility(CIF_Template):
         self._CIF_CLASS = reference_class
 
     def from_cif_block(self, block: gemmi.cif.Block) -> Dict[str, B]:
-
         atom_dict = {}
         keys = [
             self._CIF_SECTION_NAME + name[1] if 'label' in name[1] else '?' + self._CIF_SECTION_NAME + name[1]
-            for name in self._CIF_MSP_ANISO_CONVERSIONS]
+            for name in self._CIF_MSP_ANISO_CONVERSIONS
+        ]
         table = block.find(keys)
         for row in table:
             kwargs = {}
@@ -269,8 +269,8 @@ class MagneticSusceptibility(CIF_Template):
             loop.add_row(line)
 
     def from_cif_string(self, cif_string: str) -> List[B]:
-        if "data_" not in cif_string:
-            cif_string = "data_temp\n" + cif_string
+        if 'data_' not in cif_string:
+            cif_string = 'data_temp\n' + cif_string
         cif_blocks = gemmi.cif.read_string(cif_string)
         objs = []
         for block in cif_blocks:
@@ -279,15 +279,14 @@ class MagneticSusceptibility(CIF_Template):
 
 
 class Atoms(CIF_Template):
-
-    _CIF_SECTION_NAME: ClassVar[str] = "_atom_site"
+    _CIF_SECTION_NAME: ClassVar[str] = '_atom_site'
     _CIF_CONVERSIONS: ClassVar[List[Tuple[str, str]]] = [
-        ("label", "_label", ".label"),
-        ("specie", "_type_symbol", ".type_symbol"),
-        ("fract_x", "_fract_x", ".fract_x"),
-        ("fract_y", "_fract_y", ".fract_y"),
-        ("fract_z", "_fract_z", ".fract_z"),
-        ("occupancy", "_occupancy", ".occupancy"),
+        ('label', '_label', '.label'),
+        ('specie', '_type_symbol', '.type_symbol'),
+        ('fract_x', '_fract_x', '.fract_x'),
+        ('fract_y', '_fract_y', '.fract_y'),
+        ('fract_z', '_fract_z', '.fract_z'),
+        ('occupancy', '_occupancy', '.occupancy'),
     ]
 
     def __init__(self, reference_class=_Atoms):
@@ -299,10 +298,16 @@ class Atoms(CIF_Template):
             self._CIF_SECTION_NAME + name[1] if 'occupancy' not in name[1] else '?' + self._CIF_SECTION_NAME + name[1]
             for name in self._CIF_CONVERSIONS
         ]
-        table = block.find(keys) if (table := block.find(keys)).loop is not None else block.find([
-            self._CIF_SECTION_NAME + name[2] if 'occupancy' not in name[2] else '?' + self._CIF_SECTION_NAME + name[2]
-            for name in self._CIF_CONVERSIONS
-        ])
+        table = (
+            block.find(keys)
+            if (table := block.find(keys)).loop is not None
+            else block.find(
+                [
+                    self._CIF_SECTION_NAME + name[2] if 'occupancy' not in name[2] else '?' + self._CIF_SECTION_NAME + name[2]
+                    for name in self._CIF_CONVERSIONS
+                ]
+            )
+        )
         atom_dict = {}
         error_dict = {}
         fixed_dict = {}
@@ -393,7 +398,7 @@ class Atoms(CIF_Template):
                 for key in keys[idx]:
                     k = key[0]
                     # Need to assure Uiso is present on ADP, else just assume 0.0
-                    s = self.variable_to_string(_obj.__getattribute__(k)) if hasattr(_obj, k) else "0.0"
+                    s = self.variable_to_string(_obj.__getattribute__(k)) if hasattr(_obj, k) else '0.0'
                     # for the cif representation, we only use [UB]iso
                     if 'ani' in s:
                         s = s.replace('ani', 'iso')
@@ -407,12 +412,10 @@ class Atoms(CIF_Template):
             loop.add_row(line)
 
     def from_cif_string(self, cif_string: str) -> List[B]:
-        if "data_" not in cif_string:
-            cif_string = "data_temp\n" + cif_string
+        if 'data_' not in cif_string:
+            cif_string = 'data_temp\n' + cif_string
         cif_blocks = gemmi.cif.read_string(cif_string)
         objs = []
         for block in cif_blocks:
             objs.append(self.from_cif_block(block))
         return objs
-
-

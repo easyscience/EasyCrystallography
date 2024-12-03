@@ -21,17 +21,26 @@ if TYPE_CHECKING:
 
 
 class SpaceGroup(CIF_Template):
-
-    _CIF_SECTION_NAME: ClassVar[str] = "_space_group"
+    _CIF_SECTION_NAME: ClassVar[str] = '_space_group'
     _CIF_CONVERSIONS: ClassVar[List[Tuple[str, str]]] = [
-        ("space_group_HM_name", "_name_H-M_ref"),
-        ("setting", "_IT_coordinate_system_code"),
-        ("symmetry_ops", "'_symop.operation_xyz'"),
+        ('space_group_HM_name', '_name_H-M_ref'),
+        ('setting', '_IT_coordinate_system_code'),
+        ('symmetry_ops', "'_symop.operation_xyz'"),
     ]
     _CIF_ALTERNATES: ClassVar[List[Tuple[str, List[str]]]] = [
-        ["space_group_HM_name",
-         ["_name_H-M_full", "_IT_number", "_name_Hall", "_name_H-M_alt",
-          ".name_H-M_full", ".IT_number", ".name_Hall", ".name_H-M_alt"]],
+        [
+            'space_group_HM_name',
+            [
+                '_name_H-M_full',
+                '_IT_number',
+                '_name_Hall',
+                '_name_H-M_alt',
+                '.name_H-M_full',
+                '.IT_number',
+                '.name_Hall',
+                '.name_H-M_alt',
+            ],
+        ],
     ]
 
     def __init__(self, reference_class=_SpaceGroup):
@@ -72,11 +81,11 @@ class SpaceGroup(CIF_Template):
         else:
             loop = block.init_loop('_space_group_symop.', ['id', 'operation_xyz'])
             for i, op in enumerate(obj.symmetry_ops):
-                loop.add_row([str(i + 1), '\'' + op.as_xyz_string().replace(" ", "") + '\''])
+                loop.add_row([str(i + 1), "'" + op.as_xyz_string().replace(' ', '') + "'"])
 
     def from_cif_string(self, cif_string: str) -> List[B]:
-        if "data_" not in cif_string:
-            cif_string = "data_temp\n" + cif_string
+        if 'data_' not in cif_string:
+            cif_string = 'data_temp\n' + cif_string
 
         cif_blocks = gemmi.cif.read_string(cif_string)
         objs = []

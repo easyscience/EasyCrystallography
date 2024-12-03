@@ -16,8 +16,6 @@ if TYPE_CHECKING:
 
 
 class generic(CIF_Template):
-
-
     def from_cif_block(self, block: gemmi.cif.Block) -> B:
         kwargs = {}
         errors = {}
@@ -43,9 +41,8 @@ class generic(CIF_Template):
             block.set_pair(self._CIF_SECTION_NAME + item[1], self.variable_to_string(value))
 
     def from_cif_string(self, cif_string: str) -> List[B]:
-
-        if "data_" not in cif_string:
-            cif_string = "data_temp\n" + cif_string
+        if 'data_' not in cif_string:
+            cif_string = 'data_temp\n' + cif_string
 
         cif_blocks = gemmi.cif.read_string(cif_string)
         objs = []
