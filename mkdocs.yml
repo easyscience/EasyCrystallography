@@ -17,27 +17,27 @@ theme:
     - content.action.edit
     #- content.action.view
     - content.code.annotate
-    - content.code.copy  # Auto generated button to copy a code block's content
+    - content.code.copy # Auto generated button to copy a code block's content
     - content.tooltips
     - navigation.footer
     - navigation.indexes
     - navigation.sections
-    - navigation.top  # Back-to-top button
-    - navigation.tracking  # Anchor tracking
+    - navigation.top # Back-to-top button
+    - navigation.tracking # Anchor tracking
     - search.highlight
     - search.share
     - search.suggest
     - toc.follow
   palette:
     # Palette toggle for light mode
-    - media: "(prefers-color-scheme: light)"
+    - media: '(prefers-color-scheme: light)'
       scheme: default
       primary: custom
       toggle:
         icon: fontawesome/solid/sun
         name: Switch to dark mode
     # Palette toggle for dark mode
-    - media: "(prefers-color-scheme: dark)"
+    - media: '(prefers-color-scheme: dark)'
       scheme: slate
       primary: custom
       toggle:
@@ -53,8 +53,8 @@ theme:
 
 # Additional configuration
 extra:
-  generator: false  # Disable `Made with Material for MkDocs` (bottom left)
-  social:  # Icons (bottom right)
+  generator: false # Disable `Made with Material for MkDocs` (bottom left)
+  social: # Icons (bottom right)
     - icon: fontawesome/brands/github
       link: https://github.com/EasyScience/EasyCrystallography
     - icon: easyscience
@@ -73,8 +73,8 @@ markdown_extensions:
   - def_list
   - footnotes
   - pymdownx.snippets
-  - pymdownx.highlight  # whether highlighting should be carried out during build time by Pygments
-  - pymdownx.superfences  # whether highlighting should be carried out during build time by Pygments
+  - pymdownx.highlight # whether highlighting should be carried out during build time by Pygments
+  - pymdownx.superfences # whether highlighting should be carried out during build time by Pygments
   - pymdownx.tasklist:
       custom_checkbox: true
   - toc:
@@ -96,7 +96,7 @@ plugins:
 nav:
   - Introduction: index.md
   - Installation:
-    - installation/standard.md
+      - installation/standard.md
   - Modules:
       - modules/Components.md
       - modules/Databases.md

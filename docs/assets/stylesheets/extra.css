@@ -20,74 +20,120 @@
 
 /* Default light mode https://github.com/squidfunk/mkdocs-material/blob/master/src/assets/stylesheets/main/_colors.scss */
 
-[data-md-color-scheme="default"] {
-
+[data-md-color-scheme='default'] {
   /* Primary color shades */
-  --md-primary-fg-color:               var(--sz-body-background-color--lightmode);  /* Navigation background */
-  --md-primary-bg-color:               var(--sz-body-text-color--lightmode);  /* E.g., Header title and icons */
-  --md-primary-bg-color--light:        var(--sz-body-text-color--lightmode);  /* E.g., Header search */
+  --md-primary-fg-color: var(
+    --sz-body-background-color--lightmode
+  ); /* Navigation background */
+  --md-primary-bg-color: var(
+    --sz-body-text-color--lightmode
+  ); /* E.g., Header title and icons */
+  --md-primary-bg-color--light: var(
+    --sz-body-text-color--lightmode
+  ); /* E.g., Header search */
 
   /* Accent color shades */
-  --md-accent-fg-color:                var(--sz-hovered-link-color--lightmode);  /* E.g., Hovered `a` elements & copy icon in code */
+  --md-accent-fg-color: var(
+    --sz-hovered-link-color--lightmode
+  ); /* E.g., Hovered `a` elements & copy icon in code */
 
   /* Default color shades */
-  --md-default-fg-color:               var(--sz-body-text-color--lightmode);
-  --md-default-fg-color--light:        var(--sz-body-heading-color--lightmode);  /* E.g., `h1` color & TOC viewed items & `$` in code */
-  --md-default-fg-color--lighter:      var(--sz-body-text-color--lightmode);  /* E.g., `¶` sign near `h1-h8` */
-  --md-default-fg-color--lightest:     var(--sz-body-text-color--lightmode);  /* E.g., Copy icon in code */
-  --md-default-bg-color:               var(--sz-body-background-color--lightmode);
+  --md-default-fg-color: var(--sz-body-text-color--lightmode);
+  --md-default-fg-color--light: var(
+    --sz-body-heading-color--lightmode
+  ); /* E.g., `h1` color & TOC viewed items & `$` in code */
+  --md-default-fg-color--lighter: var(
+    --sz-body-text-color--lightmode
+  ); /* E.g., `¶` sign near `h1-h8` */
+  --md-default-fg-color--lightest: var(
+    --sz-body-text-color--lightmode
+  ); /* E.g., Copy icon in code */
+  --md-default-bg-color: var(--sz-body-background-color--lightmode);
 
   /* Code color shades */
-  --md-code-bg-color:                  var(--sz-code-background-color--lightmode);
+  --md-code-bg-color: var(--sz-code-background-color--lightmode);
 
   /* Typeset color shades */
-  --md-typeset-color:                  var(--sz-body-text-color--lightmode);
+  --md-typeset-color: var(--sz-body-text-color--lightmode);
 
   /* Typeset `a` color shades */
-  --md-typeset-a-color:                var(--sz-link-color--lightmode);
+  --md-typeset-a-color: var(--sz-link-color--lightmode);
 
   /* Footer color shades */
-  --md-footer-fg-color:                var(--sz-body-text-color--lightmode);  /* E.g., Next -> */
-  --md-footer-fg-color--light:         var(--sz-body-text-color--lightmode);  /* E.g., © 2022 EasyDiffraction, Material for MkDocs */
-  --md-footer-fg-color--lighter:       var(--sz-body-text-color--lightmode);  /* E.g. Made with */
-  --md-footer-bg-color:                hsla(0, 0%, 0%, 0.0);  /* Space with, e.g., Next -> */
-  --md-footer-bg-color--dark:          hsla(0, 0%, 0%, 0.0);  /* Space with, e.g., © 2022 EasyDiffraction */
+  --md-footer-fg-color: var(
+    --sz-body-text-color--lightmode
+  ); /* E.g., Next -> */
+  --md-footer-fg-color--light: var(
+    --sz-body-text-color--lightmode
+  ); /* E.g., © 2022 EasyDiffraction, Material for MkDocs */
+  --md-footer-fg-color--lighter: var(
+    --sz-body-text-color--lightmode
+  ); /* E.g. Made with */
+  --md-footer-bg-color: hsla(0, 0%, 0%, 0); /* Space with, e.g., Next -> */
+  --md-footer-bg-color--dark: hsla(
+    0,
+    0%,
+    0%,
+    0
+  ); /* Space with, e.g., © 2022 EasyDiffraction */
 }
 
 /* Default dark mode: https://github.com/squidfunk/mkdocs-material/blob/master/src/assets/stylesheets/palette/_scheme.scss */
 
-[data-md-color-scheme="slate"] {
-
+[data-md-color-scheme='slate'] {
   /* Primary color shades */
-  --md-primary-fg-color:               var(--sz-body-background-color--darkmode);  /* Navigation background */
-  --md-primary-bg-color:               var(--sz-body-text-color--darkmode);  /* E.g., Header title and icons */
-  --md-primary-bg-color--light:        var(--sz-body-text-color--darkmode);  /* E.g., Header search */
+  --md-primary-fg-color: var(
+    --sz-body-background-color--darkmode
+  ); /* Navigation background */
+  --md-primary-bg-color: var(
+    --sz-body-text-color--darkmode
+  ); /* E.g., Header title and icons */
+  --md-primary-bg-color--light: var(
+    --sz-body-text-color--darkmode
+  ); /* E.g., Header search */
 
   /* Accent color shades */
-  --md-accent-fg-color:                var(--sz-hovered-link-color--darkmode);  /* E.g., Hovered `a` elements & copy icon in code */
+  --md-accent-fg-color: var(
+    --sz-hovered-link-color--darkmode
+  ); /* E.g., Hovered `a` elements & copy icon in code */
 
   /* Default color shades */
-  --md-default-fg-color:               var(--sz-body-text-color--darkmode);
-  --md-default-fg-color--light:        var(--sz-body-heading-color--darkmode);  /* E.g., `h1` color & TOC viewed items & `$` in code */
-  --md-default-fg-color--lighter:      var(--sz-body-text-color--darkmode);  /* E.g., `¶` sign near `h1-h8` */
-  --md-default-fg-color--lightest:     var(--sz-body-text-color--darkmode);  /* E.g., Copy icon in code */
-  --md-default-bg-color:               var(--sz-body-background-color--darkmode);
+  --md-default-fg-color: var(--sz-body-text-color--darkmode);
+  --md-default-fg-color--light: var(
+    --sz-body-heading-color--darkmode
+  ); /* E.g., `h1` color & TOC viewed items & `$` in code */
+  --md-default-fg-color--lighter: var(
+    --sz-body-text-color--darkmode
+  ); /* E.g., `¶` sign near `h1-h8` */
+  --md-default-fg-color--lightest: var(
+    --sz-body-text-color--darkmode
+  ); /* E.g., Copy icon in code */
+  --md-default-bg-color: var(--sz-body-background-color--darkmode);
 
   /* Code color shades */
-  --md-code-bg-color:                  var(--sz-code-background-color--darkmode);
+  --md-code-bg-color: var(--sz-code-background-color--darkmode);
 
   /* Typeset color shades */
-  --md-typeset-color:                  var(--sz-body-text-color--darkmode);
+  --md-typeset-color: var(--sz-body-text-color--darkmode);
 
   /* Typeset `a` color shades */
-  --md-typeset-a-color:                var(--sz-link-color--darkmode);
+  --md-typeset-a-color: var(--sz-link-color--darkmode);
 
   /* Footer color shades */
-  --md-footer-fg-color:                var(--sz-body-text-color--darkmode);  /* E.g., Next -> */
-  --md-footer-fg-color--light:         var(--sz-body-text-color--darkmode);  /* E.g., © 2022 EasyDiffraction, Material for MkDocs */
-  --md-footer-fg-color--lighter:       var(--sz-body-text-color--darkmode);  /* E.g. Made with */
-  --md-footer-bg-color:                hsla(0, 0%, 0%, 0.0);  /* Space with, e.g., Next -> */
-  --md-footer-bg-color--dark:          hsla(0, 0%, 0%, 0.0);  /* Space with, e.g., © 2022 EasyDiffraction */
+  --md-footer-fg-color: var(--sz-body-text-color--darkmode); /* E.g., Next -> */
+  --md-footer-fg-color--light: var(
+    --sz-body-text-color--darkmode
+  ); /* E.g., © 2022 EasyDiffraction, Material for MkDocs */
+  --md-footer-fg-color--lighter: var(
+    --sz-body-text-color--darkmode
+  ); /* E.g. Made with */
+  --md-footer-bg-color: hsla(0, 0%, 0%, 0); /* Space with, e.g., Next -> */
+  --md-footer-bg-color--dark: hsla(
+    0,
+    0%,
+    0%,
+    0
+  ); /* Space with, e.g., © 2022 EasyDiffraction */
 }
 
 /* Labels */
@@ -125,7 +171,7 @@
 }
 
 /* Hide navigation title */
-label.md-nav__title[for="__drawer"] {
+label.md-nav__title[for='__drawer'] {
   height: 0px;
 }
 
