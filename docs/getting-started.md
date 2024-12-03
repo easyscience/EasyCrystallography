@@ -2,8 +2,9 @@
 
 ## Requirements
 
-The EasyDiffraction library is developed in Python, so Python must be installed
-on your system. The library is compatible with Python versions 3.9 through 3.12.
+The **EasyCrystallography** library is developed in Python, so Python must be
+installed on your system. The library is compatible with Python versions 3.9
+through 3.12.
 
 ## Environment setup <small>optional</small> { #environment-setup data-toc-label="Environment setup" }
 
