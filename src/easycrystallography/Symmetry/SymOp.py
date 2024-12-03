@@ -1,11 +1,11 @@
 # ruff: noqa
-__author__ = "Shyue Ping Ong, Shyam Dwaraknath, Matthew Horton"
-__copyright__ = "Copyright 2011, The Materials Project"
-__version__ = "1.0"
-__maintainer__ = "Shyue Ping Ong"
-__email__ = "shyuep@gmail.com"
-__status__ = "Production"
-__date__ = "Sep 23, 2011"
+__author__ = 'Shyue Ping Ong, Shyam Dwaraknath, Matthew Horton'
+__copyright__ = 'Copyright 2011, The Materials Project'
+__version__ = '1.0'
+__maintainer__ = 'Shyue Ping Ong'
+__email__ = 'shyuep@gmail.com'
+__status__ = 'Production'
+__date__ = 'Sep 23, 2011'
 
 from typing import List
 from typing import Tuple
@@ -36,9 +36,8 @@ class SymmOp(ComponentSerializer):
     .. attribute:: affine_matrix
         A 4x4 numpy.array representing the symmetry operation.
     """
-    _REDIRECT = {
-        'affine_transformation_matrix': lambda obj: getattr(obj, 'affine_matrix').aslist()
-    }
+
+    _REDIRECT = {'affine_transformation_matrix': lambda obj: getattr(obj, 'affine_matrix').aslist()}
 
     def __init__(self, affine_transformation_matrix, tol=0.01):
         """
@@ -53,14 +52,16 @@ class SymmOp(ComponentSerializer):
         """
         affine_transformation_matrix = np.array(affine_transformation_matrix)
         if affine_transformation_matrix.shape != (4, 4):
-            raise ValueError("Affine Matrix must be a 4x4 numpy array!")
+            raise ValueError('Affine Matrix must be a 4x4 numpy array!')
         self.affine_matrix = affine_transformation_matrix
         self.tol = tol
 
     @staticmethod
     def from_rotation_and_translation(
-            rotation_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)),
-            translation_vec=(0, 0, 0), tol=0.1):
+        rotation_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)),
+        translation_vec=(0, 0, 0),
+        tol=0.1,
+    ):
         """
         Creates a symmetry operation from a rotation matrix and a translation
         vector.
@@ -74,18 +75,16 @@ class SymmOp(ComponentSerializer):
         rotation_matrix = np.array(rotation_matrix)
         translation_vec = np.array(translation_vec)
         if rotation_matrix.shape != (3, 3):
-            raise ValueError("Rotation Matrix must be a 3x3 numpy array.")
+            raise ValueError('Rotation Matrix must be a 3x3 numpy array.')
         if translation_vec.shape != (3,):
-            raise ValueError("Translation vector must be a rank 1 numpy array "
-                             "with 3 elements.")
+            raise ValueError('Translation vector must be a rank 1 numpy array with 3 elements.')
         affine_matrix = np.eye(4)
         affine_matrix[0:3][:, 0:3] = rotation_matrix
         affine_matrix[0:3][:, 3] = translation_vec
         return SymmOp(affine_matrix, tol)
 
     def __eq__(self, other):
-        return np.allclose(self.affine_matrix, other.affine_matrix,
-                           atol=self.tol)
+        return np.allclose(self.affine_matrix, other.affine_matrix, atol=self.tol)
 
     def __hash__(self):
         return 7
@@ -94,9 +93,13 @@ class SymmOp(ComponentSerializer):
         return self.__str__()
 
     def __str__(self):
-        output = ["Rot:", str(self.affine_matrix[0:3][:, 0:3]), "tau",
-                  str(self.affine_matrix[0:3][:, 3])]
-        return "\n".join(output)
+        output = [
+            'Rot:',
+            str(self.affine_matrix[0:3][:, 0:3]),
+            'tau',
+            str(self.affine_matrix[0:3][:, 3]),
+        ]
+        return '\n'.join(output)
 
     def operate(self, point):
         """
@@ -118,8 +121,7 @@ class SymmOp(ComponentSerializer):
             Numpy array of coordinates after operation
         """
         points = np.array(points)
-        affine_points = np.concatenate(
-            [points, np.ones(points.shape[:-1] + (1,))], axis=-1)
+        affine_points = np.concatenate([points, np.ones(points.shape[:-1] + (1,))], axis=-1)
         return np.inner(affine_points, self.affine_matrix)[..., :-1]
 
     def apply_rotation_only(self, vector):
@@ -143,11 +145,11 @@ class SymmOp(ComponentSerializer):
         dim = tensor.shape
         rank = len(dim)
         if not all([i == 3 for i in dim]):
-            raise ValueError("All dimensions must be equal to 3")
+            raise ValueError('All dimensions must be equal to 3')
 
         # Build einstein sum string
         lc = string.ascii_lowercase
-        indices = lc[:rank], lc[rank:2 * rank]
+        indices = lc[:rank], lc[rank : 2 * rank]
         einsum_string = ','.join([a + i for a, i in zip(*indices)])
         einsum_string += ',{}->{}'.format(*indices[::-1])
         einsum_args = [self.rotation_matrix] * rank + [tensor]
@@ -201,11 +203,16 @@ class SymmOp(ComponentSerializer):
         return SymmOp(invr)
 
     @staticmethod
-    def from_axis_angle_and_translation(axis: Union[Tuple[float, float, float], List[float], np.ndarray],
-                                        angle: float, angle_in_radians: bool = False,
-                                        translation_vec: Union[Tuple[float, float, float],
-                                                               List[float],
-                                                               np.ndarray] = (0, 0, 0)):
+    def from_axis_angle_and_translation(
+        axis: Union[Tuple[float, float, float], List[float], np.ndarray],
+        angle: float,
+        angle_in_radians: bool = False,
+        translation_vec: Union[Tuple[float, float, float], List[float], np.ndarray] = (
+            0,
+            0,
+            0,
+        ),
+    ):
         """
         Generates a SymmOp for a rotation about a given axis plus translation.
         Args:
@@ -244,9 +251,12 @@ class SymmOp(ComponentSerializer):
         return SymmOp.from_rotation_and_translation(r, vec)
 
     @staticmethod
-    def from_origin_axis_angle(origin: Union[Tuple[float, float, float], List[float], np.ndarray],
-                               axis: Union[Tuple[float, float, float], List[float], np.ndarray],
-                               angle: float, angle_in_radians: bool = False):
+    def from_origin_axis_angle(
+        origin: Union[Tuple[float, float, float], List[float], np.ndarray],
+        axis: Union[Tuple[float, float, float], List[float], np.ndarray],
+        angle: float,
+        angle_in_radians: bool = False,
+    ):
         """
         Generates a SymmOp for a rotation about a given axis through an
         origin.
@@ -280,30 +290,38 @@ class SymmOp(ComponentSerializer):
         m11 = (u2 + (v2 + w2) * cos_t) / l2
         m12 = (u * v * (1 - cos_t) - w * lsq * sin_t) / l2
         m13 = (u * w * (1 - cos_t) + v * lsq * sin_t) / l2
-        m14 = (a * (v2 + w2) - u * (b * v + c * w) +
-               (u * (b * v + c * w) - a * (v2 + w2)) * cos_t +
-               (b * w - c * v) * lsq * sin_t) / l2
+        m14 = (
+            a * (v2 + w2) - u * (b * v + c * w) + (u * (b * v + c * w) - a * (v2 + w2)) * cos_t + (b * w - c * v) * lsq * sin_t
+        ) / l2
 
         m21 = (u * v * (1 - cos_t) + w * lsq * sin_t) / l2
         m22 = (v2 + (u2 + w2) * cos_t) / l2
         m23 = (v * w * (1 - cos_t) - u * lsq * sin_t) / l2
-        m24 = (b * (u2 + w2) - v * (a * u + c * w) +
-               (v * (a * u + c * w) - b * (u2 + w2)) * cos_t +
-               (c * u - a * w) * lsq * sin_t) / l2
+        m24 = (
+            b * (u2 + w2) - v * (a * u + c * w) + (v * (a * u + c * w) - b * (u2 + w2)) * cos_t + (c * u - a * w) * lsq * sin_t
+        ) / l2
 
         m31 = (u * w * (1 - cos_t) - v * lsq * sin_t) / l2
         m32 = (v * w * (1 - cos_t) + u * lsq * sin_t) / l2
         m33 = (w2 + (u2 + v2) * cos_t) / l2
-        m34 = (c * (u2 + v2) - w * (a * u + b * v) +
-               (w * (a * u + b * v) - c * (u2 + v2)) * cos_t +
-               (a * v - b * u) * lsq * sin_t) / l2
+        m34 = (
+            c * (u2 + v2) - w * (a * u + b * v) + (w * (a * u + b * v) - c * (u2 + v2)) * cos_t + (a * v - b * u) * lsq * sin_t
+        ) / l2
 
-        return SymmOp([[m11, m12, m13, m14], [m21, m22, m23, m24],
-                       [m31, m32, m33, m34], [0, 0, 0, 1]])
+        return SymmOp(
+            [
+                [m11, m12, m13, m14],
+                [m21, m22, m23, m24],
+                [m31, m32, m33, m34],
+                [0, 0, 0, 1],
+            ]
+        )
 
     @staticmethod
-    def reflection(normal: Union[Tuple[float, float, float], List[float], np.ndarray],
-                   origin: Union[Tuple[float, float, float], List[float], np.ndarray] = (0, 0, 0)):
+    def reflection(
+        normal: Union[Tuple[float, float, float], List[float], np.ndarray],
+        origin: Union[Tuple[float, float, float], List[float], np.ndarray] = (0, 0, 0),
+    ):
         """
         Returns reflection symmetry operation.
         Args:
@@ -322,22 +340,22 @@ class SymmOp(ComponentSerializer):
         translation = np.eye(4)
         translation[0:3, 3] = -np.array(origin)
 
-        xx = 1 - 2 * u ** 2
-        yy = 1 - 2 * v ** 2
-        zz = 1 - 2 * w ** 2
+        xx = 1 - 2 * u**2
+        yy = 1 - 2 * v**2
+        zz = 1 - 2 * w**2
         xy = -2 * u * v
         xz = -2 * u * w
         yz = -2 * v * w
-        mirror_mat = [[xx, xy, xz, 0], [xy, yy, yz, 0], [xz, yz, zz, 0],
-                      [0, 0, 0, 1]]
+        mirror_mat = [[xx, xy, xz, 0], [xy, yy, yz, 0], [xz, yz, zz, 0], [0, 0, 0, 1]]
 
         if np.linalg.norm(origin) > 1e-6:
-            mirror_mat = np.dot(np.linalg.inv(translation),
-                                np.dot(mirror_mat, translation))
+            mirror_mat = np.dot(np.linalg.inv(translation), np.dot(mirror_mat, translation))
         return SymmOp(mirror_mat)
 
     @staticmethod
-    def inversion(origin: Union[Tuple[float, float, float], List[float], np.ndarray] = (0, 0, 0)):
+    def inversion(
+        origin: Union[Tuple[float, float, float], List[float], np.ndarray] = (0, 0, 0),
+    ):
         """
         Inversion symmetry operation about axis.
         Args:
@@ -352,8 +370,11 @@ class SymmOp(ComponentSerializer):
         return SymmOp(mat)
 
     @staticmethod
-    def roto_reflection(axis: Union[Tuple[float, float, float], List[float], np.ndarray], angle: float,
-                       origin: Union[Tuple[float, float, float], List[float], np.ndarray] = (0, 0, 0)):
+    def roto_reflection(
+        axis: Union[Tuple[float, float, float], List[float], np.ndarray],
+        angle: float,
+        origin: Union[Tuple[float, float, float], List[float], np.ndarray] = (0, 0, 0),
+    ):
         """
         Returns a roto-reflection symmetry operation
         Args:
@@ -375,11 +396,10 @@ class SymmOp(ComponentSerializer):
         '-y+1/2, x+1/2, z+1/2', etc. Only works for integer rotation matrices
         """
         # test for invalid rotation matrix
-        if not np.all(np.isclose(self.rotation_matrix,
-                                 np.round(self.rotation_matrix))):
+        if not np.all(np.isclose(self.rotation_matrix, np.round(self.rotation_matrix))):
             warnings.warn('Rotation matrix should be integer')
 
-        return transformation_to_string(self.rotation_matrix, translation_vec=self.translation_vector, delim=", ")
+        return transformation_to_string(self.rotation_matrix, translation_vec=self.translation_vector, delim=', ')
 
     @staticmethod
     def from_xyz_string(xyz_string: str):
@@ -392,22 +412,20 @@ class SymmOp(ComponentSerializer):
         """
         rot_matrix = np.zeros((3, 3))
         trans = np.zeros(3)
-        toks = xyz_string.strip().replace(" ", "").lower().split(",")
-        re_rot = re.compile(r"([+-]?)([\d\.]*)/?([\d\.]*)([x-z])")
-        re_trans = re.compile(r"([+-]?)([\d\.]+)/?([\d\.]*)(?![x-z])")
+        toks = xyz_string.strip().replace(' ', '').lower().split(',')
+        re_rot = re.compile(r'([+-]?)([\d\.]*)/?([\d\.]*)([x-z])')
+        re_trans = re.compile(r'([+-]?)([\d\.]+)/?([\d\.]*)(?![x-z])')
         for i, tok in enumerate(toks):
             # build the rotation matrix
             for m in re_rot.finditer(tok):
-                factor = -1 if m.group(1) == "-" else 1
-                if m.group(2) != "":
-                    factor *= float(m.group(2)) / float(m.group(3)) \
-                        if m.group(3) != "" else float(m.group(2))
+                factor = -1 if m.group(1) == '-' else 1
+                if m.group(2) != '':
+                    factor *= float(m.group(2)) / float(m.group(3)) if m.group(3) != '' else float(m.group(2))
                 j = ord(m.group(4)) - 120
                 rot_matrix[i, j] = factor
             # build the translation vector
             for m in re_trans.finditer(tok):
-                factor = -1 if m.group(1) == "-" else 1
-                num = float(m.group(2)) / float(m.group(3)) \
-                    if m.group(3) != "" else float(m.group(2))
+                factor = -1 if m.group(1) == '-' else 1
+                num = float(m.group(2)) / float(m.group(3)) if m.group(3) != '' else float(m.group(2))
                 trans[i] = num * factor
         return SymmOp.from_rotation_and_translation(rot_matrix, trans)

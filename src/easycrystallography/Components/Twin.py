@@ -15,5 +15,6 @@ class Twin:
 
     @property
     def operation(self):
-        return SymmOp.from_origin_axis_angle(self.origin, self.axis1, self.phi) * \
-                SymmOp.from_origin_axis_angle(self.origin, self.axis2, self.theta)
+        return SymmOp.from_origin_axis_angle(self.origin, self.axis1, self.phi) * SymmOp.from_origin_axis_angle(
+            self.origin, self.axis2, self.theta
+        )
