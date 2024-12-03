@@ -2,8 +2,9 @@
 
 ## Requirements
 
-The EasyDiffraction library is developed in Python, so Python must be installed
-on your system. The library is compatible with Python versions 3.9 through 3.12.
+The **EasyCrystallography** library is developed in Python, so Python must be
+installed on your system. The library is compatible with Python versions 3.9
+through 3.12.
 
 ## Environment setup <small>optional</small> { #environment-setup data-toc-label="Environment setup" }
 
@@ -12,26 +13,37 @@ packages you install or update are contained within that environment. If you
 encounter issues, you can simply delete and recreate the environment. Setting it
 up is straightforward:
 
-- Create a new virtual environment with:
+Create a new virtual environment with:
 
 ```console
 python3 -m venv venv
 ```
 
-- Activate the environment with:
+<!-- prettier-ignore-start -->
+Activate the environment with:
 
-  === ":material-apple: macOS" `console       . venv/bin/activate       ` ===
-  ":fontawesome-brands-windows: Windows"
-  `console       . venv/Scripts/activate       ` === ":material-linux: Linux"
-  `console       . venv/bin/activate       `
+=== ":material-apple: macOS"
+    ```console
+    . venv/bin/activate
+    ```
+=== ":fontawesome-brands-windows: Windows"
+    ```console
+    . venv/Scripts/activate
+    ```
+=== ":material-linux: Linux"
+    ```console
+    . venv/bin/activate
+    ```
+<!-- prettier-ignore-end -->
 
 Your terminal should now print `(venv)` before the prompt, which is how you know
 that you are inside the virtual environment that you just created.
 
-- Exit the environment with:
-  ```
-  deactivate
-  ```
+Exit the environment with:
+
+```console
+deactivate
+```
 
 ## Installation
 
