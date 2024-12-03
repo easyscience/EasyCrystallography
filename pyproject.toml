@@ -100,7 +100,7 @@ default-tag = 'v999.0.0'
 # https://docs.astral.sh/ruff/rules/
 
 [tool.ruff]
-exclude = ['docs_old', 'examples_old', 'tests,' 'tests_old']
+exclude = ['docs_old', 'examples_old', 'tests', 'tests_old']
 indent-width = 4
 line-length = 127
 
