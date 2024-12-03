@@ -20,10 +20,20 @@ python3 -m venv venv
 
 - Activate the environment with:
 
-  === ":material-apple: macOS" `console       . venv/bin/activate       ` ===
-  ":fontawesome-brands-windows: Windows"
-  `console       . venv/Scripts/activate       ` === ":material-linux: Linux"
-  `console       . venv/bin/activate       `
+<!-- prettier-ignore-start -->
+    === ":material-apple: macOS"
+        ```console
+        . venv/bin/activate
+        ```
+    === ":fontawesome-brands-windows: Windows"
+        ```console
+        . venv/Scripts/activate
+        ```
+    === ":material-linux: Linux"
+        ```console
+        . venv/bin/activate
+        ```
+<!-- prettier-ignore-end -->
 
 Your terminal should now print `(venv)` before the prompt, which is how you know
 that you are inside the virtual environment that you just created.
