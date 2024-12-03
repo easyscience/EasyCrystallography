@@ -26,7 +26,7 @@ dependencies = [
   'asteval',       # For evaluating mathematical expressions
   'easyscience',   # The base library of the EasyScience framework
   'gemmi',         # For handling CIF files
-  'numpy<2.0',     # For numerical calculations
+  'numpy<3.0',     # For numerical calculations
   'periodictable', # For atomic properties
   'pint',          # For units
   'uncertainties', # For error propagation
