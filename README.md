@@ -1,19 +1,39 @@
-<img src="https://raw.githubusercontent.com/EasyScience/EasyCrystallography/refs/heads/master/resources/images/ec_logo.svg" height="65">
+![EasyCrystallography Logo Light Mode]![EasyCrystallography Logo Dark Mode]
 
-EasyCrystallography is a library used to generate and manipulate crystal structures within the [EasyScience](https://github.com/EasyScience) framework.
+**EasyCrystallography** is a Python library used within the [EasyScience]
+framework to generate and manipulate crystal structures.
 
-* Documentation: https://easyscience.github.io/EasyCrystallography
-* Source code: https://github.com/EasyScience/EasyCrystallography
-* Bug reports: https://github.com/EasyScience/EasyCrystallography/issues
+## Useful Links
+
+- [Documentation] - Access the full documentation.
+- [Issue Tracker] - Report bugs or request new features.
+- [Source Code] - Explore the source code repository.
 
 ## Contributing
 
-We absolutely welcome contributions, and our goal is for EasyCrystallography to be a community-driven open source project developed by a diverse group of contributors.
+We welcome contributions! Our vision is for **EasyCrystallography** to be a
+community-driven, open-source project supported by a diverse group of
+contributors.
 
-EasyCrystallography is currently maintained by [European Spallation Source ERIC](https://ess.eu), Sweden.
+The project is currently maintained by the [European Spallation Source (ESS)] in
+Sweden.
 
-If you are interested in contributing directly to the code, please see [CONTRIBUTING.md](https://raw.githubusercontent.com/EasyScience/EasyCrystallography/refs/heads/master/CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+If you'd like to contribute, please refer to our [Contributing Guidelines] for
+information about our code of conduct and instructions on submitting pull
+requests.
 
 ## License
 
-EasyCrystallography is licensed under the [BSD 3-Clause License](https://raw.githubusercontent.com/EasyScience/EasyCrystallography/refs/heads/master/LICENSE).
+**EasyCrystallography** is licensed under the [BSD 3-Clause License].
+
+<!-- prettier-ignore-start -->
+[BSD 3-Clause License]: https://github.com/EasyScience/EasyCrystallography/blob/master/LICENSE
+[Contributing Guidelines]: https://github.com/EasyScience/EasyCrystallography/blob/master/CONTRIBUTING.md
+[EasyCrystallography Logo Light Mode]: https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_lightmode.svg#gh-light-mode-only
+[EasyCrystallography Logo Dark Mode]: https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_darkmode.svg#gh-dark-mode-only
+[EasyScience]: https://easyscience.software
+[European Spallation Source (ESS)]: https://ess.eu
+[Documentation]: https://easyscience.github.io/EasyCrystallography
+[Issue Tracker]: https://github.com/EasyScience/EasyCrystallography/issues
+[Source Code]: https://github.com/EasyScience/EasyCrystallography
+<!-- prettier-ignore-end -->
