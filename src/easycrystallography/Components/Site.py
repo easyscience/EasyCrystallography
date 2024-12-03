@@ -31,18 +31,18 @@ _SITE_DETAILS = {
     "label": {
         "value": "H",
         "description": "A unique identifier for a particular site in the crystal",
-        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
+        "url": "https://docs.easydiffraction.org/lib/dictionaries/_atom_site/",
     },
     "position": {
         "value": 0.0,
         "description": "Atom-site coordinate as fractions of the unit cell length.",
-        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
+        "url": "https://docs.easydiffraction.org/lib/dictionaries/_atom_site/",
         "fixed": True,
     },
     "occupancy": {
         "value": 1.0,
         "description": "The fraction of the atom type present at this site.",
-        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
+        "url": "https://docs.easydiffraction.org/lib/dictionaries/_atom_site/",
         "fixed": True,
     },
 }

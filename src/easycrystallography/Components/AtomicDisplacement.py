@@ -24,14 +24,14 @@ if TYPE_CHECKING:
 _ANIO_DETAILS = {
     'adp_type': {
         'description': "A standard code used to describe the type of atomic displacement parameters used for the site.",
-        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
+        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
         'value':       'Uani'
     },
     'Uani':     {
         'description': 'Isotropic atomic displacement parameter, or equivalent isotropic atomic  displacement '
                        'parameter, U(equiv), in angstroms squared, calculated from anisotropic atomic displacement  '
                        'parameters.',
-        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
+        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
         'value':       0.0,
         'units':       'angstrom^2',
         'fixed':       True,
@@ -39,7 +39,7 @@ _ANIO_DETAILS = {
     'Uiso':     {
         'description': 'The standard anisotropic atomic displacement components in angstroms squared which appear in '
                        'the structure-factor term.',
-        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
+        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
         'value':       0.0,
         'min':         0,
         'max':         np.inf,
@@ -49,7 +49,7 @@ _ANIO_DETAILS = {
     'Bani':     {
         'description': 'The standard anisotropic atomic displacement components in angstroms squared which appear in '
                        'the structure-factor term.',
-        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
+        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
         'value':       0.0,
         'units':       'angstrom^2',
         'fixed':       True,
@@ -58,7 +58,7 @@ _ANIO_DETAILS = {
         'description': 'Isotropic atomic displacement parameter, or equivalent isotropic atomic displacement '
                        'parameter, B(equiv), in angstroms squared, calculated from anisotropic displacement '
                        'components.',
-        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/',
+        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
         'value':       0.0,
         'min':         0,
         'max':         np.inf,

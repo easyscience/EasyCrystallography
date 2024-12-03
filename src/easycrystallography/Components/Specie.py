@@ -16,7 +16,7 @@ from easyscience.Utils.classTools import removeProp
 _SPECIE_DETAILS = {
     "type_symbol": {
         "description": "A code to identify the atom species occupying this site.",
-        "url":         "https://docs.easydiffraction.org/lib/project/dictionaries/_atom_site/",
+        "url":         "https://docs.easydiffraction.org/lib/dictionaries/_atom_site/",
     },
 }
 

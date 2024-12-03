@@ -39,7 +39,7 @@ if TYPE_CHECKING:
 CELL_DETAILS = {
     "length": {
         "description": "Unit-cell length of the selected structure in angstroms.",
-        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
+        "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
         "value": 3,
         "units": "angstrom",
         "min": 0,
@@ -48,7 +48,7 @@ CELL_DETAILS = {
     },
     "angle": {
         "description": "Unit-cell angle of the selected structure in degrees.",
-        "url": "https://docs.easydiffraction.org/lib/project/dictionaries/_cell/",
+        "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
         "value": 90,
         "units": "deg",
         "min": 0,

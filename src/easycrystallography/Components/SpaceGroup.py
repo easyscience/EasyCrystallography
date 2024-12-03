@@ -25,14 +25,14 @@ SG_DETAILS = {
         "name":        "hermann_mauguin",
         "description": "Hermann-Mauguin symbols given in Table 4.3.2.1 of International Tables for Crystallography "
                        "Vol. A (2002) or a Hermann-Mauguin symbol for a conventional or unconventional setting.",
-        "url":         "https://docs.easydiffraction.org/lib/project/dictionaries/_space_group/",
+        "url":         "https://docs.easydiffraction.org/lib/dictionaries/_space_group/",
         "value":       "P 1",
     },
     'setting':             {
         'name':        'coordinate-code',
         'description': 'A qualifier taken from the enumeration list identifying which setting in International Tables '
                        'for Crystallography Volume A (2002) (IT) is used.',
-        'url':         'https://docs.easydiffraction.org/lib/project/dictionaries/_space_group/',
+        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_space_group/',
         'value':       '\x00',
     },
     'symmetry_ops': {
