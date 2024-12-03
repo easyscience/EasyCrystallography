@@ -21,25 +21,25 @@ from easyscience.Objects.ObjectClasses import Descriptor
 from easycrystallography.Symmetry.SymOp import SymmOp
 
 SG_DETAILS = {
-    "space_group_HM_name": {
-        "name":        "hermann_mauguin",
-        "description": "Hermann-Mauguin symbols given in Table 4.3.2.1 of International Tables for Crystallography "
-                       "Vol. A (2002) or a Hermann-Mauguin symbol for a conventional or unconventional setting.",
-        "url":         "https://docs.easydiffraction.org/lib/dictionaries/_space_group/",
-        "value":       "P 1",
+    'space_group_HM_name': {
+        'name': 'hermann_mauguin',
+        'description': 'Hermann-Mauguin symbols given in Table 4.3.2.1 of International Tables for Crystallography '
+        'Vol. A (2002) or a Hermann-Mauguin symbol for a conventional or unconventional setting.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_space_group/',
+        'value': 'P 1',
     },
-    'setting':             {
-        'name':        'coordinate-code',
+    'setting': {
+        'name': 'coordinate-code',
         'description': 'A qualifier taken from the enumeration list identifying which setting in International Tables '
-                       'for Crystallography Volume A (2002) (IT) is used.',
-        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_space_group/',
-        'value':       '\x00',
+        'for Crystallography Volume A (2002) (IT) is used.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_space_group/',
+        'value': '\x00',
     },
     'symmetry_ops': {
-        'name':        'symmetry-ops',
+        'name': 'symmetry-ops',
         'description': 'A list of symmetry operations, each given as a 4x4 matrix in the form of a `SymmOp` object.',
-        'value':       [SymmOp.from_xyz_string('x,y,z')],
-    }
+        'value': [SymmOp.from_xyz_string('x,y,z')],
+    },
 }
 
 if TYPE_CHECKING:
@@ -47,6 +47,7 @@ if TYPE_CHECKING:
     from easyscience.Utils.typing import iF
 
     from easycrystallography.Components.Site import S
+
     T = Union[S, npt.ArrayLike]
 
 
@@ -59,20 +60,19 @@ class easyOp(Descriptor):
 
 
 class SpaceGroup(BaseObj):
-
     _space_group_HM_name: ClassVar[Descriptor]
     _setting: ClassVar[Descriptor]
     _symmetry_ops: ClassVar[Descriptor]
 
-    _REDIRECT = {
-        'symmetry_ops': lambda obj: None if obj._sg_data is not None else obj._symmetry_ops
-    }
+    _REDIRECT = {'symmetry_ops': lambda obj: None if obj._sg_data is not None else obj._symmetry_ops}
 
-    def __init__(self,
-                 space_group_HM_name: Optional[Descriptor, str] = None,
-                 setting: Optional[Descriptor, str] = None,
-                 symmetry_ops: Optional[List[SymmOp]] = None,
-                 interface: Optional[iF] = None):
+    def __init__(
+        self,
+        space_group_HM_name: Optional[Descriptor, str] = None,
+        setting: Optional[Descriptor, str] = None,
+        symmetry_ops: Optional[List[SymmOp]] = None,
+        interface: Optional[iF] = None,
+    ):
         """
         Generate a spacegroup object from it's Hermann-Mauguin symbol and setting. The setting can be a part of the
         Hermann-Mauguin symbol.
@@ -83,10 +83,10 @@ class SpaceGroup(BaseObj):
         """
 
         super(SpaceGroup, self).__init__(
-            "space_group",
-            _space_group_HM_name=Descriptor(**SG_DETAILS["space_group_HM_name"]),
-            _setting=Descriptor(**SG_DETAILS["setting"]),
-            _symmetry_ops=easyOp(**SG_DETAILS["symmetry_ops"]),
+            'space_group',
+            _space_group_HM_name=Descriptor(**SG_DETAILS['space_group_HM_name']),
+            _setting=Descriptor(**SG_DETAILS['setting']),
+            _symmetry_ops=easyOp(**SG_DETAILS['symmetry_ops']),
         )
 
         if space_group_HM_name:
@@ -98,7 +98,7 @@ class SpaceGroup(BaseObj):
             'new_spacegroup': self._space_group_HM_name.raw_value,
             'new_setting': self._setting.raw_value,
             'operations_set': None,
-            'set_internal': True
+            'set_internal': True,
         }
         if symmetry_ops is not None:
             kwargs['operations_set'] = symmetry_ops
@@ -136,7 +136,12 @@ class SpaceGroup(BaseObj):
         return cls(sg_data.hm, sg_data.ext, interface=interface)
 
     @classmethod
-    def from_symMatrices(cls, rotations: List[np.ndarray], translations: List[np.ndarray], interface: Optional[iF] = None):
+    def from_symMatrices(
+        cls,
+        rotations: List[np.ndarray],
+        translations: List[np.ndarray],
+        interface: Optional[iF] = None,
+    ):
         """
         Create a space group from a lists of rotations and translations. The number of rotations and translations must
         be the same.
@@ -151,7 +156,12 @@ class SpaceGroup(BaseObj):
         return cls.from_symOps(ops, interface=interface)
 
     @classmethod
-    def from_generators(cls, rotations: List[np.ndarray], translations: List[np.ndarray], interface: Optional[iF] = None):
+    def from_generators(
+        cls,
+        rotations: List[np.ndarray],
+        translations: List[np.ndarray],
+        interface: Optional[iF] = None,
+    ):
         """
         Create a space group from a lists of rotations and translations. Each translation is applied to each rotation.
 
@@ -159,12 +169,16 @@ class SpaceGroup(BaseObj):
         :param translations: Array of translations [m*[1x3]]
         :param interface: Interface to the calculator
         """
-        rots = len(translations)*rotations
+        rots = len(translations) * rotations
         trans = [np.array(d) for d in np.array(translations).repeat(len(rotations), axis=0).tolist()]
         return cls.from_symMatrices(rots, trans, interface=interface)
 
     @classmethod
-    def from_gemmi_operations(cls, operations: Union[gemmi.GroupOps, List[gemmi.Op]], interface: Optional[iF] = None):
+    def from_gemmi_operations(
+        cls,
+        operations: Union[gemmi.GroupOps, List[gemmi.Op]],
+        interface: Optional[iF] = None,
+    ):
         """
         Generate a space group from a list of gemmi operations or a gemmi group of operations.
 
@@ -179,7 +193,7 @@ class SpaceGroup(BaseObj):
                 if isinstance(op, gemmi.Op):
                     ops.append(op)
                 else:
-                    raise TypeError("Operations must be of type gemmi.Op")
+                    raise TypeError('Operations must be of type gemmi.Op')
             ops = gemmi.GroupOps(ops)
         sg_data = gemmi.find_spacegroup_by_ops(ops)
         return cls(sg_data.hm, sg_data.ext, interface=interface)
@@ -210,29 +224,31 @@ class SpaceGroup(BaseObj):
             if item.number > number:
                 break
             if item.number == number:
-                st = ""
+                st = ''
                 # Cases where ext and qualifier are not empty
-                if item.ext and item.ext != "\x00":
+                if item.ext and item.ext != '\x00':
                     st += item.ext
                 if item.qualifier:
                     st += item.qualifier
                 # special cases of defaul settings, not explicitly defined in gemmi
                 system = item.crystal_system_str()
-                if system == "orthorhombic" and not item.qualifier:
-                    st += "abc"
-                elif (system == "trigonal" or system == "hexagonal") and not item.qualifier:
-                    st += "h"
+                if system == 'orthorhombic' and not item.qualifier:
+                    st += 'abc'
+                elif (system == 'trigonal' or system == 'hexagonal') and not item.qualifier:
+                    st += 'h'
                 # failed, just assign "1" to triclinic/monoclinic/tetragonal
                 if not st:
-                    st = "1"
+                    st = '1'
                 ext.append(st)
         return ext
 
-    def __on_change(self,
-                    new_spacegroup: Union[int, str],
-                    new_setting: Optional[str] = None,
-                    operations_set: Optional[List[SymmOp]] = None,
-                    set_internal: bool = True) -> Tuple[str, str, List[SymmOp]]:
+    def __on_change(
+        self,
+        new_spacegroup: Union[int, str],
+        new_setting: Optional[str] = None,
+        operations_set: Optional[List[SymmOp]] = None,
+        set_internal: bool = True,
+    ) -> Tuple[str, str, List[SymmOp]]:
         """
         Internal function to update the space group. This function is called when the space group is changed. It checks
         the form of the imputs, generates reference data, and updates the internal data (if requested).
@@ -241,7 +257,7 @@ class SpaceGroup(BaseObj):
         :param new_setting: New space group setting
         :param set_internal: Should internal objects be updated
         """
-        setting = "\x00"
+        setting = '\x00'
         if operations_set is None:
             if isinstance(new_spacegroup, str):
                 if ':' in new_spacegroup:
@@ -256,13 +272,13 @@ class SpaceGroup(BaseObj):
                 sg_data = gemmi.find_spacegroup_by_number(int(new_spacegroup))
 
             if sg_data is None:
-                raise ValueError(f"Spacegroup \'{new_spacegroup}\' not found in database.")
+                raise ValueError(f"Spacegroup '{new_spacegroup}' not found in database.")
 
             settings = self.find_settings_by_number(sg_data.number)
             hm_name = sg_data.hm
             reference = sg_data.ext
 
-            if new_setting is None or new_setting == "" or new_setting == "\x00":
+            if new_setting is None or new_setting == '' or new_setting == '\x00':
                 if reference != '\x00':
                     setting = reference
             else:
@@ -278,7 +294,7 @@ class SpaceGroup(BaseObj):
                         # this can be because the setting is the "default" setting which gemmi treats as a blank
                         new_sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + reference)
                     if new_sg_data is None:
-                        raise ValueError(f"Spacegroup \'{new_spacegroup}:{new_setting}\' not found in database.")
+                        raise ValueError(f"Spacegroup '{new_spacegroup}:{new_setting}' not found in database.")
                     sg_data = new_sg_data
                     setting = sg_data.ext
                 else:
@@ -288,8 +304,10 @@ class SpaceGroup(BaseObj):
 
             if operations_set is None:
                 operations_set = sg_data.operations()
-            operations = [SymmOp.from_rotation_and_translation(np.array(op.rot) / op.DEN, np.array(op.tran) / op.DEN)
-                          for op in operations_set]
+            operations = [
+                SymmOp.from_rotation_and_translation(np.array(op.rot) / op.DEN, np.array(op.tran) / op.DEN)
+                for op in operations_set
+            ]
         else:
             sg_data = None
             hm_name = 'custom'
@@ -315,7 +333,7 @@ class SpaceGroup(BaseObj):
         :return: Space group setting
         """
         setting_str = self._setting.raw_value
-        if setting_str == "\x00":
+        if setting_str == '\x00':
             return None  # no setting
         return self._setting
 
@@ -337,7 +355,7 @@ class SpaceGroup(BaseObj):
         :return: Space group setting
         """
         setting_str = self._setting.raw_value
-        if setting_str == "\x00":
+        if setting_str == '\x00':
             return None  # no setting
         return self._setting
 
@@ -351,7 +369,6 @@ class SpaceGroup(BaseObj):
         """
         _, setting, _ = self.__on_change(self._space_group_HM_name.raw_value, new_setting, set_internal=True)
 
-
     @property
     def setting_str(self) -> str:
         """
@@ -360,7 +377,7 @@ class SpaceGroup(BaseObj):
         :return: Space group setting as a string
         """
         if self.setting is None:
-            return ""
+            return ''
         return self._setting.raw_value
 
     @property
@@ -507,8 +524,11 @@ class SpaceGroup(BaseObj):
 
         :param new_ops: List of new symmetry operations
         """
-        self.__on_change(self._space_group_HM_name.raw_value, operations_set=new_ops, set_internal=True)
-
+        self.__on_change(
+            self._space_group_HM_name.raw_value,
+            operations_set=new_ops,
+            set_internal=True,
+        )
 
     @property
     def symmetry_xyz(self) -> str:
@@ -582,7 +602,7 @@ class SpaceGroup(BaseObj):
         )
         if self.setting_str:
             out_str = "{:s} setting: '{:s}'".format(out_str, self.setting_str)
-        return out_str + ">"
+        return out_str + '>'
 
 
 def in_array_list(array_list, a, tol=1e-5) -> bool:

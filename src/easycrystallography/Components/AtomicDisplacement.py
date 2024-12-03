@@ -23,53 +23,52 @@ if TYPE_CHECKING:
 
 _ANIO_DETAILS = {
     'adp_type': {
-        'description': "A standard code used to describe the type of atomic displacement parameters used for the site.",
-        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
-        'value':       'Uani'
+        'description': 'A standard code used to describe the type of atomic displacement parameters used for the site.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
+        'value': 'Uani',
     },
-    'Uani':     {
+    'Uani': {
         'description': 'Isotropic atomic displacement parameter, or equivalent isotropic atomic  displacement '
-                       'parameter, U(equiv), in angstroms squared, calculated from anisotropic atomic displacement  '
-                       'parameters.',
-        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
-        'value':       0.0,
-        'units':       'angstrom^2',
-        'fixed':       True,
+        'parameter, U(equiv), in angstroms squared, calculated from anisotropic atomic displacement  '
+        'parameters.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
+        'value': 0.0,
+        'units': 'angstrom^2',
+        'fixed': True,
     },
-    'Uiso':     {
+    'Uiso': {
         'description': 'The standard anisotropic atomic displacement components in angstroms squared which appear in '
-                       'the structure-factor term.',
-        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
-        'value':       0.0,
-        'min':         0,
-        'max':         np.inf,
-        'units':       'angstrom^2',
-        'fixed':       True,
+        'the structure-factor term.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
+        'value': 0.0,
+        'min': 0,
+        'max': np.inf,
+        'units': 'angstrom^2',
+        'fixed': True,
     },
-    'Bani':     {
+    'Bani': {
         'description': 'The standard anisotropic atomic displacement components in angstroms squared which appear in '
-                       'the structure-factor term.',
-        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
-        'value':       0.0,
-        'units':       'angstrom^2',
-        'fixed':       True,
+        'the structure-factor term.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
+        'value': 0.0,
+        'units': 'angstrom^2',
+        'fixed': True,
     },
-    'Biso':     {
+    'Biso': {
         'description': 'Isotropic atomic displacement parameter, or equivalent isotropic atomic displacement '
-                       'parameter, B(equiv), in angstroms squared, calculated from anisotropic displacement '
-                       'components.',
-        'url':         'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
-        'value':       0.0,
-        'min':         0,
-        'max':         np.inf,
-        'units':       'angstrom^2',
-        'fixed':       True,
-    }
+        'parameter, B(equiv), in angstroms squared, calculated from anisotropic displacement '
+        'components.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
+        'value': 0.0,
+        'min': 0,
+        'max': np.inf,
+        'units': 'angstrom^2',
+        'fixed': True,
+    },
 }
 
 
 class AdpBase(BaseObj):
-
     def __init__(self, *args, **kwargs):
         super(AdpBase, self).__init__(*args, **kwargs)
 
@@ -97,7 +96,6 @@ class AdpBase(BaseObj):
 
 
 class Anisotropic(AdpBase):
-
     U_11: ClassVar[Parameter]
     U_12: ClassVar[Parameter]
     U_13: ClassVar[Parameter]
@@ -105,19 +103,26 @@ class Anisotropic(AdpBase):
     U_23: ClassVar[Parameter]
     U_33: ClassVar[Parameter]
 
-    def __init__(self,
-                 Uiso_ani: Optional[float] = None,
-                 U_11: Optional[Union[Parameter, float]] = None, U_12: Optional[Union[Parameter, float]] = None,
-                 U_13: Optional[Union[Parameter, float]] = None, U_22: Optional[Union[Parameter, float]] = None,
-                 U_23: Optional[Union[Parameter, float]] = None, U_33: Optional[Union[Parameter, float]] = None,
-                 interface: Optional[iF] = None):
-        super(Anisotropic, self).__init__('anisoU',
-                                          U_11=Parameter('U_11', **_ANIO_DETAILS['Uani']),
-                                          U_12=Parameter('U_12', **_ANIO_DETAILS['Uani']),
-                                          U_13=Parameter('U_13', **_ANIO_DETAILS['Uani']),
-                                          U_22=Parameter('U_22', **_ANIO_DETAILS['Uani']),
-                                          U_23=Parameter('U_23', **_ANIO_DETAILS['Uani']),
-                                          U_33=Parameter('U_33', **_ANIO_DETAILS['Uani']))
+    def __init__(
+        self,
+        Uiso_ani: Optional[float] = None,
+        U_11: Optional[Union[Parameter, float]] = None,
+        U_12: Optional[Union[Parameter, float]] = None,
+        U_13: Optional[Union[Parameter, float]] = None,
+        U_22: Optional[Union[Parameter, float]] = None,
+        U_23: Optional[Union[Parameter, float]] = None,
+        U_33: Optional[Union[Parameter, float]] = None,
+        interface: Optional[iF] = None,
+    ):
+        super(Anisotropic, self).__init__(
+            'anisoU',
+            U_11=Parameter('U_11', **_ANIO_DETAILS['Uani']),
+            U_12=Parameter('U_12', **_ANIO_DETAILS['Uani']),
+            U_13=Parameter('U_13', **_ANIO_DETAILS['Uani']),
+            U_22=Parameter('U_22', **_ANIO_DETAILS['Uani']),
+            U_23=Parameter('U_23', **_ANIO_DETAILS['Uani']),
+            U_33=Parameter('U_33', **_ANIO_DETAILS['Uani']),
+        )
         if U_11 is not None:
             self.U_11 = U_11
         if U_12 is not None:
@@ -139,19 +144,20 @@ class Anisotropic(AdpBase):
 
 
 class Isotropic(AdpBase):
-
     Uiso: ClassVar[Parameter]
 
-    def __init__(self, Uiso: Optional[Union[Parameter, float]] = None, interface: Optional[iF] = None):
-        super(Isotropic, self).__init__('Uiso',
-                                        Uiso=Parameter('Uiso', **_ANIO_DETAILS['Uiso']))
+    def __init__(
+        self,
+        Uiso: Optional[Union[Parameter, float]] = None,
+        interface: Optional[iF] = None,
+    ):
+        super(Isotropic, self).__init__('Uiso', Uiso=Parameter('Uiso', **_ANIO_DETAILS['Uiso']))
         if Uiso is not None:
             self.Uiso = Uiso
         self.interface = interface
 
 
 class AnisotropicBij(AdpBase):
-
     B_11: ClassVar[Parameter]
     B_12: ClassVar[Parameter]
     B_13: ClassVar[Parameter]
@@ -159,16 +165,20 @@ class AnisotropicBij(AdpBase):
     B_23: ClassVar[Parameter]
     B_33: ClassVar[Parameter]
 
-    def __init__(self,
-                 B_11: Optional[Union[Parameter, float]] = None, B_12: Optional[Union[Parameter, float]] = None,
-                 B_13: Optional[Union[Parameter, float]] = None, B_22: Optional[Union[Parameter, float]] = None,
-                 B_23: Optional[Union[Parameter, float]] = None, B_33: Optional[Union[Parameter, float]] = None,
-                 interface: Optional[iF] = None):
-        super(AnisotropicBij, self).__init__('anisoB',
-                                             **{name: Parameter(name, **_ANIO_DETAILS['Bani']) for name in
-                                              ['B_11', 'B_12', 'B_13',
-                                               'B_22', 'B_23', 'B_33']
-                                                })
+    def __init__(
+        self,
+        B_11: Optional[Union[Parameter, float]] = None,
+        B_12: Optional[Union[Parameter, float]] = None,
+        B_13: Optional[Union[Parameter, float]] = None,
+        B_22: Optional[Union[Parameter, float]] = None,
+        B_23: Optional[Union[Parameter, float]] = None,
+        B_33: Optional[Union[Parameter, float]] = None,
+        interface: Optional[iF] = None,
+    ):
+        super(AnisotropicBij, self).__init__(
+            'anisoB',
+            **{name: Parameter(name, **_ANIO_DETAILS['Bani']) for name in ['B_11', 'B_12', 'B_13', 'B_22', 'B_23', 'B_33']},
+        )
         if B_11 is not None:
             self.B_11 = B_11
         if B_12 is not None:
@@ -185,12 +195,14 @@ class AnisotropicBij(AdpBase):
 
 
 class IsotropicB(AdpBase):
-
     Biso: ClassVar[Parameter]
 
-    def __init__(self, Biso: Optional[Union[Parameter, float]] = None, interface: Optional[iF] = None):
-        super(IsotropicB, self).__init__('Biso',
-                                         Biso=Parameter('Biso', **_ANIO_DETAILS['Biso']))
+    def __init__(
+        self,
+        Biso: Optional[Union[Parameter, float]] = None,
+        interface: Optional[iF] = None,
+    ):
+        super(IsotropicB, self).__init__('Biso', Biso=Parameter('Biso', **_ANIO_DETAILS['Biso']))
         if Biso is not None:
             self.Biso = Biso
         self.interface = interface
@@ -211,11 +223,15 @@ if TYPE_CHECKING:
 
 
 class AtomicDisplacement(BaseObj):
-
     adp_type: ClassVar[Descriptor]
     adp_class: ClassVar[AB]
 
-    def __init__(self, adp_type: Optional[Union[Descriptor, str]] = None, interface: Optional[iF] = None, **kwargs):
+    def __init__(
+        self,
+        adp_type: Optional[Union[Descriptor, str]] = None,
+        interface: Optional[iF] = None,
+        **kwargs,
+    ):
         if adp_type is None:
             adp_type = 'Uiso'
         if isinstance(adp_type, str):
@@ -224,27 +240,30 @@ class AtomicDisplacement(BaseObj):
         if adp_class_name in _AVAILABLE_ISO_TYPES.keys():
             adp_class = _AVAILABLE_ISO_TYPES[adp_class_name]
             # enable passing ADP parameters to constructor
-            if "adp_class" in kwargs.keys():
-                m = getattr(kwargs["adp_class"], adp_class_name)
+            if 'adp_class' in kwargs.keys():
+                m = getattr(kwargs['adp_class'], adp_class_name)
                 kwargs[adp_class_name] = m
-                _ = kwargs.pop("adp_class")
+                _ = kwargs.pop('adp_class')
             adp = adp_class(**kwargs, interface=interface)
         else:
-            raise AttributeError(f"{adp_class_name} is not a valid adp type")
-        super(AtomicDisplacement, self).__init__('adp',
-                                                 adp_type=adp_type,
-                                                 adp_class=adp)
+            raise AttributeError(f'{adp_class_name} is not a valid adp type')
+        super(AtomicDisplacement, self).__init__('adp', adp_type=adp_type, adp_class=adp)
         for par in adp.get_parameters():
-            addProp(self, par.name, fget=self.__a_getter(par.name), fset=self.__a_setter(par.name))
+            addProp(
+                self,
+                par.name,
+                fget=self.__a_getter(par.name),
+                fset=self.__a_setter(par.name),
+            )
         self.interface = interface
 
     def switch_type(self, adp_string: str, **kwargs):
-        #if adp_string in _AVAILABLE_ISO_TYPES.keys():
-            # adp_class = _AVAILABLE_ISO_TYPES[adp_string]
-            # if kwargs:
-            #     adp = adp_class(**kwargs, interface=self.interface)
-            # else:
-            #     adp = adp_class(interface=self.interface)
+        # if adp_string in _AVAILABLE_ISO_TYPES.keys():
+        # adp_class = _AVAILABLE_ISO_TYPES[adp_string]
+        # if kwargs:
+        #     adp = adp_class(**kwargs, interface=self.interface)
+        # else:
+        #     adp = adp_class(interface=self.interface)
         # else:
         #     raise AttributeError(f"{adp_string} is not a valid adp type")
         for par in self.adp_class.get_parameters():
@@ -257,7 +276,6 @@ class AtomicDisplacement(BaseObj):
 
     @staticmethod
     def __a_getter(key: str):
-
         def getter(obj):
             return obj.adp_class._kwargs[key]
 

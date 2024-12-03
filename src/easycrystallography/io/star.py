@@ -28,13 +28,17 @@ if TYPE_CHECKING:
 _MAX_LEN = 160
 _SEP = '.'
 
+
 def _flatten_dict_gen(d, parent_key, sep):
     for k, v in d.items():
         new_key = parent_key + sep + k if parent_key else k
         if isinstance(v, MutableMapping):
             yield from flatten_dict(v, new_key, sep=sep).items()
         elif isinstance(v, list):
-            yield new_key, [value if not isinstance(value, MutableMapping) else flatten_dict(value, '', sep) for value in v ]
+            yield (
+                new_key,
+                [value if not isinstance(value, MutableMapping) else flatten_dict(value, '', sep) for value in v],
+            )
         else:
             yield new_key, v
 
@@ -55,9 +59,10 @@ def _unflatten_dict(key, value, out, sep) -> dict:
         if f is not None and not f:
             out['fixed'] = f
 
+
 def _unflatten_loop(loop: cif.Loop, out: dict, sep: str):
-    loop_name = "".join(p for p, *r in zip(*loop.tags) if all(p==c for c in r))
-    labels = [lab[len(loop_name):] for lab in loop.tags]
+    loop_name = ''.join(p for p, *r in zip(*loop.tags) if all(p == c for c in r))
+    labels = [lab[len(loop_name) :] for lab in loop.tags]
     out[loop_name] = []
     width = loop.width()
     length = loop.length()
@@ -67,6 +72,7 @@ def _unflatten_loop(loop: cif.Loop, out: dict, sep: str):
             _unflatten_dict(labels[idx2], loop.val(idx, idx2), this_dict, sep)
         out[loop_name].append(this_dict)
     return out
+
 
 def unflatten_bock(block: cif.Block, sep: str) -> dict:
     # Note that all names start with "_", so start at index 1!
@@ -81,7 +87,6 @@ def unflatten_bock(block: cif.Block, sep: str) -> dict:
 
 
 class CifSerializer(BaseEncoderDecoder):
-
     def encode(self, obj: BV, skip: Optional[List[str]] = None, data_only: bool = False) -> str:
         if skip is None:
             skip = []
@@ -148,7 +153,7 @@ class CifSerializer(BaseEncoderDecoder):
                 print(type(value))
             if abs(value - int(value)) > 0.0:
                 decimal_places = len(str(value).split('.')[1]) - 1
-            initial_str = "{:." + str(decimal_places) + "f}"
+            initial_str = '{:.' + str(decimal_places) + 'f}'
             s = initial_str.format(round(value, decimal_places))
             if error is not None and not np.isclose(error, 0.0):
                 xe_exp = int(floor(log10(error)))
@@ -162,17 +167,17 @@ class CifSerializer(BaseEncoderDecoder):
                 no_int = round(value * 10 ** (-no_exp))
 
                 # format - nom(unc)
-                fmt = "%%.%df" % max(0, -no_exp)
-                s = (fmt + "(%.0f)") % (
-                    no_int * 10 ** no_exp,
+                fmt = '%%.%df' % max(0, -no_exp)
+                s = (fmt + '(%.0f)') % (
+                    no_int * 10**no_exp,
                     un_int * 10 ** max(0, un_exp),
                 )
         elif isinstance(value, str):
-            s = "{:s}".format(value)
+            s = '{:s}'.format(value)
         else:
-            s = "{:s}".format(str(value))
+            s = '{:s}'.format(str(value))
         if fixed is not None and not fixed and error is None:
-            s += "()"
+            s += '()'
         return self._format_field(s)
 
     @staticmethod
@@ -180,11 +185,11 @@ class CifSerializer(BaseEncoderDecoder):
         in_string = in_string.strip()
         if "'" in in_string:
             in_string = in_string.replace("'", '')
-        if "\"" in in_string:
-            in_string = in_string.replace("\"", '')
+        if '"' in in_string:
+            in_string = in_string.replace('"', '')
         fixed = None
         error = None
-        tokens = in_string.split("(")
+        tokens = in_string.split('(')
         try:
             value = float(tokens[0])
         except ValueError:
@@ -193,29 +198,25 @@ class CifSerializer(BaseEncoderDecoder):
                 tokens = value[1:].split('.')
                 cls = tokens[0]
                 val = tokens[1]
-                value = eval(cls)(val) # noqa S307
+                value = eval(cls)(val)  # noqa S307
             elif value == 'None':
                 value = None
             return value, error, fixed
         if len(tokens) > 1:
             fixed = False
-            if tokens[1][0] != ")":
-                error = (10 ** -(len(f"{tokens[0]}".split(".")[1]) - 1)) * int(tokens[1][:-1])
+            if tokens[1][0] != ')':
+                error = (10 ** -(len(f'{tokens[0]}'.split('.')[1]) - 1)) * int(tokens[1][:-1])
         return value, error, fixed
 
     @staticmethod
     def _format_field(v):
         v = v.__str__().strip()
         if len(v) > _MAX_LEN:
-            return ";\n" + textwrap.fill(v, _MAX_LEN) + "\n;"
+            return ';\n' + textwrap.fill(v, _MAX_LEN) + '\n;'
         # add quotes if necessary
-        if v == "":
+        if v == '':
             return '""'
-        if (
-            (" " in v or v[0] == "_")
-            and not (v[0] == "'" and v[-1] == "'")
-            and not (v[0] == '"' and v[-1] == '"')
-        ):
+        if (' ' in v or v[0] == '_') and not (v[0] == "'" and v[-1] == "'") and not (v[0] == '"' and v[-1] == '"'):
             if "'" in v:
                 q = '"'
             else:

@@ -78,7 +78,6 @@ class AbstractStructureWriter(AbstractBase):
 
 
 class AbstractStructureParser:
-
     def __init__(self, reading_context_class, writing_context_class):
         self._reading_context_class = reading_context_class
         self._writing_context_class = writing_context_class

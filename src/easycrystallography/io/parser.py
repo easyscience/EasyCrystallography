@@ -7,10 +7,7 @@ from .cif_parser import CifStringParser
 
 
 class Parsers:
-    _parsers = {
-        'cif_str': CifStringParser,
-        'cif': CifFileParser
-    }
+    _parsers = {'cif_str': CifStringParser, 'cif': CifFileParser}
 
     def __init__(self, parser_choice: str, *args, **kwargs):
         self._setup_parser(parser_choice, *args, **kwargs)

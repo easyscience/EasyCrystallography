@@ -25,42 +25,49 @@ SG_NAMES = _make_SG_names()
 
 
 class SpacegroupInfo:
-
     @staticmethod
     def get_all_systems() -> List[str]:
-        return ["triclinic", "monoclinic", "orthorhombic", "tetragonal", "trigonal", "hexagonal", "cubic"]
+        return [
+            'triclinic',
+            'monoclinic',
+            'orthorhombic',
+            'tetragonal',
+            'trigonal',
+            'hexagonal',
+            'cubic',
+        ]
 
     @staticmethod
     def get_ints_from_system(system: str) -> List[int]:
-        if system == "triclinic":
+        if system == 'triclinic':
             return list(range(1, 3))
-        if system == "monoclinic":
+        if system == 'monoclinic':
             return list(range(3, 16))
-        if system == "orthorhombic":
+        if system == 'orthorhombic':
             return list(range(16, 75))
-        if system == "tetragonal":
+        if system == 'tetragonal':
             return list(range(75, 143))
-        if system == "trigonal":
+        if system == 'trigonal':
             return list(range(143, 168))
-        if system == "hexagonal":
+        if system == 'hexagonal':
             return list(range(168, 195))
         return list(range(195, 231))
 
     @staticmethod
     def get_system_from_int(int_number: int):
         if int_number <= 2:
-            return "triclinic"
+            return 'triclinic'
         if int_number <= 15:
-            return "monoclinic"
+            return 'monoclinic'
         if int_number <= 74:
-            return "orthorhombic"
+            return 'orthorhombic'
         if int_number <= 142:
-            return "tetragonal"
+            return 'tetragonal'
         if int_number <= 167:
-            return "trigonal"
+            return 'trigonal'
         if int_number <= 194:
-            return "hexagonal"
-        return "cubic"
+            return 'hexagonal'
+        return 'cubic'
 
     @staticmethod
     def get_symbol_from_int_number(int_number: int):
@@ -72,7 +79,7 @@ class SpacegroupInfo:
 
     @staticmethod
     def get_compatible_HM_from_name(name: str):
-        enc: dict = _get_symm_data("space_group_encoding")
+        enc: dict = _get_symm_data('space_group_encoding')
         opt = enc.get(name.replace(' ', ''), None)
         if opt is None:
             raise AttributeError
@@ -84,4 +91,3 @@ class SpacegroupInfo:
         if not ints:
             raise AttributeError
         return ints[0]
-

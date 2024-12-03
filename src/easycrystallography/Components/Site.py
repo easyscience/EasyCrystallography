@@ -28,30 +28,29 @@ if TYPE_CHECKING:
 
 
 _SITE_DETAILS = {
-    "label": {
-        "value": "H",
-        "description": "A unique identifier for a particular site in the crystal",
-        "url": "https://docs.easydiffraction.org/lib/dictionaries/_atom_site/",
+    'label': {
+        'value': 'H',
+        'description': 'A unique identifier for a particular site in the crystal',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
     },
-    "position": {
-        "value": 0.0,
-        "description": "Atom-site coordinate as fractions of the unit cell length.",
-        "url": "https://docs.easydiffraction.org/lib/dictionaries/_atom_site/",
-        "fixed": True,
+    'position': {
+        'value': 0.0,
+        'description': 'Atom-site coordinate as fractions of the unit cell length.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
+        'fixed': True,
     },
-    "occupancy": {
-        "value": 1.0,
-        "description": "The fraction of the atom type present at this site.",
-        "url": "https://docs.easydiffraction.org/lib/dictionaries/_atom_site/",
-        "fixed": True,
+    'occupancy': {
+        'value': 1.0,
+        'description': 'The fraction of the atom type present at this site.',
+        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_atom_site/',
+        'fixed': True,
     },
 }
 
-S = TypeVar("S", bound="Site")
+S = TypeVar('S', bound='Site')
 
 
 class Site(BaseObj):
-
     label: ClassVar[Descriptor]
     specie: ClassVar[Specie]
     occupancy: ClassVar[Parameter]
@@ -70,29 +69,28 @@ class Site(BaseObj):
         interface: Optional[iF] = None,
         **kwargs,
     ):
-
-        adp = kwargs.get("adp", None)
-        b_iso_or_equiv = kwargs.get("b_iso_or_equiv", None)
-        u_iso_or_equiv = kwargs.get("u_iso_or_equiv", None)
+        adp = kwargs.get('adp', None)
+        b_iso_or_equiv = kwargs.get('b_iso_or_equiv', None)
+        u_iso_or_equiv = kwargs.get('u_iso_or_equiv', None)
 
         if b_iso_or_equiv is not None and u_iso_or_equiv is not None:
-            raise AttributeError("Cannot set both Biso and Uiso")
+            raise AttributeError('Cannot set both Biso and Uiso')
 
         if adp is None and b_iso_or_equiv is None and u_iso_or_equiv is None:
-            adp = AtomicDisplacement("Uiso", Uiso=0)
-            kwargs["adp"] = adp
+            adp = AtomicDisplacement('Uiso', Uiso=0)
+            kwargs['adp'] = adp
 
         if b_iso_or_equiv is not None:
-            adp = AtomicDisplacement("Biso", Biso=b_iso_or_equiv)
-            kwargs["adp"] = adp
+            adp = AtomicDisplacement('Biso', Biso=b_iso_or_equiv)
+            kwargs['adp'] = adp
 
-        u_iso_or_equiv = kwargs.get("u_iso_or_equiv", None)
+        u_iso_or_equiv = kwargs.get('u_iso_or_equiv', None)
 
         if u_iso_or_equiv is not None:
-            aadp = AtomicDisplacement("Uiso", Uiso=u_iso_or_equiv)
-            kwargs["adp"] = aadp
+            aadp = AtomicDisplacement('Uiso', Uiso=u_iso_or_equiv)
+            kwargs['adp'] = aadp
 
-        msp = kwargs.get("msp", None)
+        msp = kwargs.get('msp', None)
         if msp is not None:
             if isinstance(msp, str):
                 msp = MagneticSusceptibility(msp)
@@ -100,7 +98,7 @@ class Site(BaseObj):
                 if parameter.name in kwargs.keys():
                     new_option = kwargs.pop(parameter.name)
                     parameter.value = new_option
-            kwargs["msp"] = msp
+            kwargs['msp'] = msp
 
         if adp is not None:
             if isinstance(adp, str):
@@ -109,16 +107,16 @@ class Site(BaseObj):
                 if parameter.name in kwargs.keys():
                     new_option = kwargs.pop(parameter.name)
                     parameter.value = new_option
-            kwargs["adp"] = adp
+            kwargs['adp'] = adp
 
         super(Site, self).__init__(
-            "site",
-            label=Descriptor("label", **_SITE_DETAILS["label"]),
-            specie=Specie(_SITE_DETAILS["label"]["value"]),
-            occupancy=Parameter("occupancy", **_SITE_DETAILS["occupancy"]),
-            fract_x=Parameter("fract_x", **_SITE_DETAILS["position"]),
-            fract_y=Parameter("fract_y", **_SITE_DETAILS["position"]),
-            fract_z=Parameter("fract_z", **_SITE_DETAILS["position"]),
+            'site',
+            label=Descriptor('label', **_SITE_DETAILS['label']),
+            specie=Specie(_SITE_DETAILS['label']['value']),
+            occupancy=Parameter('occupancy', **_SITE_DETAILS['occupancy']),
+            fract_x=Parameter('fract_x', **_SITE_DETAILS['position']),
+            fract_y=Parameter('fract_y', **_SITE_DETAILS['position']),
+            fract_z=Parameter('fract_z', **_SITE_DETAILS['position']),
             **kwargs,
         )
         if label is not None:
@@ -140,8 +138,8 @@ class Site(BaseObj):
 
     def __repr__(self) -> str:
         return (
-            f"Atom {self.name} ({self.specie.raw_value}) @"
-            f" ({self.fract_x.raw_value}, {self.fract_y.raw_value}, {self.fract_z.raw_value})"
+            f'Atom {self.name} ({self.specie.raw_value}) @'
+            f' ({self.fract_x.raw_value}, {self.fract_y.raw_value}, {self.fract_z.raw_value})'
         )
 
     @property
@@ -156,9 +154,7 @@ class Site(BaseObj):
         :return: Array containing fractional co-ordinates
         :rtype: np.ndarray
         """
-        return np.array(
-            [self.fract_x.raw_value, self.fract_y.raw_value, self.fract_z.raw_value]
-        )
+        return np.array([self.fract_x.raw_value, self.fract_y.raw_value, self.fract_z.raw_value])
 
     def fract_distance(self, other_site: S) -> float:
         """
@@ -207,15 +203,15 @@ class Site(BaseObj):
     def add_adp(self, adp_type: Union[str, AtomicDisplacement], **kwargs):
         if isinstance(adp_type, str):
             adp_type = AtomicDisplacement(adp_type, **kwargs)
-        self._add_component("adp", adp_type)
+        self._add_component('adp', adp_type)
         if self.interface is not None:
             self.interface.generate_bindings(self)
 
     def add_msp(self, msp_type: Union[str, MagneticSusceptibility], **kwargs):
         if isinstance(msp_type, str):
             msp_type = MagneticSusceptibility(msp_type, **kwargs)
-        self._add_component("msp", msp_type)
-        #if self.interface is not None:
+        self._add_component('msp', msp_type)
+        # if self.interface is not None:
         #    self.interface.generate_bindings(self)
 
 
@@ -232,9 +228,7 @@ class PeriodicSite(Site):
         interface: Optional[iF] = None,
         **kwargs,
     ):
-        super(PeriodicSite, self).__init__(
-            label, specie, occupancy, fract_x, fract_y, fract_z, **kwargs
-        )
+        super(PeriodicSite, self).__init__(label, specie, occupancy, fract_x, fract_y, fract_z, **kwargs)
         if lattice is None:
             lattice = PeriodicLattice()
         self.lattice = lattice
@@ -243,23 +237,23 @@ class PeriodicSite(Site):
     @staticmethod
     def _from_site_kwargs(lattice: PeriodicLattice, site: S) -> Dict[str, float]:
         return {
-            "lattice": lattice,
-            "label": site.label,
-            "specie": site.specie,
-            "occupancy": site.occupancy,
-            "fract_x": site.fract_x,
-            "fract_y": site.fract_y,
-            "fract_z": site.fract_z,
-            "interface": site.interface,
+            'lattice': lattice,
+            'label': site.label,
+            'specie': site.specie,
+            'occupancy': site.occupancy,
+            'fract_x': site.fract_x,
+            'fract_y': site.fract_y,
+            'fract_z': site.fract_z,
+            'interface': site.interface,
         }
 
     @classmethod
     def from_site(cls, lattice: PeriodicLattice, site: S) -> S:
         kwargs = cls._from_site_kwargs(lattice, site)
-        if hasattr(site, "adp"):
-            kwargs["adp"] = site.adp
-        if hasattr(site, "msp"):
-            kwargs["msp"] = site.msp
+        if hasattr(site, 'adp'):
+            kwargs['adp'] = site.adp
+        if hasattr(site, 'msp'):
+            kwargs['msp'] = site.msp
         return cls(**kwargs)
 
     def get_orbit(self) -> np.ndarray:
@@ -281,22 +275,19 @@ class PeriodicSite(Site):
 
 
 class Atoms(BaseCollection):
-
     _SITE_CLASS = Site
 
     def __init__(self, name: str, *args, interface: Optional[iF] = None, **kwargs):
         if not isinstance(name, str):
-            raise TypeError("A `name` for this collection must be given in string form")
+            raise TypeError('A `name` for this collection must be given in string form')
         super(Atoms, self).__init__(name, *args, **kwargs)
         self.interface = interface
         self._kwargs._stack_enabled = True
 
     def __repr__(self) -> str:
-        return f"Collection of {len(self)} sites."
+        return f'Collection of {len(self)} sites.'
 
-    def __getitem__(
-        self, idx: Union[int, slice, str]
-    ) -> Union[Parameter, Descriptor, BaseObj, "BaseCollection"]:
+    def __getitem__(self, idx: Union[int, slice, str]) -> Union[Parameter, Descriptor, BaseObj, 'BaseCollection']:
         if isinstance(idx, str) and idx in self.atom_labels:
             idx = self.atom_labels.index(idx)
         return super(Atoms, self).__getitem__(idx)
@@ -341,20 +332,24 @@ class Atoms(BaseCollection):
         return np.array([atom.occupancy.raw_value for atom in self])
 
 
-A = TypeVar("A", bound=Atoms)
+A = TypeVar('A', bound=Atoms)
 
 
 class PeriodicAtoms(Atoms):
-
     _SITE_CLASS = PeriodicSite
 
-    def __init__(self, name: str, *args,
-                 lattice: Optional[PeriodicLattice] = None,
-                 interface: Optional[iF] = None, **kwargs):
+    def __init__(
+        self,
+        name: str,
+        *args,
+        lattice: Optional[PeriodicLattice] = None,
+        interface: Optional[iF] = None,
+        **kwargs,
+    ):
         args = list(args)
         if lattice is None:
             for item in args:
-                if hasattr(item, "lattice"):
+                if hasattr(item, 'lattice'):
                     lattice = item.lattice
                     break
         if lattice is None:
@@ -370,15 +365,13 @@ class PeriodicAtoms(Atoms):
         return cls(atoms.name, *atoms, lattice=lattice, interface=atoms.interface)
 
     def __repr__(self) -> str:
-        return f"Collection of {len(self)} periodic sites."
+        return f'Collection of {len(self)} periodic sites.'
 
     def append(self, item: S):
         if not issubclass(item.__class__, Site):
-            raise TypeError("Item must be a Site or periodic site")
+            raise TypeError('Item must be a Site or periodic site')
         if item.label.raw_value in self.atom_labels:
-            raise AttributeError(
-                f"An atom of name {item.label.raw_value} already exists."
-            )
+            raise AttributeError(f'An atom of name {item.label.raw_value} already exists.')
         # if isinstance(item, Site):
         item = self._SITE_CLASS.from_site(self.lattice, item)
         super(PeriodicAtoms, self).append(item)

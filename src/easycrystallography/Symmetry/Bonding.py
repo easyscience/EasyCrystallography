@@ -12,7 +12,14 @@ from easycrystallography.Symmetry.SymOp import SymmOp
 
 
 class Bonding:
-    def __init__(self, dl: np.ndarray, atom1: np.ndarray, atom2: np.ndarray, idx: np.ndarray, n_sym: int):
+    def __init__(
+        self,
+        dl: np.ndarray,
+        atom1: np.ndarray,
+        atom2: np.ndarray,
+        idx: np.ndarray,
+        n_sym: int,
+    ):
         self.dl = dl
         self.atom1 = atom1
         self.atom2 = atom2
@@ -20,9 +27,16 @@ class Bonding:
         self.nSym = n_sym
 
 
-def generate_bonds(phase_obj, force_no_sym: bool = False,
-                   max_distance: float = 8, tol: float = 1E-5, tol_dist: float = 1E-3, d_min: float = 0.5,
-                   max_sym: int = None, magnetic_only: bool = False) -> Bonding:
+def generate_bonds(
+    phase_obj,
+    force_no_sym: bool = False,
+    max_distance: float = 8,
+    tol: float = 1e-5,
+    tol_dist: float = 1e-3,
+    d_min: float = 0.5,
+    max_sym: int = None,
+    magnetic_only: bool = False,
+) -> Bonding:
     """
     `generate_bonds` generates all bonds up to a certain length between magnetic atoms. It also groups bonds based
     either on crystal symmetry or bond length (with `tol_dist`  tolerance) is space group is not defined.
@@ -68,7 +82,7 @@ def generate_bonds(phase_obj, force_no_sym: bool = False,
     c_dim = np.array([n_c[0] + 1, 2 * n_c[1] + 1, 2 * n_c[2] + 1])
 
     # generate all cell translations
-    c_tr1, c_tr2, c_tr3 = np.mgrid[0:n_c[0] + 1, -n_c[1]:n_c[1] + 1, -n_c[2]:n_c[2] + 1]
+    c_tr1, c_tr2, c_tr3 = np.mgrid[0 : n_c[0] + 1, -n_c[1] : n_c[1] + 1, -n_c[2] : n_c[2] + 1]
     # cell origin translations: Na x Nb x Nc x 1 x 1 x3
     c_tr = np.stack([c_tr1, c_tr2, c_tr3], axis=3).reshape((*c_tr1.shape, 1, 1, 3))
     # remove unit cells that would produce duplicate bonds mark them with NaN (enough to do along a-axis values)
@@ -87,14 +101,21 @@ def generate_bonds(phase_obj, force_no_sym: bool = False,
     # mark duplicate bonds within the (0,0,0) cell with nan
     r0 = d_r[0, int(n_c[1]), int(n_c[2]), :, :, :]
     d_r[0, int(n_c[1]), int(n_c[2]), :, :, :] = r0 * (
-            1 + np.tril(np.nan * np.ones((n_atoms, n_atoms))).reshape((n_atoms, n_atoms, 1)))
+        1 + np.tril(np.nan * np.ones((n_atoms, n_atoms))).reshape((n_atoms, n_atoms, 1))
+    )
     # calculate the absolute value of the distances in Angstrom
     d_ra = np.sqrt(np.sum(np.einsum('abcdei,ij->abcdej', d_r, phase_obj.cell.matrix) ** 2, axis=5))
     # reshape the numbers into a column list of bonds
     # 3 x Na x Nb x Nc x nMagAtom x nMagAtom
     dl = np.transpose(np.tile(c_tr, [1, 1, 1, n_atoms, n_atoms, 1]), axes=[5, 0, 1, 2, 3, 4])
-    atoms1 = np.tile(np.arange(n_atoms).reshape((1, 1, 1, 1, -1, 1)), [1, *[int(d) for d in c_dim], 1, n_atoms])
-    atoms2 = np.tile(np.arange(n_atoms).reshape((1, 1, 1, 1, 1, -1)), [1, *[int(d) for d in c_dim], n_atoms, 1])
+    atoms1 = np.tile(
+        np.arange(n_atoms).reshape((1, 1, 1, 1, -1, 1)),
+        [1, *[int(d) for d in c_dim], 1, n_atoms],
+    )
+    atoms2 = np.tile(
+        np.arange(n_atoms).reshape((1, 1, 1, 1, 1, -1)),
+        [1, *[int(d) for d in c_dim], n_atoms, 1],
+    )
     d_ra = d_ra.reshape((1, *d_ra.shape))
     # store everything in a single matrix
     # c_mat  = [dl(:,:);atom1(1,:);atom2(1,:);d_ra(1,:)];
@@ -140,7 +161,7 @@ def generate_bonds(phase_obj, force_no_sym: bool = False,
                 # Remove identical couplings from the symmetry generated list
                 gen_c = gen_c[:, un_c]
                 if np.sum(~i_new) != np.sum(un_c):
-                    raise ArithmeticError(f'Symmetry error! ii={ii}, idx={idx}. Try to change ''tol'' parameter.')
+                    raise ArithmeticError(f'Symmetry error! ii={ii}, idx={idx}. Try to change ' 'tol' ' parameter.')
                 n_mat.append(np.vstack((gen_c, np.ones((1, gen_c.shape[1])) * idx)))
                 idx += 1
             ii += 1
@@ -155,15 +176,22 @@ def generate_bonds(phase_obj, force_no_sym: bool = False,
     else:
         n_sym = 0
 
-    return Bonding(c_mat[0:3, :].astype(int),
-                   c_mat[3, :].astype(int),
-                   c_mat[4, :].astype(int),
-                   c_mat[5, :].astype(int),
-                   n_sym)
+    return Bonding(
+        c_mat[0:3, :].astype(int),
+        c_mat[3, :].astype(int),
+        c_mat[4, :].astype(int),
+        c_mat[5, :].astype(int),
+        n_sym,
+    )
 
 
-def bond(r: np.ndarray, bv: np.ndarray, single_bond: np.ndarray,
-         sym_op: List[SymmOp], tol: float = 1e-5) -> Tuple[np.ndarray, Union[np.ndarray, np.ndarray]]:
+def bond(
+    r: np.ndarray,
+    bv: np.ndarray,
+    single_bond: np.ndarray,
+    sym_op: List[SymmOp],
+    tol: float = 1e-5,
+) -> Tuple[np.ndarray, Union[np.ndarray, np.ndarray]]:
     """
     generates all bonds that are symmetry equivalent to the given `bond`. The function uses the given space group
     operators and positions of magnetic atoms to return a list of equivalent bonds in a matrix. The function also checks
@@ -240,8 +268,9 @@ def cfloor(r0: np.ndarray, tol: float) -> np.ndarray:
     return r
 
 
-def isnewUC(matrix_a: np.ndarray, matrix_b: np.ndarray, tol: float) -> \
-        Tuple[Union[np.ndarray, bool], Union[np.ndarray, int, float, complex]]:
+def isnewUC(
+    matrix_a: np.ndarray, matrix_b: np.ndarray, tol: float
+) -> Tuple[Union[np.ndarray, bool], Union[np.ndarray, int, float, complex]]:
     """
     Selects the new vectors from B within the first unit cell.
 
@@ -271,13 +300,17 @@ def isnewUC(matrix_a: np.ndarray, matrix_b: np.ndarray, tol: float) -> \
 
     is_new = np.all(notequal, axis=0)
     idx = np.arange(n_b)
-    sym_idx = np.max(np.array(~notequal[:, idx[~is_new]], dtype=int) * np.arange(n_a).reshape((-1, 1)), axis=0)
+    sym_idx = np.max(
+        np.array(~notequal[:, idx[~is_new]], dtype=int) * np.arange(n_a).reshape((-1, 1)),
+        axis=0,
+    )
 
     return is_new, sym_idx
 
 
-def isnew(matrix_a: np.ndarray, matrix_b: np.ndarray, tol: float) -> \
-        Tuple[Union[np.ndarray, bool], Union[np.ndarray, int, float, complex]]:
+def isnew(
+    matrix_a: np.ndarray, matrix_b: np.ndarray, tol: float
+) -> Tuple[Union[np.ndarray, bool], Union[np.ndarray, int, float, complex]]:
     """
     Selects the new vectors from B within the first unit cell.
 
@@ -297,8 +330,14 @@ def isnew(matrix_a: np.ndarray, matrix_b: np.ndarray, tol: float) -> \
     if not matrix_a.shape[0] == matrix_b.shape[0]:
         raise AttributeError
 
-    aa = np.tile(matrix_a.reshape((*matrix_a.shape, 1)).transpose((1, 2, 0)), (1, matrix_b.shape[1], 1))
-    bb = np.tile(matrix_b.reshape((*matrix_b.shape, 1)).transpose((2, 1, 0)), (matrix_a.shape[1], 1, 1))
+    aa = np.tile(
+        matrix_a.reshape((*matrix_a.shape, 1)).transpose((1, 2, 0)),
+        (1, matrix_b.shape[1], 1),
+    )
+    bb = np.tile(
+        matrix_b.reshape((*matrix_b.shape, 1)).transpose((2, 1, 0)),
+        (matrix_a.shape[1], 1, 1),
+    )
     notequal = np.sum(np.abs(aa - bb) ** 2, axis=2) > tol
 
     is_new = np.all(notequal, axis=0)
@@ -341,7 +380,9 @@ def uniqueB(bond_matrix: np.ndarray) -> Union[np.ndarray, bool]:
     c2 = bond_matrix.reshape((*bond_matrix.shape, 1)).transpose((2, 1, 0))
     nc1 = np.vstack((-bond_matrix[0:3, :], bond_matrix[[4, 3], :])).reshape((5, -1, 1)).transpose((1, 2, 0))
 
-    unique_b = np.all(np.triu(np.any(np.not_equal(c1, c2), axis=2) &
-                              np.any(np.not_equal(nc1, c2), axis=2)) |
-                      np.tril(np.ones(n_c, dtype=bool)), axis=0)
+    unique_b = np.all(
+        np.triu(np.any(np.not_equal(c1, c2), axis=2) & np.any(np.not_equal(nc1, c2), axis=2))
+        | np.tril(np.ones(n_c, dtype=bool)),
+        axis=0,
+    )
     return unique_b
