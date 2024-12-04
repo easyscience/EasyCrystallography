@@ -1,4 +1,13 @@
-![EasyCrystallography Logo Light Mode]![EasyCrystallography Logo Dark Mode]
+<p align='left'>
+  <picture>
+    <!-- light mode logo -->
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_lightmode.svg">
+    <!-- dark mode logo -->
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_darkmode.svg">
+    <!-- default logo == light mode logo -->
+    <img src="https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_lightmode.svg" alt="EasyCrystallography">
+  </picture>
+</p>
 
 **EasyCrystallography** is a Python library used within the [EasyScience]
 framework to generate and manipulate crystal structures.
@@ -29,8 +38,6 @@ requests.
 <!-- prettier-ignore-start -->
 [BSD 3-Clause License]: https://github.com/EasyScience/EasyCrystallography/blob/master/LICENSE
 [Contributing Guidelines]: https://github.com/EasyScience/EasyCrystallography/blob/master/CONTRIBUTING.md
-[EasyCrystallography Logo Light Mode]: https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_lightmode.svg#gh-light-mode-only
-[EasyCrystallography Logo Dark Mode]: https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_darkmode.svg#gh-dark-mode-only
 [EasyScience]: https://easyscience.software
 [European Spallation Source (ESS)]: https://ess.eu
 [Documentation]: https://easyscience.github.io/EasyCrystallography
