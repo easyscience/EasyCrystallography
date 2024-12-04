@@ -1,4 +1,4 @@
-# Making diffraction data analysis easy
+# Crystallography in EasyScience
 
 ## About
 
