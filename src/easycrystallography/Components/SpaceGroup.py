@@ -19,6 +19,7 @@ from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.ObjectClasses import Descriptor
 
 from easycrystallography.Symmetry.SymOp import SymmOp
+from easycrystallography.Symmetry.functions import get_default_it_coordinate_system_code_by_it_number
 
 SG_DETAILS = {
     "space_group_HM_name": {
@@ -260,11 +261,11 @@ class SpaceGroup(BaseObj):
 
             settings = self.find_settings_by_number(sg_data.number)
             hm_name = sg_data.hm
-            reference = sg_data.ext  # THIS NEEDS TO BE SET TO CRYSPY DEFAULT
+            reference = get_default_it_coordinate_system_code_by_it_number(sg_data.number)
 
             if new_setting is None or new_setting == "" or new_setting == "\x00":
-                if reference != '\x00':
-                    #setting = reference
+                if reference is not None:
+                    setting = reference
                     pass # let the library take care of default setting
             else:
                 try:
@@ -281,7 +282,8 @@ class SpaceGroup(BaseObj):
                     if new_sg_data is None:
                         raise ValueError(f"Spacegroup \'{new_spacegroup}:{new_setting}\' not found in database.")
                     sg_data = new_sg_data
-                    setting = sg_data.ext
+                    #setting = sg_data.ext
+                    setting = get_default_it_coordinate_system_code_by_it_number(sg_data.number)
                 else:
                     setting = new_setting
                 if new_setting in settings:
