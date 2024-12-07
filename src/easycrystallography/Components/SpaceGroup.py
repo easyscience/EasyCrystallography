@@ -18,8 +18,8 @@ import numpy as np
 from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.ObjectClasses import Descriptor
 
-from easycrystallography.Symmetry.SymOp import SymmOp
 from easycrystallography.Symmetry.functions import get_default_it_coordinate_system_code_by_it_number
+from easycrystallography.Symmetry.SymOp import SymmOp
 
 SG_DETAILS = {
     "space_group_HM_name": {
