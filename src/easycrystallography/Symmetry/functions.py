@@ -12,63 +12,67 @@ ACCESIBLE_IT_NUMBER_TETRAGONAL_SYSTEM_DOUBLE_CHOICE = (85, 86, 88, 125, 126, 129
 ACCESIBLE_IT_NUMBER_TRIGONAL_SYSTEM_DOUBLE_AXES = (146, 148, 155, 160, 161, 166, 167)
 ACCESIBLE_IT_NUMBER_CUBIC_SYSTEM_DOUBLE_CHOICE = (201, 203, 222, 224, 227, 228)
 
-ACCESIBLE_IT_NUMBER = (ACCESIBLE_IT_NUMBER_TRICLINIC_SYSTEM +
-                       ACCESIBLE_IT_NUMBER_MONOCLINIC_SYSTEM +
-                       ACCESIBLE_IT_NUMBER_ORTHORHOMBIC_SYSTEM +
-                       ACCESIBLE_IT_NUMBER_TETRAGONAL_SYSTEM +
-                       ACCESIBLE_IT_NUMBER_TRIGONAL_SYSTEM +
-                       ACCESIBLE_IT_NUMBER_HEXAGONAL_SYSTEM +
-                       ACCESIBLE_IT_NUMBER_CUBIC_SYSTEM)
+ACCESIBLE_IT_NUMBER = (
+    ACCESIBLE_IT_NUMBER_TRICLINIC_SYSTEM
+    + ACCESIBLE_IT_NUMBER_MONOCLINIC_SYSTEM
+    + ACCESIBLE_IT_NUMBER_ORTHORHOMBIC_SYSTEM
+    + ACCESIBLE_IT_NUMBER_TETRAGONAL_SYSTEM
+    + ACCESIBLE_IT_NUMBER_TRIGONAL_SYSTEM
+    + ACCESIBLE_IT_NUMBER_HEXAGONAL_SYSTEM
+    + ACCESIBLE_IT_NUMBER_CUBIC_SYSTEM
+)
+
 
 def get_default_it_coordinate_system_code_by_it_number(it_number: int) -> str:
     crystal_system = get_crystal_system_by_it_number(it_number)
-    if crystal_system == "triclinic":
+    if crystal_system == 'triclinic':
         it_coordinate_system_code = None
-    elif crystal_system == "monoclinic":
-        it_coordinate_system_code = "b1"
-    elif crystal_system == "orthorhombic":
+    elif crystal_system == 'monoclinic':
+        it_coordinate_system_code = 'b1'
+    elif crystal_system == 'orthorhombic':
         if it_number in ACCESIBLE_IT_NUMBER_ORTHORHOMBIC_SYSTEM_DOUBLE_CHOICE:
-            it_coordinate_system_code = "2abc"
+            it_coordinate_system_code = '2abc'
         else:
-            it_coordinate_system_code = "abc"
-    elif crystal_system == "tetragonal":
+            it_coordinate_system_code = 'abc'
+    elif crystal_system == 'tetragonal':
         if it_number in ACCESIBLE_IT_NUMBER_TETRAGONAL_SYSTEM_DOUBLE_CHOICE:
-            it_coordinate_system_code = "2"
+            it_coordinate_system_code = '2'
         else:
-            it_coordinate_system_code = "1"
-    elif crystal_system == "trigonal":
+            it_coordinate_system_code = '1'
+    elif crystal_system == 'trigonal':
         if it_number in ACCESIBLE_IT_NUMBER_TRIGONAL_SYSTEM_DOUBLE_AXES:
-            it_coordinate_system_code = "h"
+            it_coordinate_system_code = 'h'
         else:
-            it_coordinate_system_code = "r"
-    elif crystal_system == "hexagonal":
-        it_coordinate_system_code = "h"
-    elif crystal_system == "cubic":
+            it_coordinate_system_code = 'r'
+    elif crystal_system == 'hexagonal':
+        it_coordinate_system_code = 'h'
+    elif crystal_system == 'cubic':
         if it_number in ACCESIBLE_IT_NUMBER_CUBIC_SYSTEM_DOUBLE_CHOICE:
-            it_coordinate_system_code = "2"
+            it_coordinate_system_code = '2'
         else:
-            it_coordinate_system_code = "1"
+            it_coordinate_system_code = '1'
     else:
         it_coordinate_system_code = None
     return it_coordinate_system_code
+
 
 def get_crystal_system_by_it_number(it_number: int) -> str:
     if it_number is None:
         return None
     if (it_number >= 1) & (it_number <= 2):
-        res = "triclinic"
+        res = 'triclinic'
     elif (it_number >= 3) & (it_number <= 15):
-        res = "monoclinic"
+        res = 'monoclinic'
     elif (it_number >= 16) & (it_number <= 74):
-        res = "orthorhombic"
+        res = 'orthorhombic'
     elif (it_number >= 75) & (it_number <= 142):
-        res = "tetragonal"
+        res = 'tetragonal'
     elif (it_number >= 143) & (it_number <= 167):
-        res = "trigonal"
+        res = 'trigonal'
     elif (it_number >= 168) & (it_number <= 194):
-        res = "hexagonal"
+        res = 'hexagonal'
     elif (it_number >= 195) & (it_number <= 230):
-        res = "cubic"
+        res = 'cubic'
     else:
         res = None
     return res
