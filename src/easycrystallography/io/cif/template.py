@@ -74,12 +74,12 @@ class CIF_Template:
         pass
 
     def variable_to_string(self, obj: V) -> str:
-        value = obj.raw_value
+        value = obj.value
         error = getattr(obj, 'error', None)
         if error is not None and np.isclose(error, 0.0):
             error = None
         decimal_places = self.decimal_places
-        if isinstance(obj.raw_value, Number):
+        if isinstance(obj.value, Number):
             if abs(value - int(value)) > 0.0:
                 decimal_places = len(str(value).split('.')[1])
             initial_str = '{:.' + str(decimal_places) + 'f}'

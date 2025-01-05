@@ -54,10 +54,10 @@ def test_SpaceGroup_fromDescriptor():
 
     d = Descriptor(*sg_items)
     sg = SpaceGroup(d)
-    assert sg.space_group_HM_name.raw_value == 'P 1'
+    assert sg.space_group_HM_name.value.m == 'P 1'
 
     with pytest.raises(ValueError):
-        p = Parameter('space_group_HM_name', 1)
+        p = Parameter('space_group_HM_name', 'P 1')
         sg = SpaceGroup(p)
 
 
@@ -72,7 +72,7 @@ def test_SpaceGroup_default():
         for item in SG_DETAILS[selector].keys():
             g_item = item
             if item == 'value':
-                g_item = 'raw_value'
+                g_item = 'value'
             assert getattr(f, g_item) == SG_DETAILS[selector][item]
 
     assert isinstance(sg.space_group_HM_name, Descriptor)
@@ -93,7 +93,7 @@ def test_SpaceGroup_fromPars_HM_Full(sg_in):
             g_item = item
             f_value = SG_DETAILS[selector][item]
             if item == 'value':
-                g_item = 'raw_value'
+                g_item = 'value'
                 f_value = sg_in.split(':')
             # don't check the setting
             if selector == 'setting' and item == 'value':
@@ -121,7 +121,7 @@ def test_SpaceGroup_fromPars_HM_noSpace(sg_in):
             g_item = item
             f_value = SG_DETAILS[selector][item]
             if item == 'value':
-                g_item = 'raw_value'
+                g_item = 'value'
                 f_value = sg_in['hermann_mauguin_fmt'].split(':')
             # don't check the setting
             if selector == 'setting' and item == 'value':
@@ -149,7 +149,7 @@ def test_SpaceGroup_fromPars_HM_noSpace(sg_in):
             g_item = item
             f_value = SG_DETAILS[selector][item]
             if item == 'value':
-                g_item = 'raw_value'
+                g_item = 'value'
                 f_value = sg_in['hermann_mauguin_fmt'].split(':')
             if f_value[0] in known_conversions.keys():
                 f_value[0] = known_conversions[f_value[0]]
@@ -171,7 +171,7 @@ def test_SpaceGroup_fromIntNumber(sg_int: int):
             g_item = item
             f_value = SG_DETAILS[selector][item]
             if item == 'value':
-                g_item = 'raw_value'
+                g_item = 'value'
                 for opt in SG.SYMM_OPS:
                     if opt['number'] == sg_int:
                         f_value = opt['hermann_mauguin_fmt'].split(':')
@@ -194,7 +194,7 @@ def test_SpaceGroup_fromIntNumber_HexTest(sg_int: int, setting: bool):
             g_item = item
             f_value = SG_DETAILS[selector][item]
             if item == 'value':
-                g_item = 'raw_value'
+                g_item = 'value'
                 for opt in SG.SYMM_OPS:
                     if opt['number'] == sg_int:
                         f_value: str = opt['hermann_mauguin_fmt']
@@ -253,7 +253,7 @@ def test_SpaceGroup_change_setting():
     assert sg_p.setting_str == '2abc'
     old_ops = sg_p.symmetry_ops
     sg_p.setting = '1bca'
-    assert sg_p.setting.raw_value == '1bca'
+    assert sg_p.setting.value.m == '1bca'
     assert np.all(sg_p.symmetry_ops == old_ops)
 
 # DISABLE UNTIL UNIQUE_NAME IS FIXED

@@ -53,7 +53,7 @@ if TYPE_CHECKING:
 
 
 _D_REDIRECT = deepcopy(Descriptor._REDIRECT)
-_D_REDIRECT['value'] = lambda obj: ';'.join([r.as_xyz_string() for r in obj.raw_value.tolist()])
+_D_REDIRECT['value'] = lambda obj: ';'.join([r.as_xyz_string() for r in obj.value.tolist()])
 
 
 class easyOp(Descriptor):
@@ -96,8 +96,8 @@ class SpaceGroup(BaseObj):
             self._setting = setting
 
         kwargs = {
-            'new_spacegroup': self._space_group_HM_name.raw_value,
-            'new_setting': self._setting.raw_value,
+            'new_spacegroup': self._space_group_HM_name.value.m,
+            'new_setting': self._setting.value.m,
             'operations_set': None,
             'set_internal': True,
         }
@@ -333,7 +333,7 @@ class SpaceGroup(BaseObj):
 
         :return: Space group setting
         """
-        setting_str = self._setting.raw_value
+        setting_str = self._setting.value.m
         if setting_str == '\x00':
             return None  # no setting
         return self._setting
@@ -345,7 +345,7 @@ class SpaceGroup(BaseObj):
 
         :param new_setting: Space group setting
         """
-        _, setting, _ = self.__on_change(self._space_group_HM_name.raw_value, new_setting, set_internal=True)
+        _, setting, _ = self.__on_change(self._space_group_HM_name.value.m, new_setting, set_internal=True)
 
     @property
     def it_coordinate_system_code(self) -> Optional[Descriptor]:
@@ -355,7 +355,7 @@ class SpaceGroup(BaseObj):
 
         :return: Space group setting
         """
-        setting_str = self._setting.raw_value
+        setting_str = self._setting.value.m
         if setting_str == '\x00':
             return None  # no setting
         return self._setting
@@ -368,7 +368,7 @@ class SpaceGroup(BaseObj):
 
         :param new_setting: Space group setting
         """
-        _, setting, _ = self.__on_change(self._space_group_HM_name.raw_value, new_setting, set_internal=True)
+        _, setting, _ = self.__on_change(self._space_group_HM_name.value.m, new_setting, set_internal=True)
 
     @property
     def setting_str(self) -> str:
@@ -379,7 +379,7 @@ class SpaceGroup(BaseObj):
         """
         if self.setting is None:
             return ''
-        return self._setting.raw_value
+        return self._setting.value.m
 
     @property
     def space_group_HM_name(self) -> Descriptor:
@@ -426,7 +426,7 @@ class SpaceGroup(BaseObj):
 
         :return: Space group name as a string
         """
-        return self._space_group_HM_name.raw_value
+        return self._space_group_HM_name.value.m
 
     @property
     def name_hall(self) -> str:
@@ -516,7 +516,7 @@ class SpaceGroup(BaseObj):
 
         :return: List of symmetry operations of the space group
         """
-        return self._symmetry_ops.raw_value
+        return self._symmetry_ops.value.m
 
     @symmetry_ops.setter
     def symmetry_ops(self, new_ops: List[SymmOp]) -> NoReturn:
@@ -526,7 +526,7 @@ class SpaceGroup(BaseObj):
         :param new_ops: List of new symmetry operations
         """
         self.__on_change(
-            self._space_group_HM_name.raw_value,
+            self._space_group_HM_name.value.m,
             operations_set=new_ops,
             set_internal=True,
         )
@@ -538,7 +538,7 @@ class SpaceGroup(BaseObj):
 
         :return: String of symmetry operations of the space group
         """
-        return ';'.join([op.as_xyz_string() for op in self._symmetry_ops.raw_value])
+        return ';'.join([op.as_xyz_string() for op in self._symmetry_ops.value])
 
     @property
     def is_reference_setting(self) -> bool:

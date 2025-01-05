@@ -13,9 +13,9 @@ from typing import Union
 
 import numpy as np
 from easyscience.Objects.Groups import BaseCollection
+from easyscience.Objects.new_variable import Parameter
 from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.ObjectClasses import Descriptor
-from easyscience.Objects.ObjectClasses import Parameter
 
 from easycrystallography.Components.Lattice import Lattice
 from easycrystallography.Components.Lattice import PeriodicLattice
@@ -239,7 +239,7 @@ class Phase(BaseObj):
         for site in self.atoms:
             unique_sites = self._generate_positions(site, extent)
             site_positions = unique_sites - self.center
-            sites[site.label.raw_value] = (
+            sites[site.label.value] = (
                 site_positions[
                     np.all(site_positions >= -self.atom_tolerance, axis=1)
                     & np.all(site_positions <= extent + self.atom_tolerance, axis=1),
