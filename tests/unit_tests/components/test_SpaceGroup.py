@@ -6,7 +6,10 @@ import pytest
 import itertools
 import numpy as np
 
-from easyscience.Objects.ObjectClasses import Descriptor, Parameter
+# from easyscience.Objects.ObjectClasses import Parameter
+from easyscience.Objects.new_variable import Parameter
+from easyscience.Objects.new_variable import DescriptorStr as Descriptor
+# from easyscience.Objects.ObjectClasses import Descriptor as old_Descriptor
 from easyscience import global_object
 from easycrystallography.Components.SpaceGroup import SpaceGroup, SG_DETAILS as _SG_DETAILS
 from easycrystallography.Symmetry.groups import SpaceGroup as SG
@@ -54,9 +57,9 @@ def test_SpaceGroup_fromDescriptor():
 
     d = Descriptor(*sg_items)
     sg = SpaceGroup(d)
-    assert sg.space_group_HM_name.value.m == 'P 1'
+    assert sg.space_group_HM_name.value == 'P 1'
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         p = Parameter('space_group_HM_name', 'P 1')
         sg = SpaceGroup(p)
 
@@ -224,8 +227,6 @@ def test_SpaceGroup_as_dict():
     assert sg_p_dict == {
                                    'symmetry_ops':        None,
                                    'setting':             {
-                                       'units':        'dimensionless',
-                                       'enabled':      True,
                                        'name':         'coordinate-code',
                                        'display_name': 'coordinate-code',
                                        'url': 'https://docs.easydiffraction.org/lib/dictionaries/_space_group/',
@@ -236,8 +237,6 @@ def test_SpaceGroup_as_dict():
                                    },
                                    'interface':           None,
                                    'space_group_HM_name': {
-                                       'units':        'dimensionless',
-                                       'enabled':      True,
                                        'name':         'hermann_mauguin',
                                        'display_name': 'hermann_mauguin',
                                        'url':          'https://docs.easydiffraction.org/lib/dictionaries/_space_group/',
@@ -253,7 +252,7 @@ def test_SpaceGroup_change_setting():
     assert sg_p.setting_str == '2abc'
     old_ops = sg_p.symmetry_ops
     sg_p.setting = '1bca'
-    assert sg_p.setting.value.m == '1bca'
+    assert sg_p.setting.value == '1bca'
     assert np.all(sg_p.symmetry_ops == old_ops)
 
 # DISABLE UNTIL UNIQUE_NAME IS FIXED

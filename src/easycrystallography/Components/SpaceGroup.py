@@ -15,8 +15,9 @@ from typing import Union
 
 import gemmi
 import numpy as np
+from easyscience.Objects.new_variable import DescriptorStr as Descriptor
 from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.ObjectClasses import Descriptor
+from easyscience.Objects.ObjectClasses import Descriptor as old_Descriptor
 
 from easycrystallography.Symmetry.functions import get_default_it_coordinate_system_code_by_it_number
 from easycrystallography.Symmetry.SymOp import SymmOp
@@ -56,14 +57,14 @@ _D_REDIRECT = deepcopy(Descriptor._REDIRECT)
 _D_REDIRECT['value'] = lambda obj: ';'.join([r.as_xyz_string() for r in obj.value.tolist()])
 
 
-class easyOp(Descriptor):
+class easyOp(old_Descriptor):
     _REDIRECT = _D_REDIRECT
 
 
 class SpaceGroup(BaseObj):
     _space_group_HM_name: ClassVar[Descriptor]
     _setting: ClassVar[Descriptor]
-    _symmetry_ops: ClassVar[Descriptor]
+    _symmetry_ops: ClassVar[old_Descriptor]
 
     _REDIRECT = {'symmetry_ops': lambda obj: None if obj._sg_data is not None else obj._symmetry_ops}
 
@@ -96,8 +97,8 @@ class SpaceGroup(BaseObj):
             self._setting = setting
 
         kwargs = {
-            'new_spacegroup': self._space_group_HM_name.value.m,
-            'new_setting': self._setting.value.m,
+            'new_spacegroup': self._space_group_HM_name.value,
+            'new_setting': self._setting.value,
             'operations_set': None,
             'set_internal': True,
         }
@@ -333,7 +334,7 @@ class SpaceGroup(BaseObj):
 
         :return: Space group setting
         """
-        setting_str = self._setting.value.m
+        setting_str = self._setting.value
         if setting_str == '\x00':
             return None  # no setting
         return self._setting
@@ -345,7 +346,7 @@ class SpaceGroup(BaseObj):
 
         :param new_setting: Space group setting
         """
-        _, setting, _ = self.__on_change(self._space_group_HM_name.value.m, new_setting, set_internal=True)
+        _, setting, _ = self.__on_change(self._space_group_HM_name.value, new_setting, set_internal=True)
 
     @property
     def it_coordinate_system_code(self) -> Optional[Descriptor]:
@@ -355,7 +356,7 @@ class SpaceGroup(BaseObj):
 
         :return: Space group setting
         """
-        setting_str = self._setting.value.m
+        setting_str = self._setting.value
         if setting_str == '\x00':
             return None  # no setting
         return self._setting
@@ -368,7 +369,7 @@ class SpaceGroup(BaseObj):
 
         :param new_setting: Space group setting
         """
-        _, setting, _ = self.__on_change(self._space_group_HM_name.value.m, new_setting, set_internal=True)
+        _, setting, _ = self.__on_change(self._space_group_HM_name.value, new_setting, set_internal=True)
 
     @property
     def setting_str(self) -> str:
@@ -379,7 +380,7 @@ class SpaceGroup(BaseObj):
         """
         if self.setting is None:
             return ''
-        return self._setting.value.m
+        return self._setting.value
 
     @property
     def space_group_HM_name(self) -> Descriptor:
@@ -426,7 +427,7 @@ class SpaceGroup(BaseObj):
 
         :return: Space group name as a string
         """
-        return self._space_group_HM_name.value.m
+        return self._space_group_HM_name.value
 
     @property
     def name_hall(self) -> str:
@@ -526,7 +527,7 @@ class SpaceGroup(BaseObj):
         :param new_ops: List of new symmetry operations
         """
         self.__on_change(
-            self._space_group_HM_name.value.m,
+            self._space_group_HM_name.value,
             operations_set=new_ops,
             set_internal=True,
         )

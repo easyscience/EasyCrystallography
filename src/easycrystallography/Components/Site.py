@@ -14,11 +14,9 @@ from typing import Union
 
 import numpy as np
 from easyscience.Objects.Groups import BaseCollection
-
-# from easyscience.Objects.Variable import Parameter
+from easyscience.Objects.new_variable import DescriptorStr as Descriptor
 from easyscience.Objects.new_variable import Parameter
 from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.Variable import Descriptor
 
 from .AtomicDisplacement import AtomicDisplacement
 from .Lattice import PeriodicLattice
@@ -140,8 +138,7 @@ class Site(BaseObj):
 
     def __repr__(self) -> str:
         return (
-            f'Atom {self.name.m} ({self.specie.raw_value}) @'
-            f' ({self.fract_x.value}, {self.fract_y.value}, {self.fract_z.value})'
+            f'Atom {self.name} ({self.specie.value}) @' f' ({self.fract_x.value}, {self.fract_y.value}, {self.fract_z.value})'
         )
 
     @property
