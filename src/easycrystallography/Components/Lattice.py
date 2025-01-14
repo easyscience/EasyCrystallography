@@ -815,7 +815,8 @@ class PeriodicLattice(Lattice):
         ]
         for par in pars:
             new_con = {con: par.user_constraints[con] for con in par.user_constraints.keys() if not con.startswith('sg_')}
-            par.user_constraints = new_con
+            if new_con:
+                par.user_constraints = new_con
             if not par.enabled:
                 par.enabled = True
 

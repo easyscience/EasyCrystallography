@@ -94,6 +94,12 @@ class SpaceGroup(BaseObj):
         if space_group_HM_name:
             self._space_group_HM_name = space_group_HM_name
         if setting is not None:
+            if isinstance(setting, int):
+                setting = str(setting)
+            elif isinstance(setting, str):
+                setting = setting.strip()
+            elif isinstance(setting, float):
+                setting = str(int(setting))
             self._setting = setting
 
         kwargs = {
