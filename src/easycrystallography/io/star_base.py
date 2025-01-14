@@ -254,7 +254,7 @@ class StarProcess:
                     this_data[k].append(v.strip())
                 loops.append(this_data)
             elif ''.join(s).strip() != '':
-                warnings.warn('Possible issue in cif file' ' at line: {}'.format(''.join(s).strip()))
+                warnings.warn('Possible issue in cif file at line: {}'.format(''.join(s).strip()))
         return data, loops
 
 

@@ -109,9 +109,9 @@ class Specie(Descriptor):
         self._props = props
         for k, v in props.items():
             addProp(self, k, fget=self.__getter_periodic(k))
-        rep = f"{self._raw_data['element']}"
+        rep = f'{self._raw_data["element"]}'
         if self.is_ion:
-            rep += f"{abs(self._raw_data['oxi_state'])}"
+            rep += f'{abs(self._raw_data["oxi_state"])}'
             if self._raw_data['oxi_state'] > 0:
                 rep += '+'
             else:
@@ -121,26 +121,26 @@ class Specie(Descriptor):
     def __repr__(self) -> str:
         rep = f"<{self.__class__.__name__} '{self.name}': "
         if self.is_isotope:
-            rep += f"{self._raw_data['isotope']}"
-        rep += f"{self._raw_data['element']}"
+            rep += f'{self._raw_data["isotope"]}'
+        rep += f'{self._raw_data["element"]}'
         if self.is_ion:
             if self._raw_data['oxi_state'] > 0:
-                rep += f"{self._raw_data['oxi_state']}+"
+                rep += f'{self._raw_data["oxi_state"]}+'
             else:
-                rep += f"{self._raw_data['oxi_state']}-"
+                rep += f'{self._raw_data["oxi_state"]}-'
         rep += '>'
         return rep
 
     def __str__(self) -> str:
         rep = ''
         if self.is_isotope:
-            rep += f"{self._raw_data['isotope']}"
-        rep += f"{self._raw_data['element']}"
+            rep += f'{self._raw_data["isotope"]}'
+        rep += f'{self._raw_data["element"]}'
         if self.is_ion:
             if self._raw_data['oxi_state'] > 0:
-                rep += f"{self._raw_data['oxi_state']}+"
+                rep += f'{self._raw_data["oxi_state"]}+'
             else:
-                rep += f"{str(self._raw_data['oxi_state'])[1:]}-"
+                rep += f'{str(self._raw_data["oxi_state"])[1:]}-'
         return rep
 
     @staticmethod

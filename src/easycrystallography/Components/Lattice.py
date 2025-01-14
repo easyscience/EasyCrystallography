@@ -616,9 +616,7 @@ class Lattice(BaseObj):
     # noinspection PyStringFormat
     def __repr__(self) -> str:
         return (
-            '<Lattice: (a: {:.2f} {}, b: {:.2f} {}, c: {:.2f} {}, alpha: {:.2f} {}, beta: {:.2f} {}, '
-            ''
-            'gamma: {:.2f} {}>'.format(
+            '<Lattice: (a: {:.2f} {}, b: {:.2f} {}, c: {:.2f} {}, alpha: {:.2f} {}, beta: {:.2f} {}, gamma: {:.2f} {}>'.format(
                 self.length_a.value,
                 self.length_a.unit,
                 self.length_b.value,

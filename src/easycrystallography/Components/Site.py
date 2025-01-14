@@ -137,9 +137,7 @@ class Site(BaseObj):
         self.interface = interface
 
     def __repr__(self) -> str:
-        return (
-            f'Atom {self.name} ({self.specie.value}) @' f' ({self.fract_x.value}, {self.fract_y.value}, {self.fract_z.value})'
-        )
+        return f'Atom {self.name} ({self.specie.value}) @ ({self.fract_x.value}, {self.fract_y.value}, {self.fract_z.value})'
 
     @property
     def name(self) -> str:
