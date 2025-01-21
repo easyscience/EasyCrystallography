@@ -393,7 +393,7 @@ class SpaceGroup(BaseObj):
         """
         Space group name as defined by a Hermann-Mauguin symbol
 
-        :return: Space group name as easyCore DescriptorStr
+        :return: Space group name as EasyScience DescriptorStr
         """
         return self._space_group_HM_name
 
@@ -412,7 +412,7 @@ class SpaceGroup(BaseObj):
         Space group name as defined by a Hermann-Mauguin symbol
         Equivalent to space_group_HM_name, defined to satisfy CIF Template
 
-        :return: Space group name as easyCore DescriptorStr
+        :return: Space group name as EasyScience DescriptorStr
         """
         return self._space_group_HM_name
 
