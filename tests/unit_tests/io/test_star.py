@@ -8,7 +8,7 @@ from easyscience import global_object
 from easyscience.models.polynomial import Line
 from easyscience.Objects.Groups import BaseCollection
 from easyscience.Objects.Variable import Descriptor
-from easyscience.Objects.new_variable import Parameter
+from easyscience.Objects.variable import Parameter
 from easycrystallography.Components.Site import Atoms, Site, _SITE_DETAILS
 from easycrystallography.io.star_base import ItemHolder
 from easycrystallography.io.star_base import StarLoop

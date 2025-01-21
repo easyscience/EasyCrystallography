@@ -212,7 +212,7 @@ def test_Site_as_dict(label, elm):
         "@class": "Site",
         "unique_name": None,
         "label": {
-            "@module": "easyscience.Objects.new_variable.descriptor_str",
+            "@module": "easyscience.Objects.variable.descriptor_str",
             "@class": "DescriptorStr",
             "@version": easyscience.__version__,
             "unique_name": None,
@@ -237,7 +237,7 @@ def test_Site_as_dict(label, elm):
         #      'unit':    'dimensionless',
         #  },
         "occupancy": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "unique_name": None,
@@ -253,7 +253,7 @@ def test_Site_as_dict(label, elm):
             "enabled": True,
         },
         "fract_x": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "unique_name": None,
@@ -269,7 +269,7 @@ def test_Site_as_dict(label, elm):
             "enabled": True,
         },
         "fract_y": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "unique_name": None,
@@ -285,7 +285,7 @@ def test_Site_as_dict(label, elm):
             "enabled": True,
         },
         "fract_z": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "unique_name": None,
@@ -323,7 +323,7 @@ def test_Site_from_dict(label, elm):
         "@class": "Site",
         "unique_name": None,
         "label": {
-            "@module": "easyscience.Objects.new_variable.descriptor_str",
+            "@module": "easyscience.Objects.variable.descriptor_str",
             "@class": "DescriptorStr",
             "@version": easyscience.__version__,
             "unique_name": None,
@@ -343,7 +343,7 @@ def test_Site_from_dict(label, elm):
             "units": "dimensionless",
         },
         "occupancy": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "unique_name": None,
@@ -359,7 +359,7 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "fract_x": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "unique_name": None,
@@ -375,7 +375,7 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "fract_y": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "unique_name": None,
@@ -391,7 +391,7 @@ def test_Site_from_dict(label, elm):
             "enabled": True,
         },
         "fract_z": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "unique_name": None,

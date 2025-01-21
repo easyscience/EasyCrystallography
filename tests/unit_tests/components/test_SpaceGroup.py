@@ -7,8 +7,8 @@ import itertools
 import numpy as np
 
 # from easyscience.Objects.ObjectClasses import Parameter
-from easyscience.Objects.new_variable import Parameter
-from easyscience.Objects.new_variable import DescriptorStr as Descriptor
+from easyscience.Objects.variable import Parameter
+from easyscience.Objects.variable import DescriptorStr as Descriptor
 # from easyscience.Objects.ObjectClasses import Descriptor as old_Descriptor
 from easyscience import global_object
 from easycrystallography.Components.SpaceGroup import SpaceGroup, SG_DETAILS as _SG_DETAILS

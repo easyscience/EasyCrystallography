@@ -24,7 +24,7 @@ from typing import Union
 import numpy as np
 from easyscience import ureg
 from easyscience.Constraints import ObjConstraint
-from easyscience.Objects.new_variable import Parameter
+from easyscience.Objects.variable import Parameter
 from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Utils.decorators import memoized
 

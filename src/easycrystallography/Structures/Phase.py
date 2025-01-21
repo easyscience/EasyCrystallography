@@ -13,8 +13,8 @@ from typing import Union
 
 import numpy as np
 from easyscience.Objects.Groups import BaseCollection
-from easyscience.Objects.new_variable import DescriptorStr as Descriptor
-from easyscience.Objects.new_variable import Parameter
+from easyscience.Objects.variable import DescriptorStr as Descriptor
+from easyscience.Objects.variable import Parameter
 from easyscience.Objects.ObjectClasses import BaseObj
 
 from easycrystallography.Components.Lattice import Lattice

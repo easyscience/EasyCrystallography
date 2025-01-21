@@ -15,7 +15,7 @@ from typing import Union
 
 import gemmi
 import numpy as np
-from easyscience.Objects.new_variable import DescriptorStr as Descriptor
+from easyscience.Objects.variable import DescriptorStr as Descriptor
 from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.ObjectClasses import Descriptor as old_Descriptor
 

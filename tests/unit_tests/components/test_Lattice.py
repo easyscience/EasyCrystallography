@@ -512,7 +512,7 @@ def make_dict(value) -> dict:
         "@module": "easycrystallography.Components.Lattice",
         "@class": "Lattice",
         "length_a": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "length_a",
@@ -528,7 +528,7 @@ def make_dict(value) -> dict:
             "enabled": True,
         },
         "length_b": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "length_b",
@@ -544,7 +544,7 @@ def make_dict(value) -> dict:
             "enabled": True,
         },
         "length_c": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "length_c",
@@ -560,7 +560,7 @@ def make_dict(value) -> dict:
             "enabled": True,
         },
         "angle_alpha": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "angle_alpha",
@@ -576,7 +576,7 @@ def make_dict(value) -> dict:
             "enabled": True,
         },
         "angle_beta": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "angle_beta",
@@ -592,7 +592,7 @@ def make_dict(value) -> dict:
             "enabled": True,
         },
         "angle_gamma": {
-            "@module": "easyscience.Objects.new_variable.parameter",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "angle_gamma",
