@@ -15,7 +15,7 @@ from typing import Union
 
 import gemmi
 import numpy as np
-from easyscience.Objects.variable import DescriptorStr as Descriptor
+from easyscience.Objects.variable import DescriptorStr
 from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.ObjectClasses import Descriptor as old_Descriptor
 
@@ -53,7 +53,7 @@ if TYPE_CHECKING:
     T = Union[S, npt.ArrayLike]
 
 
-_D_REDIRECT = deepcopy(Descriptor._REDIRECT)
+_D_REDIRECT = deepcopy(DescriptorStr._REDIRECT)
 _D_REDIRECT['value'] = lambda obj: ';'.join([r.as_xyz_string() for r in obj.value.tolist()])
 
 
@@ -62,16 +62,16 @@ class easyOp(old_Descriptor):
 
 
 class SpaceGroup(BaseObj):
-    _space_group_HM_name: ClassVar[Descriptor]
-    _setting: ClassVar[Descriptor]
+    _space_group_HM_name: ClassVar[DescriptorStr]
+    _setting: ClassVar[DescriptorStr]
     _symmetry_ops: ClassVar[old_Descriptor]
 
     _REDIRECT = {'symmetry_ops': lambda obj: None if obj._sg_data is not None else obj._symmetry_ops}
 
     def __init__(
         self,
-        space_group_HM_name: Optional[Descriptor, str] = None,
-        setting: Optional[Descriptor, str] = None,
+        space_group_HM_name: Optional[DescriptorStr, str] = None,
+        setting: Optional[DescriptorStr, str] = None,
         symmetry_ops: Optional[List[SymmOp]] = None,
         interface: Optional[iF] = None,
     ):
@@ -86,8 +86,8 @@ class SpaceGroup(BaseObj):
 
         super(SpaceGroup, self).__init__(
             'space_group',
-            _space_group_HM_name=Descriptor(**SG_DETAILS['space_group_HM_name']),
-            _setting=Descriptor(**SG_DETAILS['setting']),
+            _space_group_HM_name=DescriptorStr(**SG_DETAILS['space_group_HM_name']),
+            _setting=DescriptorStr(**SG_DETAILS['setting']),
             _symmetry_ops=easyOp(**SG_DETAILS['symmetry_ops']),
         )
 
@@ -334,7 +334,7 @@ class SpaceGroup(BaseObj):
         return self._sg_data is None
 
     @property
-    def setting(self) -> Optional[Descriptor]:
+    def setting(self) -> Optional[DescriptorStr]:
         """
         Space group setting. If the space group does not have a setting, this will be None.
 
@@ -355,7 +355,7 @@ class SpaceGroup(BaseObj):
         _, setting, _ = self.__on_change(self._space_group_HM_name.value, new_setting, set_internal=True)
 
     @property
-    def it_coordinate_system_code(self) -> Optional[Descriptor]:
+    def it_coordinate_system_code(self) -> Optional[DescriptorStr]:
         """
         Space group setting. If the space group does not have a setting, this will be None.
         Equivalent to setting, defined to satisfy CIF Template
@@ -389,11 +389,11 @@ class SpaceGroup(BaseObj):
         return self._setting.value
 
     @property
-    def space_group_HM_name(self) -> Descriptor:
+    def space_group_HM_name(self) -> DescriptorStr:
         """
         Space group name as defined by a Hermann-Mauguin symbol
 
-        :return: Space group name as easyCore Descriptor
+        :return: Space group name as easyCore DescriptorStr
         """
         return self._space_group_HM_name
 
@@ -407,12 +407,12 @@ class SpaceGroup(BaseObj):
         self.__on_change(value, set_internal=True)
 
     @property
-    def name_hm_alt(self) -> Descriptor:
+    def name_hm_alt(self) -> DescriptorStr:
         """
         Space group name as defined by a Hermann-Mauguin symbol
         Equivalent to space_group_HM_name, defined to satisfy CIF Template
 
-        :return: Space group name as easyCore Descriptor
+        :return: Space group name as easyCore DescriptorStr
         """
         return self._space_group_HM_name
 
