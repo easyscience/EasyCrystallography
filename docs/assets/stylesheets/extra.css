@@ -216,7 +216,9 @@ label.md-nav__title[for='__drawer'] {
 /* Ensure all horizontal lines in the navigation list are removed or hidden */
 .md-nav__item {
   border: none !important; /* Removes any border starting from the second level */
-  background-color: var(--md-default-bg-color); /* Modifies the background color to hide the first horizontal line */
+  background-color: var(
+    --md-default-bg-color
+  ); /* Modifies the background color to hide the first horizontal line */
 }
 
 /* Increase TOC (on the right) width */
