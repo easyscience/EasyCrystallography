@@ -1,11 +1,11 @@
 <p align='left'>
   <picture>
     <!-- light mode logo -->
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_lightmode.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/EasyScience/BrandingResources/refs/heads/master/EasyCrystallography/logos/ecr-logo_light.svg">
     <!-- dark mode logo -->
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_darkmode.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/EasyScience/BrandingResources/refs/heads/master/EasyCrystallography/logos/ecr-logo_dark.svg">
     <!-- default logo == light mode logo -->
-    <img src="https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_lightmode.svg" alt="EasyCrystallography">
+    <img src="https://raw.githubusercontent.com/EasyScience/BrandingResources/refs/heads/master/EasyCrystallography/logos/ecr-logo_light.svg" alt="EasyCrystallography">
   </picture>
 </p>
 
