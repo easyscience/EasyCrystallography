@@ -128,7 +128,6 @@ nav:
   - Getting started: getting-started.md
   - Modules:
       - components: modules/components.md
-      - databases: modules/databases.md
       - elements: modules/elements.md
       - io: modules/io.md
       - structures: modules/structures.md
