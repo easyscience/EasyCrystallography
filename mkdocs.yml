@@ -51,8 +51,8 @@ theme:
     edit: material/file-edit-outline
   favicon: assets/favicon.ico
   #logo: assets/easycrystallography.svg
-  logo_dark_mode: https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_darkmode.svg
-  logo_light_mode: https://raw.githubusercontent.com/EasyScience/EasyCrystallography/master/resources/logo/EasyCrystallography-logo_lightmode.svg
+  logo_dark_mode: https://raw.githubusercontent.com/EasyScience/BrandingResources/refs/heads/master/EasyCrystallography/logos/ecr-logo_dark.svg
+  logo_light_mode: https://raw.githubusercontent.com/EasyScience/BrandingResources/refs/heads/master/EasyCrystallography/logos/ecr-logo_light.svg
 
 # A set of key-value pairs, where the values can be any valid YAML construct, that will be passed to the template
 extra:
