@@ -161,7 +161,7 @@ def generate_bonds(
                 # Remove identical couplings from the symmetry generated list
                 gen_c = gen_c[:, un_c]
                 if np.sum(~i_new) != np.sum(un_c):
-                    raise ArithmeticError(f'Symmetry error! ii={ii}, idx={idx}. Try to change ' 'tol' ' parameter.')
+                    raise ArithmeticError(f'Symmetry error! ii={ii}, idx={idx}. Try to change tol parameter.')
                 n_mat.append(np.vstack((gen_c, np.ones((1, gen_c.shape[1])) * idx)))
                 idx += 1
             ii += 1
