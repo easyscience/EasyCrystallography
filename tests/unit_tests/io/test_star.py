@@ -80,7 +80,7 @@ def test_ItemHolder_str(cls):
 def test_StarSection():
     l = Line(2, 3)
     s = StarSection(l)
-    expected = "_m   2.0+/-0()\n_c   3.0+/-0()\n"
+    expected = "_m   2.00000000()\n_c   3.00000000()\n"
     assert str(s) == expected
 
 
@@ -93,7 +93,7 @@ def test_StarLoop():
     s = StarLoop(ps)
 
     expected = (
-        "loop_\n _m\n _c\n  2.0+/-0()  3.0+/-0()\n  4.0+/-0()  5.0+/-0()"
+        "loop_\n _m\n _c\n  2.00000000()  3.00000000()\n  4.00000000()  5.00000000()"
     )
 
     assert str(s) == expected
