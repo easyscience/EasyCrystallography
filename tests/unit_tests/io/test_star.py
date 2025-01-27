@@ -7,7 +7,7 @@ import pytest
 from easyscience import global_object
 from easyscience.models.polynomial import Line
 from easyscience.Objects.Groups import BaseCollection
-from easyscience.Objects.Variable import Descriptor
+from easyscience.Objects.variable import DescriptorStr
 from easyscience.Objects.variable import Parameter
 from easycrystallography.Components.Site import Atoms, Site, _SITE_DETAILS
 from easycrystallography.io.star_base import ItemHolder
@@ -70,7 +70,7 @@ def test_ItemHolder_fixed(fixed, value, precision, expected):
     assert str(s) == expected
 
 
-@pytest.mark.parametrize("cls", [Descriptor])
+@pytest.mark.parametrize("cls", [DescriptorStr])
 def test_ItemHolder_str(cls):
     v = cls("v", "fooooooooo")
     s = ItemHolder(v)

@@ -146,7 +146,7 @@ def generate_bonds(
     if not force_no_sym:
         n_mat = []
         if max_sym is None:
-            max_sym = np.inf
+            max_sym = np.Inf
         max_idx_sym = max(c_idx[c_idx <= max_sym])
         ii = 0
         idx = 0

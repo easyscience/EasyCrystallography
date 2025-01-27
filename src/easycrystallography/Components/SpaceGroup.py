@@ -15,9 +15,11 @@ from typing import Union
 
 import gemmi
 import numpy as np
-from easyscience.Objects.variable import DescriptorStr
 from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.ObjectClasses import Descriptor as old_Descriptor
+from easyscience.Objects.variable import DescriptorStr
+
+# from easyscience.Objects.ObjectClasses import Descriptor as old_Descriptor
+from easyscience.Objects.variable.descriptor_array import DescriptorArray as DescriptorArray
 
 from easycrystallography.Symmetry.functions import get_default_it_coordinate_system_code_by_it_number
 from easycrystallography.Symmetry.SymOp import SymmOp
@@ -57,14 +59,14 @@ _D_REDIRECT = deepcopy(DescriptorStr._REDIRECT)
 _D_REDIRECT['value'] = lambda obj: ';'.join([r.as_xyz_string() for r in obj.value.tolist()])
 
 
-class easyOp(old_Descriptor):
+class easyOp(DescriptorArray):
     _REDIRECT = _D_REDIRECT
 
 
 class SpaceGroup(BaseObj):
     _space_group_HM_name: ClassVar[DescriptorStr]
     _setting: ClassVar[DescriptorStr]
-    _symmetry_ops: ClassVar[old_Descriptor]
+    _symmetry_ops: ClassVar[DescriptorArray]
 
     _REDIRECT = {'symmetry_ops': lambda obj: None if obj._sg_data is not None else obj._symmetry_ops}
 
