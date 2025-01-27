@@ -39,7 +39,7 @@ _ANIO_DETAILS = {
         'parameter, C(equiv), in inverted teslas, calculated from anisotropic susceptibility '
         'components.',
         'value': 0.0,
-        'max': np.Inf,
+        'max': np.inf,
         'unit': 'T^-1',
         'fixed': True,
     },

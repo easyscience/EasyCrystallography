@@ -43,7 +43,7 @@ CELL_DETAILS = {
         'value': 3,
         'unit': 'angstrom',
         'min': 0,
-        'max': np.Inf,
+        'max': np.inf,
         'fixed': True,
     },
     'angle': {
@@ -52,7 +52,7 @@ CELL_DETAILS = {
         'value': 90,
         'unit': 'deg',
         'min': 0,
-        'max': np.Inf,
+        'max': np.inf,
         'fixed': True,
     },
 }
