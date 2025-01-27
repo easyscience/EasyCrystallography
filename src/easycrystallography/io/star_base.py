@@ -74,9 +74,9 @@ class ItemHolder:
                     un_int * 10 ** max(0, un_exp),
                 )
         elif isinstance(self.value, str):
-            s = '{:s}'.format(self.value.m)
+            s = '{:s}'.format(self.value)
         else:
-            s = '{:s}'.format(str(self.value.m))
+            s = '{:s}'.format(str(self.value))
         # THIS IS THE OLD CODE, KEPT FOR REFERENCE
         # s = "{}"
         # if isinstance(self.value, str):

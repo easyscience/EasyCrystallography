@@ -17,9 +17,8 @@ import gemmi
 import numpy as np
 from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.variable import DescriptorStr
-
-# from easyscience.Objects.ObjectClasses import Descriptor as old_Descriptor
-from easyscience.Objects.variable.descriptor_array import DescriptorArray as DescriptorArray
+# from easyscience.Objects.variable.descriptor_array import DescriptorArray as DescriptorArray
+from easyscience.Objects.variable.descriptor_container import DescriptorContainer
 
 from easycrystallography.Symmetry.functions import get_default_it_coordinate_system_code_by_it_number
 from easycrystallography.Symmetry.SymOp import SymmOp
@@ -59,14 +58,14 @@ _D_REDIRECT = deepcopy(DescriptorStr._REDIRECT)
 _D_REDIRECT['value'] = lambda obj: ';'.join([r.as_xyz_string() for r in obj.value.tolist()])
 
 
-class easyOp(DescriptorArray):
+class easyOp(DescriptorContainer):
     _REDIRECT = _D_REDIRECT
 
 
 class SpaceGroup(BaseObj):
     _space_group_HM_name: ClassVar[DescriptorStr]
     _setting: ClassVar[DescriptorStr]
-    _symmetry_ops: ClassVar[DescriptorArray]
+    _symmetry_ops: ClassVar[DescriptorContainer]
 
     _REDIRECT = {'symmetry_ops': lambda obj: None if obj._sg_data is not None else obj._symmetry_ops}
 
@@ -525,7 +524,7 @@ class SpaceGroup(BaseObj):
 
         :return: List of symmetry operations of the space group
         """
-        return self._symmetry_ops.value.m
+        return self._symmetry_ops.value
 
     @symmetry_ops.setter
     def symmetry_ops(self, new_ops: List[SymmOp]) -> NoReturn:
