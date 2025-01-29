@@ -12,9 +12,9 @@ from typing import TypeVar
 from typing import Union
 
 import numpy as np
+from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.variable import DescriptorStr as Descriptor
 from easyscience.Objects.variable import Parameter
-from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Utils.classTools import addProp
 from easyscience.Utils.classTools import removeProp
 

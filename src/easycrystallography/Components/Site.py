@@ -14,9 +14,9 @@ from typing import Union
 
 import numpy as np
 from easyscience.Objects.Groups import BaseCollection
+from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.variable import DescriptorStr as Descriptor
 from easyscience.Objects.variable import Parameter
-from easyscience.Objects.ObjectClasses import BaseObj
 
 from .AtomicDisplacement import AtomicDisplacement
 from .Lattice import PeriodicLattice
