@@ -24,7 +24,7 @@ classifiers = [
 requires-python = '>=3.9,<3.13'
 dependencies = [
   'asteval',                                                                     # For evaluating mathematical expressions
-  'easyscience @ git+https://github.com/EasyScience/EasyScience.git@DescriptorArray', # The base library of the EasyScience framework
+  'easyscience @ git+https://github.com/EasyScience/EasyScience.git@DescriptorAnyType', # The base library of the EasyScience framework
   'gemmi',                                                                       # For handling CIF files
   'numpy',                                                                   # For numerical calculations
   'periodictable',                                                               # For atomic properties
