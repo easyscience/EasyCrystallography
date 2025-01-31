@@ -28,7 +28,6 @@ dependencies = [
   'gemmi',                                                                              # For handling CIF files
   'numpy',                                                                              # For numerical calculations
   'periodictable',                                                                      # For atomic properties
-  'pint',                                                                               # For units
   'uncertainties',                                                                      # For error propagation
   'versioningit',                                                                       # For versioning
   'xarray',                                                                             # For handling data arrays
