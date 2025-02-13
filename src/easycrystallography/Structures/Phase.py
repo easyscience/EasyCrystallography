@@ -151,6 +151,12 @@ class Phase(BaseObj):
     def space_group(self):
         return self._spacegroup
 
+    @space_group.setter
+    def space_group(self, value: Union[SpaceGroup, str]):
+        if isinstance(value, str):
+            value = SpaceGroup(value)
+        self._spacegroup = value
+
     def set_spacegroup(self, value):
         if self._enforce_sym:
             self.cell.space_group_HM_name = value
