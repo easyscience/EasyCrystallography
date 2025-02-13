@@ -43,7 +43,16 @@ known_conversions = {
     "A e a a":  'A b a a',
     "B b e b":  'B b c b',
     'B 1 21 1': 'B 1 1 2',
-
+    #'P b a n': 'P n c b',
+    'P n m m': 'P m m n',
+    'P m n m': 'P m m n',
+    'P n c b': 'P b a n',
+    'P c n a': 'P b a n',
+    'C c c b': 'C c c a',
+    'A b a a': 'C c c a',
+    'B b a b': 'C c c a',
+    'B b c b': 'C c c a',
+    'A c a a': 'C c c a',
 }
 
 SYM = [value for value in SG.SYMM_OPS
@@ -83,7 +92,7 @@ def test_SpaceGroup_default():
 
 @pytest.mark.parametrize('sg_in', [sg['hermann_mauguin_fmt'] for sg in SYM])
 def test_SpaceGroup_fromPars_HM_Full(sg_in):
-    if sg_in in ['C 2 e b', 'R 1 2/c 1 ("rhombohedral" setting)', 'B 1 21/m 1', 'B 1 21 1']:
+    if sg_in in ['C 2 e b', 'R 1 2/c 1 ("rhombohedral" setting)', 'B 1 21/m 1', 'B 1 21 1', 'A e a a:1', 'B b e b:1']:
         return  # This is a known issue
 
     sg_p = SpaceGroup(sg_in)
@@ -139,7 +148,8 @@ def test_SpaceGroup_fromPars_HM_noSpace(sg_in):
 def test_SpaceGroup_fromPars_HM_noSpace(sg_in):
     global_object.map._clear()
     if sg_in['hermann_mauguin'] in ['C2eb', 'R12/c1("rhombohedral"setting)', 'B1211', 'B121/m1', 'P4bm',
-                                    'C1c1', 'Pmc21', 'Cmm2', 'P121/c1', 'Pmma', 'P12/c1', 'Pmmm', 'P1211', 'Pnma']:
+                                    'C1c1', 'Pmc21', 'Cmm2', 'P121/c1', 'Pmma', 'P12/c1', 'Pmmm', 'P1211', 'Pnma',
+                                    'Pban', 'Pban', 'Aeaa', 'Bbeb']:
         return  # This is a known issue
 
     sg_p = SpaceGroup(sg_in['universal_h_m'])

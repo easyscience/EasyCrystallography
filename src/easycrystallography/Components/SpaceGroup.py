@@ -20,6 +20,7 @@ from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.ObjectClasses import Descriptor as old_Descriptor
 
 from easycrystallography.Symmetry.functions import get_default_it_coordinate_system_code_by_it_number
+from easycrystallography.Symmetry.functions import get_spacegroup_by_name_ext
 from easycrystallography.Symmetry.SymOp import SymmOp
 
 SG_DETAILS = {
@@ -295,18 +296,16 @@ class SpaceGroup(BaseObj):
                 except ValueError:
                     pass
                 new_setting = str(new_setting)
-                if new_setting != reference:
-                    # modify the space group with the new setting
-                    new_sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + new_setting)
-                    if new_sg_data is None and new_setting in settings:
-                        # this can be because the setting is the "default" setting which gemmi treats as a blank
-                        new_sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + reference)
-                    if new_sg_data is None:
-                        raise ValueError(f"Spacegroup '{new_spacegroup}:{new_setting}' not found in database.")
-                    sg_data = new_sg_data
-                    setting = get_default_it_coordinate_system_code_by_it_number(sg_data.number)
-                else:
-                    setting = new_setting
+                # modify the space group with the new setting
+                new_sg_data = get_spacegroup_by_name_ext(sg_data.number, new_setting)
+                if new_sg_data is None and new_setting in settings:
+                    # this can be because the setting is the "default" setting which gemmi treats as a blank
+                    # new_sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + reference)
+                    new_sg_data = get_spacegroup_by_name_ext(sg_data.number, reference)
+                if new_sg_data is None:
+                    raise ValueError(f"Spacegroup '{new_spacegroup}:{new_setting}' not found in database.")
+                sg_data = new_sg_data
+                setting = get_default_it_coordinate_system_code_by_it_number(sg_data.number)
                 if new_setting in settings:
                     setting = new_setting
 
@@ -324,7 +323,7 @@ class SpaceGroup(BaseObj):
             operations = operations_set
         if set_internal:
             self._sg_data = sg_data
-            self._space_group_HM_name.value = hm_name
+            self._space_group_HM_name.value = sg_data.hm
             self._setting.value = setting
             self._symmetry_ops.value = operations
         return sg_data, setting, operations
