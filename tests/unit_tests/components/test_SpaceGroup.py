@@ -43,7 +43,6 @@ known_conversions = {
     "A e a a":  'A b a a',
     "B b e b":  'B b c b',
     'B 1 21 1': 'B 1 1 2',
-    #'P b a n': 'P n c b',
     'P n m m': 'P m m n',
     'P m n m': 'P m m n',
     'P n c b': 'P b a n',

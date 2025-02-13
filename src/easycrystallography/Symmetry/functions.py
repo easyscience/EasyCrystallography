@@ -79,6 +79,7 @@ def get_crystal_system_by_it_number(it_number: int) -> str:
         res = None
     return res
 
+
 def get_spacegroup_by_name_ext(number, setting):
     tables = gemmi.spacegroup_table()
 

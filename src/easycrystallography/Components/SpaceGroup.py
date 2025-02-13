@@ -284,7 +284,6 @@ class SpaceGroup(BaseObj):
                 raise ValueError(f"Spacegroup '{new_spacegroup}' not found in database.")
 
             settings = self.find_settings_by_number(sg_data.number)
-            hm_name = sg_data.hm
             reference = get_default_it_coordinate_system_code_by_it_number(sg_data.number)
 
             if new_setting is None or new_setting == '' or new_setting == '\x00':
@@ -317,7 +316,6 @@ class SpaceGroup(BaseObj):
             ]
         else:
             sg_data = None
-            hm_name = 'custom'
             if isinstance(operations_set, str):
                 operations_set = [SymmOp.from_xyz_string(s) for s in operations_set.split(';')]
             operations = operations_set
