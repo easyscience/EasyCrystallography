@@ -127,7 +127,9 @@ class CIF_Template:
         if len(tokens) > 1:
             fixed = False
             if tokens[1][0] != ')':
-                error = (10 ** -(len(f'{tokens[0]}'.split('.')[1]) - 1)) * int(tokens[1][:-1])
+                decimal_places = len(tokens[0].split('.')[1])
+                error = int(tokens[1][:-1]) * (10**-decimal_places)
+                # error = (10 ** -(len(f'{tokens[0]}'.split('.')[1]) - 1)) * int(tokens[1][:-1])
         return value, error, fixed
 
     @staticmethod
