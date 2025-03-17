@@ -35,11 +35,11 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  'build',        # For building the package
-  'pytest',       # For testing
-  'pytest-xdist', # For parallel testing
-  'pytest-cov',   # For coverage
-  'ruff',         # For linting
+  'build == 1.2.2.post1',  # For building the package
+  'pytest == 8.3.5',       # For testing
+  'pytest-xdist == 3.6.1', # For parallel testing
+  'pytest-cov == 6.0.0',   # For coverage
+  'ruff == 0.11.0',        # For linting
 ]
 
 [project.urls]
