@@ -298,8 +298,6 @@ class SpaceGroup(BaseObj):
                 # modify the space group with the new setting
                 new_sg_data = get_spacegroup_by_name_ext(sg_data.number, new_setting)
                 if new_sg_data is None and new_setting in settings:
-                    # this can be because the setting is the "default" setting which gemmi treats as a blank
-                    # new_sg_data = gemmi.find_spacegroup_by_name(sg_data.hm + ':' + reference)
                     new_sg_data = get_spacegroup_by_name_ext(sg_data.number, reference)
                 if new_sg_data is None:
                     raise ValueError(f"Spacegroup '{new_spacegroup}:{new_setting}' not found in database.")

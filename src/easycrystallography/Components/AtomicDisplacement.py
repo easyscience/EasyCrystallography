@@ -13,7 +13,7 @@ from typing import Union
 
 import numpy as np
 from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.variable import DescriptorStr as Descriptor
+from easyscience.Objects.variable import DescriptorStr
 from easyscience.Objects.variable import Parameter
 from easyscience.Utils.classTools import addProp
 from easyscience.Utils.classTools import removeProp
@@ -223,19 +223,19 @@ if TYPE_CHECKING:
 
 
 class AtomicDisplacement(BaseObj):
-    adp_type: ClassVar[Descriptor]
+    adp_type: ClassVar[DescriptorStr]
     adp_class: ClassVar[AB]
 
     def __init__(
         self,
-        adp_type: Optional[Union[Descriptor, str]] = None,
+        adp_type: Optional[Union[DescriptorStr, str]] = None,
         interface: Optional[iF] = None,
         **kwargs,
     ):
         if adp_type is None:
             adp_type = 'Uiso'
         if isinstance(adp_type, str):
-            adp_type = Descriptor('adp_type', adp_type)
+            adp_type = DescriptorStr('adp_type', adp_type)
         adp_class_name = adp_type.value
         if adp_class_name in _AVAILABLE_ISO_TYPES.keys():
             adp_class = _AVAILABLE_ISO_TYPES[adp_class_name]

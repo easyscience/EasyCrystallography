@@ -9,7 +9,7 @@ from typing import Dict
 from typing import Union
 
 import periodictable as pt
-from easyscience.Objects.variable import DescriptorStr as Descriptor
+from easyscience.Objects.variable import DescriptorStr
 from easyscience.Utils.classTools import addProp
 from easyscience.Utils.classTools import removeProp
 
@@ -20,11 +20,11 @@ _SPECIE_DETAILS = {
     },
 }
 
-_REDIRECT = deepcopy(Descriptor._REDIRECT)
+_REDIRECT = deepcopy(DescriptorStr._REDIRECT)
 _REDIRECT['specie'] = lambda obj: obj._raw_data['str']
 
 
-class Specie(Descriptor):
+class Specie(DescriptorStr):
     _REDIRECT = _REDIRECT
 
     def __init__(self, specie: str = 'H', **kwargs):

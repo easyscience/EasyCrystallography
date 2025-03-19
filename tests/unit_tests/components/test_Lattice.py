@@ -348,8 +348,8 @@ def test_Lattice_volume(value):
     volume = value[-1]
 
     l = Lattice(*args)
-    assert volume == pytest.approx(l.volume.m)
-    assert str(l.volume.units) == "angstrom ** 3"
+    assert volume == pytest.approx(l.volume.value)
+    assert str(l.volume.unit) == "Å^3"
 
 
 @pytest.mark.parametrize("value", matrix_pars)
@@ -432,10 +432,10 @@ def test_Lattice_reciprocal_lattice(in_value: list, new_value: list):
 def test_Lattice_scale(value: list, scale: float):
     l = Lattice(*value)
 
-    new_volume = scale * l.volume
+    new_volume = scale * l.volume.value
     scaled = l.scale(new_volume)
 
-    assert np.isclose(scaled.volume, new_volume)
+    assert np.isclose(scaled.volume.value, new_volume)
     assert np.all(np.isclose(l.angles, scaled.angles))
 
 

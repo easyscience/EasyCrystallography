@@ -22,7 +22,6 @@ from typing import TypeVar
 from typing import Union
 
 import numpy as np
-from easyscience import ureg
 from easyscience.Constraints import ObjConstraint
 from easyscience.Objects.ObjectClasses import BaseObj
 from easyscience.Objects.variable import Parameter
@@ -410,8 +409,10 @@ class Lattice(BaseObj):
         """
         m = self.matrix
         vol = float(abs(np.dot(np.cross(m[0], m[1]), m[2])))
-        unit = ureg(self.length_a.unit) * ureg(self.length_b.unit) * ureg(self.length_c.unit)
-        return ureg.Quantity(vol, units=unit)
+        # unit = ureg(self.length_a.unit) * ureg(self.length_b.unit) * ureg(self.length_c.unit)
+        p = Parameter(name='Volume', value=vol, unit=(self.length_a * self.length_b * self.length_c).unit)
+        return p
+        # return ureg.Quantity(vol, units=unit)
 
     @property
     def inv_matrix(self) -> np.ndarray:

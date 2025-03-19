@@ -15,7 +15,7 @@ from typing import Union
 import numpy as np
 from easyscience.Objects.Groups import BaseCollection
 from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.variable import DescriptorStr as Descriptor
+from easyscience.Objects.variable import DescriptorStr
 from easyscience.Objects.variable import Parameter
 
 from .AtomicDisplacement import AtomicDisplacement
@@ -51,7 +51,7 @@ S = TypeVar('S', bound='Site')
 
 
 class Site(BaseObj):
-    label: ClassVar[Descriptor]
+    label: ClassVar[DescriptorStr]
     specie: ClassVar[Specie]
     occupancy: ClassVar[Parameter]
     fract_x: ClassVar[Parameter]
@@ -60,7 +60,7 @@ class Site(BaseObj):
 
     def __init__(
         self,
-        label: Optional[Union[str, Descriptor]] = None,
+        label: Optional[Union[str, DescriptorStr]] = None,
         specie: Optional[Union[str, Specie]] = None,
         occupancy: Optional[Union[float, Parameter]] = None,
         fract_x: Optional[Union[float, Parameter]] = None,
@@ -111,7 +111,7 @@ class Site(BaseObj):
 
         super(Site, self).__init__(
             'site',
-            label=Descriptor('label', **_SITE_DETAILS['label']),
+            label=DescriptorStr('label', **_SITE_DETAILS['label']),
             specie=Specie(_SITE_DETAILS['label']['value']),
             occupancy=Parameter('occupancy', **_SITE_DETAILS['occupancy']),
             fract_x=Parameter('fract_x', **_SITE_DETAILS['position']),
@@ -216,7 +216,7 @@ class PeriodicSite(Site):
     def __init__(
         self,
         lattice: Optional[PeriodicLattice] = None,
-        label: Optional[Union[str, Descriptor]] = None,
+        label: Optional[Union[str, DescriptorStr]] = None,
         specie: Optional[Union[str, Specie]] = None,
         occupancy: Optional[Union[float, Parameter]] = None,
         fract_x: Optional[Union[float, Parameter]] = None,
@@ -284,7 +284,7 @@ class Atoms(BaseCollection):
     def __repr__(self) -> str:
         return f'Collection of {len(self)} sites.'
 
-    def __getitem__(self, idx: Union[int, slice, str]) -> Union[Parameter, Descriptor, BaseObj, 'BaseCollection']:
+    def __getitem__(self, idx: Union[int, slice, str]) -> Union[Parameter, DescriptorStr, BaseObj, 'BaseCollection']:
         if isinstance(idx, str) and idx in self.atom_labels:
             idx = self.atom_labels.index(idx)
         return super(Atoms, self).__getitem__(idx)

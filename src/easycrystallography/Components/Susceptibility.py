@@ -13,7 +13,7 @@ from typing import Union
 
 import numpy as np
 from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.variable import DescriptorStr as Descriptor
+from easyscience.Objects.variable import DescriptorStr
 from easyscience.Objects.variable import Parameter
 from easyscience.Utils.classTools import addProp
 from easyscience.Utils.classTools import removeProp
@@ -137,12 +137,12 @@ _AVAILABLE_ISO_TYPES = {'Cani': Cani, 'Ciso': Ciso}
 
 
 class MagneticSusceptibility(BaseObj):
-    msp_type: ClassVar[Descriptor]
+    msp_type: ClassVar[DescriptorStr]
     msp_class: ClassVar[Type[MSPBase]]
 
-    def __init__(self, msp_type: Union[Descriptor, str], interface: Optional = None, **kwargs):
+    def __init__(self, msp_type: Union[DescriptorStr, str], interface: Optional = None, **kwargs):
         if isinstance(msp_type, str):
-            msp_type = Descriptor('msp_type', msp_type)
+            msp_type = DescriptorStr('msp_type', msp_type)
         msp_class_name = msp_type.value
         if msp_class_name in _AVAILABLE_ISO_TYPES.keys():
             msp_class = _AVAILABLE_ISO_TYPES[msp_class_name]

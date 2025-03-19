@@ -81,6 +81,9 @@ def get_crystal_system_by_it_number(it_number: int) -> str:
 
 
 def get_spacegroup_by_name_ext(number, setting):
+    """
+    Get the spacegroup by its number and setting.
+    """
     tables = gemmi.spacegroup_table()
 
     for sg in tables:
@@ -88,8 +91,6 @@ def get_spacegroup_by_name_ext(number, setting):
             # default qualifier, not present in the table
             # so we neeed to account for it
             default_setting = get_default_it_coordinate_system_code_by_it_number(number)
-            if setting == default_setting:
-                return sg
-            if setting in sg.qualifier or setting in sg.ext:
+            if setting in {default_setting, *sg.qualifier, *sg.ext}:
                 return sg
     return None
