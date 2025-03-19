@@ -91,17 +91,12 @@ def test_Lattice_default():
         t = key.split("_")[0]
         test_defaults = CELL_DETAILS[t].copy()
         del test_defaults["value"]
-        #test_defaults["unit"] = test_defaults["units"]
-        #del test_defaults["unit"]
         for default in test_defaults.keys():
             r = test_defaults[default]
             i = getattr(item, default)
             if default == "unit":
-                if i == "Å": # special case for Å -> ang
-                    i = "ang"
-                else:
-                    i = str(i)[0:3]
-                r = r[0:3]
+                if i == "Å": # special case for Å -> angstrom
+                    i = "angstrom"
             assert i == r
 
 

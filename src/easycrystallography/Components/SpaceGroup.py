@@ -306,6 +306,8 @@ class SpaceGroup(BaseObj):
                 if new_setting in settings:
                     setting = new_setting
 
+            hm_name = sg_data.hm
+
             if operations_set is None:
                 operations_set = sg_data.operations()
             operations = [
@@ -314,12 +316,13 @@ class SpaceGroup(BaseObj):
             ]
         else:
             sg_data = None
+            hm_name = 'custom'
             if isinstance(operations_set, str):
                 operations_set = [SymmOp.from_xyz_string(s) for s in operations_set.split(';')]
             operations = operations_set
         if set_internal:
             self._sg_data = sg_data
-            self._space_group_HM_name.value = sg_data.hm
+            self._space_group_HM_name.value = hm_name
             self._setting.value = setting
             self._symmetry_ops.value = operations
         return sg_data, setting, operations
