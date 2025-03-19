@@ -540,7 +540,7 @@ def make_dict(value) -> dict:
             "description": "Unit-cell length of the selected structure in angstroms.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
             "unit": "angstrom",
-            "unique_name": "Parameter_0",
+            "unique_name": "Parameter_1",
             "enabled": True,
         },
         "length_c": {
@@ -556,7 +556,7 @@ def make_dict(value) -> dict:
             "description": "Unit-cell length of the selected structure in angstroms.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
             "unit": "angstrom",
-            "unique_name": "Parameter_0",
+            "unique_name": "Parameter_2",
             "enabled": True,
         },
         "angle_alpha": {
@@ -572,7 +572,7 @@ def make_dict(value) -> dict:
             "description": "Unit-cell angle of the selected structure in degrees.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
             "unit": "deg",
-            "unique_name": "Parameter_0",
+            "unique_name": "Parameter_3",
             "enabled": True,
         },
         "angle_beta": {
@@ -588,7 +588,7 @@ def make_dict(value) -> dict:
             "description": "Unit-cell angle of the selected structure in degrees.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
             "unit": "deg",
-            "unique_name": "Parameter_0",
+            "unique_name": "Parameter_4",
             "enabled": True,
         },
         "angle_gamma": {
@@ -604,11 +604,11 @@ def make_dict(value) -> dict:
             "description": "Unit-cell angle of the selected structure in degrees.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
             "unit": "deg",
-            "unique_name": "Parameter_0",
+            "unique_name": "Parameter_5",
             "enabled": True,
         },
         "interface": None,
-        "unique_name": "Parameter_0",
+        "unique_name": "Lattice_0",
     }
 
 
@@ -633,13 +633,8 @@ def test_Lattice_as_dict(value: list):
     check_dict(expected, obtained)
 
 
-@pytest.mark.skip(reason="Object name ... already exists in the grap")
-#@pytest.mark.parametrize("value", basic_pars)
+@pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_from_dict(value: list):
-    # ADDED UNTIL UNIQUE_NAME IS FIXED BECAUSE OF THE FOLLOWING ERRORS:
-    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[tetragonal] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the graph.
-    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[monoclinic] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the graph.
-    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[rhombohedral] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the grap
     global_object.map._clear()
 
     expected = make_dict(value)
