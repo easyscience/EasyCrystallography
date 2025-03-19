@@ -524,7 +524,6 @@ def make_dict(value) -> dict:
             "description": "Unit-cell length of the selected structure in angstroms.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
             "unit": "angstrom",
-            "unique_name": "Parameter_0",
             "enabled": True,
         },
         "length_b": {
@@ -633,6 +632,7 @@ def test_Lattice_as_dict(value: list):
     check_dict(expected, obtained)
 
 
+@pytest.mark.parametrize("value", basic_pars)
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_from_dict(value: list):
     global_object.map._clear()
