@@ -90,16 +90,13 @@ def test_Lattice_default():
         assert item.name == key
         t = key.split("_")[0]
         test_defaults = CELL_DETAILS[t].copy()
-        test_defaults["raw_value"] = test_defaults["value"]
         del test_defaults["value"]
-        test_defaults["unit"] = test_defaults["units"]
-        del test_defaults["units"]
         for default in test_defaults.keys():
             r = test_defaults[default]
             i = getattr(item, default)
             if default == "unit":
-                i = str(i)[0:3]
-                r = r[0:3]
+                if i == "Å": # special case for Å -> angstrom
+                    i = "angstrom"
             assert i == r
 
 
@@ -134,15 +131,18 @@ def test_Lattice_from_pars(value: list, ang_unit: str):
         assert item.name == key
         t = key.split("_")[0]
         test_defaults = CELL_DETAILS[t].copy()
-        test_defaults["raw_value"] = ref[idx]
+        test_defaults["value"] = ref[idx]
         del test_defaults["value"]
-        test_defaults["unit"] = test_defaults["units"]
-        del test_defaults["units"]
+        # test_defaults["unit"] = test_defaults["units"]
+        # del test_defaults["units"]
         for default in test_defaults.keys():
             r = test_defaults[default]
             i = getattr(item, default)
             if default == "unit":
-                i = str(i)[0:3]
+                if i == "Å": # special case for Å -> ang
+                    i = "ang"
+                else:
+                    i = str(i)[0:3]
                 r = r[0:3]
             if isinstance(i, Number) and not isinstance(i, bool):
                 assert r == pytest.approx(i)
@@ -170,15 +170,16 @@ def test_Lattice_from_matrix(value):
         assert item.name == key
         t = key.split("_")[0]
         test_defaults = CELL_DETAILS[t].copy()
-        test_defaults["raw_value"] = args[idx]
+        test_defaults["value"] = args[idx]
         del test_defaults["value"]
-        test_defaults["unit"] = test_defaults["units"]
-        del test_defaults["units"]
         for default in test_defaults.keys():
             r = test_defaults[default]
             i = getattr(item, default)
             if default == "unit":
-                i = str(i)[0:3]
+                if i == "Å": # special case for Å -> ang
+                    i = "ang"
+                else:
+                    i = str(i)[0:3]
                 r = r[0:3]
             if isinstance(i, Number) and not isinstance(i, bool):
                 assert r == pytest.approx(i)
@@ -211,15 +212,16 @@ def test_Lattice_from_special(request, value):
         assert item.name == key
         t = key.split("_")[0]
         test_defaults = CELL_DETAILS[t].copy()
-        test_defaults["raw_value"] = ref[idx]
+        test_defaults["value"] = ref[idx]
         del test_defaults["value"]
-        test_defaults["unit"] = test_defaults["units"]
-        del test_defaults["units"]
         for default in test_defaults.keys():
             r = test_defaults[default]
             i = getattr(item, default)
             if default == "unit":
-                i = str(i)[0:3]
+                if i == "Å": # special case for Å -> ang
+                    i = "ang"
+                else:
+                    i = str(i)[0:3]
                 r = r[0:3]
             if isinstance(i, Number) and not isinstance(i, bool):
                 assert r == pytest.approx(i)
@@ -293,10 +295,10 @@ def test_Lattice_pars_SET(in_value: list, new_value: list):
 
     for idx, item in enumerate(items):
         f = getattr(l, item)
-        assert f.raw_value == in_value[idx]
+        assert f.value == in_value[idx]
         setattr(l, item, new_value[idx])
         f = getattr(l, item)
-        assert f.raw_value == new_value[idx]
+        assert f.value == new_value[idx]
 
 
 @pytest.mark.parametrize("value", basic_pars)
@@ -341,8 +343,8 @@ def test_Lattice_volume(value):
     volume = value[-1]
 
     l = Lattice(*args)
-    assert volume == pytest.approx(l.volume.m)
-    assert str(l.volume.units) == "angstrom ** 3"
+    assert volume == pytest.approx(l.volume.value)
+    assert str(l.volume.unit) == "Å^3"
 
 
 @pytest.mark.parametrize("value", matrix_pars)
@@ -385,7 +387,7 @@ def test_Lattice_reciprocal_lattice(in_value: list, new_value: list):
 
     for idx, item in enumerate(items):
         f = getattr(obj, item)
-        assert np.isclose(f.raw_value, new_value[idx])
+        assert np.isclose(f.value, new_value[idx])
 
 
 @pytest.mark.parametrize(
@@ -417,7 +419,7 @@ def test_Lattice_reciprocal_lattice(in_value: list, new_value: list):
 
     for idx, item in enumerate(items):
         f = getattr(obj, item)
-        assert np.isclose(f.raw_value, new_value[idx])
+        assert np.isclose(f.value, new_value[idx])
 
 
 @pytest.mark.parametrize("scale", [0.1, 2, 3.14, 100])
@@ -425,10 +427,10 @@ def test_Lattice_reciprocal_lattice(in_value: list, new_value: list):
 def test_Lattice_scale(value: list, scale: float):
     l = Lattice(*value)
 
-    new_volume = scale * l.volume
+    new_volume = scale * l.volume.value
     scaled = l.scale(new_volume)
 
-    assert np.isclose(scaled.volume, new_volume)
+    assert np.isclose(scaled.volume.value, new_volume)
     assert np.all(np.isclose(l.angles, scaled.angles))
 
 
@@ -485,12 +487,12 @@ def test_Lattice_is_hexagonal():
     "values, out_str",
     mod_pars(
         [
-            "<Lattice: (a: 5.00 Å, b: 5.00 Å, c: 5.00Å, alpha: 90.00 deg, beta: 90.00 deg, gamma: 90.00 deg>",
-            "<Lattice: (a: 10.00 Å, b: 10.00 Å, c: 5.00Å, alpha: 90.00 deg, beta: 90.00 deg, gamma: 90.00 deg>",
-            "<Lattice: (a: 2.00 Å, b: 3.00 Å, c: 4.00Å, alpha: 90.00 deg, beta: 90.00 deg, gamma: 90.00 deg>",
-            "<Lattice: (a: 2.00 Å, b: 3.00 Å, c: 4.00Å, alpha: 90.00 deg, beta: 99.00 deg, gamma: 90.00 deg>",
-            "<Lattice: (a: 3.00 Å, b: 3.00 Å, c: 4.00Å, alpha: 90.00 deg, beta: 90.00 deg, gamma: 120.00 deg>",
-            "<Lattice: (a: 4.00 Å, b: 4.00 Å, c: 4.00Å, alpha: 99.00 deg, beta: 99.00 deg, gamma: 99.00 deg>",
+            "<Lattice: (a: 5.00 Å, b: 5.00 Å, c: 5.00 Å, alpha: 90.00 deg, beta: 90.00 deg, gamma: 90.00 deg>",
+            "<Lattice: (a: 10.00 Å, b: 10.00 Å, c: 5.00 Å, alpha: 90.00 deg, beta: 90.00 deg, gamma: 90.00 deg>",
+            "<Lattice: (a: 2.00 Å, b: 3.00 Å, c: 4.00 Å, alpha: 90.00 deg, beta: 90.00 deg, gamma: 90.00 deg>",
+            "<Lattice: (a: 2.00 Å, b: 3.00 Å, c: 4.00 Å, alpha: 90.00 deg, beta: 99.00 deg, gamma: 90.00 deg>",
+            "<Lattice: (a: 3.00 Å, b: 3.00 Å, c: 4.00 Å, alpha: 90.00 deg, beta: 90.00 deg, gamma: 120.00 deg>",
+            "<Lattice: (a: 4.00 Å, b: 4.00 Å, c: 4.00 Å, alpha: 99.00 deg, beta: 99.00 deg, gamma: 99.00 deg>",
         ],
         True,
     ),
@@ -505,103 +507,103 @@ def make_dict(value) -> dict:
         "@module": "easycrystallography.Components.Lattice",
         "@class": "Lattice",
         "length_a": {
-            "@module": "easyscience.Objects.Variable",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "length_a",
             "value": float(value[0]),
-            "error": 0.0,
-            "min": 0,
+            "variance": 0.0,
+            "min": 0.0,
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell length of the selected structure in angstroms.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
-            "units": "angstrom",
-            "unique_name": "149027786693506016496254445195239597714",
+            "unit": "angstrom",
+            "unique_name": "Parameter_0",
             "enabled": True,
         },
         "length_b": {
-            "@module": "easyscience.Objects.Variable",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "length_b",
             "value": float(value[1]),
-            "error": 0.0,
-            "min": 0,
+            "variance": 0.0,
+            "min": 0.0,
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell length of the selected structure in angstroms.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
-            "units": "angstrom",
-            "unique_name": "294836968667493729920294930317191977696",
+            "unit": "angstrom",
+            "unique_name": "Parameter_1",
             "enabled": True,
         },
         "length_c": {
-            "@module": "easyscience.Objects.Variable",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "length_c",
             "value": float(value[2]),
-            "error": 0.0,
-            "min": 0,
+            "variance": 0.0,
+            "min": 0.0,
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell length of the selected structure in angstroms.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
-            "units": "angstrom",
-            "unique_name": "275642519607899521714432039990092728990",
+            "unit": "angstrom",
+            "unique_name": "Parameter_2",
             "enabled": True,
         },
         "angle_alpha": {
-            "@module": "easyscience.Objects.Variable",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "angle_alpha",
             "value": float(value[3]),
-            "error": 0.0,
-            "min": 0,
+            "variance": 0.0,
+            "min": 0.0,
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell angle of the selected structure in degrees.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
-            "units": "degree",
-            "unique_name": "161899496656810433045540450883723049023",
+            "unit": "deg",
+            "unique_name": "Parameter_3",
             "enabled": True,
         },
         "angle_beta": {
-            "@module": "easyscience.Objects.Variable",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "angle_beta",
             "value": float(value[4]),
-            "error": 0.0,
-            "min": 0,
+            "variance": 0.0,
+            "min": 0.0,
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell angle of the selected structure in degrees.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
-            "units": "degree",
-            "unique_name": "186637124621565458307862080073460500737",
+            "unit": "deg",
+            "unique_name": "Parameter_4",
             "enabled": True,
         },
         "angle_gamma": {
-            "@module": "easyscience.Objects.Variable",
+            "@module": "easyscience.Objects.variable.parameter",
             "@class": "Parameter",
             "@version": easyscience.__version__,
             "name": "angle_gamma",
             "value": float(value[5]),
-            "error": 0.0,
-            "min": 0,
+            "variance": 0.0,
+            "min": 0.0,
             "max": np.inf,
             "fixed": True,
             "description": "Unit-cell angle of the selected structure in degrees.",
             "url": "https://docs.easydiffraction.org/lib/dictionaries/_cell/",
-            "units": "degree",
-            "unique_name": "225244117838730303286513043607480352526",
+            "unit": "deg",
+            "unique_name": "Parameter_5",
             "enabled": True,
         },
         "interface": None,
-        "unique_name": "78109834334085432621980127205750673524",
+        "unique_name": "Lattice_0",
     }
 
 
@@ -619,6 +621,8 @@ def test_Lattice_as_dict(value: list):
                 check_dict(check[this_check_key], item[this_check_key])
         else:
             assert isinstance(item, type(check))
+            if item == "Å":
+                item = "angstrom"
             assert item == check
 
     check_dict(expected, obtained)
@@ -626,10 +630,6 @@ def test_Lattice_as_dict(value: list):
 
 @pytest.mark.parametrize("value", basic_pars)
 def test_Lattice_from_dict(value: list):
-    # ADDED UNTIL UNIQUE_NAME IS FIXED BECAUSE OF THE FOLLOWING ERRORS:
-    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[tetragonal] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the graph.
-    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[monoclinic] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the graph.
-    # FAILED tests/unit_tests/Components/test_Lattice.py::test_Lattice_from_dict[rhombohedral] - ValueError: Object name 149027786693506016496254445195239597714 already exists in the grap
     global_object.map._clear()
 
     expected = make_dict(value)
@@ -644,6 +644,8 @@ def test_Lattice_from_dict(value: list):
                 check_dict(check[this_check_key], item[this_check_key])
         else:
             assert isinstance(item, type(check))
+            if item == "Å":
+                item = "angstrom"
             assert item == check
 
     check_dict(expected, obtained)
@@ -709,5 +711,5 @@ def test_lattice_copy(value):
     for item in items:
         f1 = getattr(l1, item)
         f2 = getattr(l2, item)
-        assert np.isclose(f1.raw_value, f2.raw_value)
+        assert np.isclose(f1.value, f2.value)
         assert f1 != f2
