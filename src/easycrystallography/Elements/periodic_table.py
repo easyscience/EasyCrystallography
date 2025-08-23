@@ -17,8 +17,8 @@ from typing import Callable
 from typing import Optional
 
 import numpy as np
-from easyscience.Objects.core import ComponentSerializer
-from easyscience.Objects.Variable import Descriptor
+from easyscience.io.serializer_component import SerializerComponent
+from easyscience.Variable import DescriptorStr as Descriptor
 
 """Module contains classes presenting Element and Species (Element + oxidation state) and PeriodicTable."""
 
@@ -1075,7 +1075,7 @@ class Element(Enum):
             print(' '.join(rowstr))
 
 
-class Species(ComponentSerializer):
+class Species(SerializerComponent):
     """
     An extension of Element with an oxidation state and other optional
     properties. Properties associated with Species should be "idealized"

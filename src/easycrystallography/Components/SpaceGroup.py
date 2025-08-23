@@ -15,9 +15,9 @@ from typing import Union
 
 import gemmi
 import numpy as np
-from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.variable import DescriptorAnyType
-from easyscience.Objects.variable import DescriptorStr
+from easyscience import ObjBase as BaseObj
+from easyscience.variable import DescriptorAnyType
+from easyscience.variable import DescriptorStr
 
 from easycrystallography.Symmetry.functions import get_default_it_coordinate_system_code_by_it_number
 from easycrystallography.Symmetry.functions import get_spacegroup_by_name_ext

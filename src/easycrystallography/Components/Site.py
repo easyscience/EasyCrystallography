@@ -13,10 +13,10 @@ from typing import TypeVar
 from typing import Union
 
 import numpy as np
-from easyscience.Objects.Groups import BaseCollection
-from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.variable import DescriptorStr
-from easyscience.Objects.variable import Parameter
+from easyscience import ObjBase as BaseObj
+from easyscience.base_classes import CollectionBase
+from easyscience.variable import DescriptorStr
+from easyscience.variable import Parameter
 
 from .AtomicDisplacement import AtomicDisplacement
 from .Lattice import PeriodicLattice
@@ -271,7 +271,7 @@ class PeriodicSite(Site):
         return self.lattice.get_cartesian_coords(self.fract_coords)
 
 
-class Atoms(BaseCollection):
+class Atoms(CollectionBase):
     _SITE_CLASS = Site
 
     def __init__(self, name: str, *args, interface: Optional[iF] = None, **kwargs):
@@ -284,7 +284,7 @@ class Atoms(BaseCollection):
     def __repr__(self) -> str:
         return f'Collection of {len(self)} sites.'
 
-    def __getitem__(self, idx: Union[int, slice, str]) -> Union[Parameter, DescriptorStr, BaseObj, 'BaseCollection']:
+    def __getitem__(self, idx: Union[int, slice, str]) -> Union[Parameter, DescriptorStr, BaseObj, 'CollectionBase']:
         if isinstance(idx, str) and idx in self.atom_labels:
             idx = self.atom_labels.index(idx)
         return super(Atoms, self).__getitem__(idx)

@@ -12,11 +12,11 @@ from typing import TypeVar
 from typing import Union
 
 import numpy as np
-from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.variable import DescriptorStr
-from easyscience.Objects.variable import Parameter
+from easyscience import ObjBase as BaseObj
 from easyscience.Utils.classTools import addProp
 from easyscience.Utils.classTools import removeProp
+from easyscience.variable import DescriptorStr
+from easyscience.variable import Parameter
 
 if TYPE_CHECKING:
     from easyscience.Utils.typing import iF
