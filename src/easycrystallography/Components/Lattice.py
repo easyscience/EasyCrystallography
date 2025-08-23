@@ -854,12 +854,12 @@ class PeriodicLattice(Lattice):
 
         # Go through the cell systems
         if crys_system == 'cubic':
-            #self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
-            #self.length_a.user_constraints['sg_1']()
-            #self.length_a.user_constraints['sg_2'] = ObjConstraint(self.length_c, '', self.length_a)
-            #self.length_a.user_constraints['sg_2']()
-            self.length_b.make_dependent_on(dependency_expression="self.length_a")
-            self.length_c.make_dependent_on(dependency_expression="self.length_a")
+            # self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
+            # self.length_a.user_constraints['sg_1']()
+            # self.length_a.user_constraints['sg_2'] = ObjConstraint(self.length_c, '', self.length_a)
+            # self.length_a.user_constraints['sg_2']()
+            self.length_b.make_dependent_on(dependency_expression='self.length_a')
+            self.length_c.make_dependent_on(dependency_expression='self.length_a')
             self.angle_alpha = 90
             self.angle_alpha.enabled = False
             self.angle_beta = 90
@@ -867,9 +867,9 @@ class PeriodicLattice(Lattice):
             self.angle_gamma = 90
             self.angle_gamma.enabled = False
         elif crys_system == 'hexagonal' or trig_test:
-            #self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
-            #self.length_a.user_constraints['sg_1']()
-            self.length_b.make_dependent_on(dependency_expression="self.length_a")
+            # self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
+            # self.length_a.user_constraints['sg_1']()
+            self.length_b.make_dependent_on(dependency_expression='self.length_a')
             self.angle_alpha = 90
             self.angle_alpha.enabled = False
             self.angle_beta = 90
@@ -885,14 +885,14 @@ class PeriodicLattice(Lattice):
             # self.angle_alpha.user_constraints['sg_1']()
             # self.angle_alpha.user_constraints['sg_2'] = ObjConstraint(self.angle_gamma, '', self.angle_alpha)
             # self.angle_alpha.user_constraints['sg_2']()
-            self.length_b.make_dependent_on(dependency_expression="self.length_a")
-            self.length_c.make_dependent_on(dependency_expression="self.length_a")
-            self.angle_beta.make_dependent_on(dependency_expression="self.angle_alpha")
-            self.angle_gamma.make_dependent_on(dependency_expression="self.angle_alpha")
+            self.length_b.make_dependent_on(dependency_expression='self.length_a')
+            self.length_c.make_dependent_on(dependency_expression='self.length_a')
+            self.angle_beta.make_dependent_on(dependency_expression='self.angle_alpha')
+            self.angle_gamma.make_dependent_on(dependency_expression='self.angle_alpha')
         elif crys_system == 'tetragonal':
-            #self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
-            #self.length_a.user_constraints['sg_1']()
-            self.length_b.make_dependent_on(dependency_expression="self.length_a")
+            # self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
+            # self.length_a.user_constraints['sg_1']()
+            self.length_b.make_dependent_on(dependency_expression='self.length_a')
             self.angle_alpha = 90
             self.angle_alpha.enabled = False
             self.angle_beta = 90
