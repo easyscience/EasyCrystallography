@@ -17,7 +17,7 @@ from .template import CIF_Template
 from .template import gemmi
 
 if TYPE_CHECKING:
-    from easyscience.Utils.typing import B
+    from easyscience.utils.typing import B
 
 
 class SpaceGroup(CIF_Template):

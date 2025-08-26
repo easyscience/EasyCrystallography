@@ -26,7 +26,7 @@ from easycrystallography.Components.SpaceGroup import SpaceGroup
 from easycrystallography.io.parser import Parsers
 
 if TYPE_CHECKING:
-    from easyscience.Utils.typing import iF
+    from easyscience.utils.typing import iF
 
 
 class Phase(BaseObj):

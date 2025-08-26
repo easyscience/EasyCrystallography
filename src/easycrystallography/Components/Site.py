@@ -24,7 +24,7 @@ from .Specie import Specie
 from .Susceptibility import MagneticSusceptibility
 
 if TYPE_CHECKING:
-    from easyscience.Utils.typing import iF
+    from easyscience.utils.typing import iF
 
 
 _SITE_DETAILS = {

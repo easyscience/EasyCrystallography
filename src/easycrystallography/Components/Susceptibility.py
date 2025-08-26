@@ -13,13 +13,13 @@ from typing import Union
 
 import numpy as np
 from easyscience import ObjBase as BaseObj
-from easyscience.Utils.classTools import addProp
-from easyscience.Utils.classTools import removeProp
+from easyscience.utils.classTools import addProp
+from easyscience.utils.classTools import removeProp
 from easyscience.variable import DescriptorStr
 from easyscience.variable import Parameter
 
 if TYPE_CHECKING:
-    from easyscience.Utils.typing import iF
+    from easyscience.utils.typing import iF
 
 _ANIO_DETAILS = {
     'msp_type': {
