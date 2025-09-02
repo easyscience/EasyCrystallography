@@ -25,7 +25,7 @@ import numpy as np
 
 # from easyscience.Constraints import ObjConstraint
 from easyscience import ObjBase as BaseObj
-from easyscience.Utils.decorators import memoized
+from easyscience.utils.decorators import memoized
 from easyscience.variable import Parameter
 
 from .SpaceGroup import SpaceGroup
@@ -34,7 +34,7 @@ Vector3Like = Union[List[float], np.ndarray]
 
 
 if TYPE_CHECKING:
-    from easyscience.Utils.typing import iF
+    from easyscience.utils.typing import iF
 
 CELL_DETAILS = {
     'length': {

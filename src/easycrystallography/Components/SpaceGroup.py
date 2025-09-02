@@ -47,7 +47,7 @@ SG_DETAILS = {
 
 if TYPE_CHECKING:
     import numpy.typing as npt
-    from easyscience.Utils.typing import iF
+    from easyscience.utils.typing import iF
 
     from easycrystallography.Components.Site import S
 

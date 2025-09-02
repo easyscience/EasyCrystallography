@@ -18,8 +18,8 @@ import gemmi
 import numpy as np
 
 if TYPE_CHECKING:
-    from easyscience.Utils.typing import B
-    from easyscience.Utils.typing import V
+    from easyscience.utils.typing import B
+    from easyscience.utils.typing import V
 
 _MAX_LEN = 140
 _MAX_LABEL_LEN = 130

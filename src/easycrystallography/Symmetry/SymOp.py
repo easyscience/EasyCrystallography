@@ -25,7 +25,7 @@ from math import sqrt
 
 import numpy as np
 from easyscience.io.serializer_component import SerializerComponent
-from easyscience.Utils.string import transformation_to_string
+from easyscience.utils.string import transformation_to_string
 
 
 class SymmOp(SerializerComponent):
