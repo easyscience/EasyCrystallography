@@ -875,10 +875,12 @@ class PeriodicLattice(Lattice):
         elif crys_system == 'trigonal' and not trig_test:
             self.length_b.make_dependent_on(dependency_expression=dependency_expression_a, dependency_map=dependency_map_a)
             self.length_c.make_dependent_on(dependency_expression=dependency_expression_a, dependency_map=dependency_map_a)
-            self.angle_beta.make_dependent_on(dependency_expression=dependency_expression_alpha,
-                                                dependency_map=dependency_map_alpha)
-            self.angle_gamma.make_dependent_on(dependency_expression=dependency_expression_alpha,
-                                                dependency_map=dependency_map_alpha)
+            self.angle_beta.make_dependent_on(
+                dependency_expression=dependency_expression_alpha, dependency_map=dependency_map_alpha
+            )
+            self.angle_gamma.make_dependent_on(
+                dependency_expression=dependency_expression_alpha, dependency_map=dependency_map_alpha
+            )
         elif crys_system == 'tetragonal':
             self.length_b.make_dependent_on(dependency_expression=dependency_expression_a, dependency_map=dependency_map_a)
             self.angle_alpha = 90
