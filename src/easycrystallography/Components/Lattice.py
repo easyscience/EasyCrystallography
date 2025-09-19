@@ -22,10 +22,9 @@ from typing import TypeVar
 from typing import Union
 
 import numpy as np
-from easyscience.Constraints import ObjConstraint
-from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.variable import Parameter
-from easyscience.Utils.decorators import memoized
+from easyscience import ObjBase as BaseObj
+from easyscience.utils.decorators import memoized
+from easyscience.variable import Parameter
 
 from .SpaceGroup import SpaceGroup
 
@@ -33,7 +32,7 @@ Vector3Like = Union[List[float], np.ndarray]
 
 
 if TYPE_CHECKING:
-    from easyscience.Utils.typing import iF
+    from easyscience.utils.typing import iF
 
 CELL_DETAILS = {
     'length': {
@@ -852,11 +851,13 @@ class PeriodicLattice(Lattice):
         )
 
         # Go through the cell systems
+        dependency_expression_a = 'a'
+        dependency_expression_alpha = 'alpha'
+        dependency_map_a = {'a': 'self.length_a'}
+        dependency_map_alpha = {'alpha': 'self.angle_alpha'}
         if crys_system == 'cubic':
-            self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
-            self.length_a.user_constraints['sg_1']()
-            self.length_a.user_constraints['sg_2'] = ObjConstraint(self.length_c, '', self.length_a)
-            self.length_a.user_constraints['sg_2']()
+            self.length_b.make_dependent_on(dependency_expression=dependency_expression_a, dependency_map=dependency_map_a)
+            self.length_c.make_dependent_on(dependency_expression=dependency_expression_a, dependency_map=dependency_map_a)
             self.angle_alpha = 90
             self.angle_alpha.enabled = False
             self.angle_beta = 90
@@ -864,8 +865,7 @@ class PeriodicLattice(Lattice):
             self.angle_gamma = 90
             self.angle_gamma.enabled = False
         elif crys_system == 'hexagonal' or trig_test:
-            self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
-            self.length_a.user_constraints['sg_1']()
+            self.length_b.make_dependent_on(dependency_expression=dependency_expression_a, dependency_map=dependency_map_a)
             self.angle_alpha = 90
             self.angle_alpha.enabled = False
             self.angle_beta = 90
@@ -873,17 +873,16 @@ class PeriodicLattice(Lattice):
             self.angle_gamma = 120
             self.angle_gamma.enabled = False
         elif crys_system == 'trigonal' and not trig_test:
-            self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
-            self.length_a.user_constraints['sg_1']()
-            self.length_a.user_constraints['sg_2'] = ObjConstraint(self.length_c, '', self.length_a)
-            self.length_a.user_constraints['sg_2']()
-            self.angle_alpha.user_constraints['sg_1'] = ObjConstraint(self.angle_beta, '', self.angle_alpha)
-            self.angle_alpha.user_constraints['sg_1']()
-            self.angle_alpha.user_constraints['sg_2'] = ObjConstraint(self.angle_gamma, '', self.angle_alpha)
-            self.angle_alpha.user_constraints['sg_2']()
+            self.length_b.make_dependent_on(dependency_expression=dependency_expression_a, dependency_map=dependency_map_a)
+            self.length_c.make_dependent_on(dependency_expression=dependency_expression_a, dependency_map=dependency_map_a)
+            self.angle_beta.make_dependent_on(
+                dependency_expression=dependency_expression_alpha, dependency_map=dependency_map_alpha
+            )
+            self.angle_gamma.make_dependent_on(
+                dependency_expression=dependency_expression_alpha, dependency_map=dependency_map_alpha
+            )
         elif crys_system == 'tetragonal':
-            self.length_a.user_constraints['sg_1'] = ObjConstraint(self.length_b, '', self.length_a)
-            self.length_a.user_constraints['sg_1']()
+            self.length_b.make_dependent_on(dependency_expression=dependency_expression_a, dependency_map=dependency_map_a)
             self.angle_alpha = 90
             self.angle_alpha.enabled = False
             self.angle_beta = 90

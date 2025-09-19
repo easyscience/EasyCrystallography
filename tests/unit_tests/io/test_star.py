@@ -2,19 +2,45 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # © 2022-2024 Contributors to the EasyCrystallography project <https://github.com/EasyScience/EasyCrystallography>
 
+import numpy as np
 import pytest
+from typing import ClassVar
+from typing import Iterable
+from typing import Optional
+from typing import Union
 
 from easyscience import global_object
-from easyscience.models.polynomial import Line
-from easyscience.Objects.Groups import BaseCollection
-from easyscience.Objects.variable import DescriptorStr
-from easyscience.Objects.variable import Parameter
+from easyscience.base_classes import CollectionBase
+from easyscience import ObjBase
+from easyscience.variable import DescriptorStr
+from easyscience.variable import Parameter
 from easycrystallography.Components.Site import Atoms, Site, _SITE_DETAILS
 from easycrystallography.io.star_base import ItemHolder
 from easycrystallography.io.star_base import StarLoop
 from easycrystallography.io.star_base import StarSection
 import gc
 
+class Line(ObjBase):
+    m: ClassVar[Parameter]
+    c: ClassVar[Parameter]
+
+    def __init__(
+        self,
+        m: Optional[Union[Parameter, float]] = None,
+        c: Optional[Union[Parameter, float]] = None,
+    ):
+        super(Line, self).__init__('line', m=Parameter('m', 1.0), c=Parameter('c', 0.0))
+        if m is not None:
+            self.m = m
+        if c is not None:
+            self.c = c
+
+    # @designate_calc_fn can be used to inject parameters into the calculation function. i.e. _m = m.value
+    def __call__(self, x: np.ndarray, *args, **kwargs) -> np.ndarray:
+        return self.m.value * x + self.c.value
+
+    def __repr__(self):
+        return '{}({}, {})'.format(self.__class__.__name__, self.m, self.c)
 
 @pytest.mark.parametrize(
     "value, variance, precision, expected",
@@ -89,7 +115,7 @@ def test_StarLoop():
     l1 = Line(2, 3)
     l2 = Line(4, 5)
 
-    ps = BaseCollection("LineCollection", l1, l2)
+    ps = CollectionBase("LineCollection", l1, l2)
     s = StarLoop(ps)
 
     expected = (

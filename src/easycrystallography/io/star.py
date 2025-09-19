@@ -17,13 +17,13 @@ from typing import Optional
 from typing import Union
 
 import numpy as np
-from easyscience.Utils.io.dict import DataDictSerializer
-from easyscience.Utils.io.dict import DictSerializer
-from easyscience.Utils.io.template import BaseEncoderDecoder
+from easyscience.utils.io.dict import DataDictSerializer
+from easyscience.utils.io.dict import DictSerializer
+from easyscience.utils.io.template import BaseEncoderDecoder
 from gemmi import cif
 
 if TYPE_CHECKING:
-    from easyscience.Utils.typing import BV
+    from easyscience.utils.typing import BV
 
 _MAX_LEN = 160
 _SEP = '.'

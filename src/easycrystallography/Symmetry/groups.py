@@ -19,7 +19,7 @@ from fractions import Fraction
 from itertools import product
 
 import numpy as np
-from easyscience.Utils.classUtils import cached_class
+from easyscience.utils.classUtils import cached_class
 
 from easycrystallography.Symmetry.SymOp import SymmOp
 
