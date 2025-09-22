@@ -12,10 +12,10 @@ from typing import Optional
 from typing import Union
 
 import numpy as np
-from easyscience.Objects.Groups import BaseCollection
-from easyscience.Objects.ObjectClasses import BaseObj
-from easyscience.Objects.variable import DescriptorStr
-from easyscience.Objects.variable import Parameter
+from easyscience import ObjBase as BaseObj
+from easyscience.base_classes import CollectionBase
+from easyscience.variable import DescriptorStr
+from easyscience.variable import Parameter
 
 from easycrystallography.Components.Lattice import Lattice
 from easycrystallography.Components.Lattice import PeriodicLattice
@@ -26,7 +26,7 @@ from easycrystallography.Components.SpaceGroup import SpaceGroup
 from easycrystallography.io.parser import Parsers
 
 if TYPE_CHECKING:
-    from easyscience.Utils.typing import iF
+    from easyscience.utils.typing import iF
 
 
 class Phase(BaseObj):
@@ -279,7 +279,7 @@ class Phase(BaseObj):
         return s
 
 
-class Phases(BaseCollection):
+class Phases(CollectionBase):
     _SITE_CLASS = Site
     _ATOM_CLASS = Atoms
     _PHASE_CLASS = Phase
@@ -302,7 +302,7 @@ class Phases(BaseCollection):
     def __repr__(self) -> str:
         return f'Collection of {len(self)} phases: {self.phase_names}'
 
-    def __getitem__(self, idx: Union[int, slice]) -> Union[Parameter, DescriptorStr, BaseObj, BaseCollection]:
+    def __getitem__(self, idx: Union[int, slice]) -> Union[Parameter, DescriptorStr, BaseObj, CollectionBase]:
         if isinstance(idx, str) and idx in self.phase_names:
             idx = self.phase_names.index(idx)
         return super(Phases, self).__getitem__(idx)

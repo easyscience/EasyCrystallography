@@ -24,11 +24,11 @@ from math import sin
 from math import sqrt
 
 import numpy as np
-from easyscience.Objects.core import ComponentSerializer
-from easyscience.Utils.string import transformation_to_string
+from easyscience.io.serializer_component import SerializerComponent
+from easyscience.utils.string import transformation_to_string
 
 
-class SymmOp(ComponentSerializer):
+class SymmOp(SerializerComponent):
     """
     A symmetry operation in cartesian space. Consists of a rotation plus a
     translation. Implementation is as an affine transformation matrix of rank 4

@@ -6,12 +6,12 @@ import pytest
 import itertools
 import numpy as np
 
-from easyscience.Objects.variable import Parameter
-from easyscience.Objects.variable import DescriptorStr
+from easyscience.variable import Parameter
+from easyscience.variable import DescriptorStr
 from easyscience import global_object
 from easycrystallography.Components.SpaceGroup import SpaceGroup, SG_DETAILS as _SG_DETAILS
 from easycrystallography.Symmetry.groups import SpaceGroup as SG
-from easyscience.Objects.variable import DescriptorAnyType
+from easyscience.variable import DescriptorAnyType
 
 SG_DETAILS = _SG_DETAILS.copy()
 del SG_DETAILS['symmetry_ops']

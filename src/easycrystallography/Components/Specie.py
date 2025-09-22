@@ -9,9 +9,9 @@ from typing import Dict
 from typing import Union
 
 import periodictable as pt
-from easyscience.Objects.variable import DescriptorStr
-from easyscience.Utils.classTools import addProp
-from easyscience.Utils.classTools import removeProp
+from easyscience.utils.classTools import addProp
+from easyscience.utils.classTools import removeProp
+from easyscience.variable import DescriptorStr
 
 _SPECIE_DETAILS = {
     'type_symbol': {
