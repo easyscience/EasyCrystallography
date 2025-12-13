@@ -12,11 +12,12 @@ from typing import TypeVar
 from typing import Union
 
 import numpy as np
-from easyscience import ObjBase as BaseObj
 from easyscience.utils.classTools import addProp
 from easyscience.utils.classTools import removeProp
 from easyscience.variable import DescriptorStr
 from easyscience.variable import Parameter
+
+from .base_core import BaseCore
 
 if TYPE_CHECKING:
     from easyscience.utils.typing import iF
@@ -68,7 +69,7 @@ _ANIO_DETAILS = {
 }
 
 
-class AdpBase(BaseObj):
+class AdpBase(BaseCore):
     def __init__(self, *args, **kwargs):
         super(AdpBase, self).__init__(*args, **kwargs)
 
@@ -116,6 +117,7 @@ class Anisotropic(AdpBase):
     ):
         super(Anisotropic, self).__init__(
             'anisoU',
+            interface=interface,
             U_11=Parameter('U_11', **_ANIO_DETAILS['Uani']),
             U_12=Parameter('U_12', **_ANIO_DETAILS['Uani']),
             U_13=Parameter('U_13', **_ANIO_DETAILS['Uani']),
@@ -140,7 +142,6 @@ class Anisotropic(AdpBase):
         else:
             # for cubic, tetragonal, and orthorhombic systems
             self.Uiso_ani = (self.U_11.value + self.U_22.value + self.U_33.value) / 3.0
-        self.interface = interface
 
 
 class Isotropic(AdpBase):
@@ -151,10 +152,9 @@ class Isotropic(AdpBase):
         Uiso: Optional[Union[Parameter, float]] = None,
         interface: Optional[iF] = None,
     ):
-        super(Isotropic, self).__init__('Uiso', Uiso=Parameter('Uiso', **_ANIO_DETAILS['Uiso']))
+        super(Isotropic, self).__init__('Uiso', interface=interface, Uiso=Parameter('Uiso', **_ANIO_DETAILS['Uiso']))
         if Uiso is not None:
             self.Uiso = Uiso
-        self.interface = interface
 
 
 class AnisotropicBij(AdpBase):
@@ -177,6 +177,7 @@ class AnisotropicBij(AdpBase):
     ):
         super(AnisotropicBij, self).__init__(
             'anisoB',
+            interface=interface,
             **{name: Parameter(name, **_ANIO_DETAILS['Bani']) for name in ['B_11', 'B_12', 'B_13', 'B_22', 'B_23', 'B_33']},
         )
         if B_11 is not None:
@@ -191,7 +192,6 @@ class AnisotropicBij(AdpBase):
             self.B_23 = B_23
         if B_33 is not None:
             self.B_33 = B_33
-        self.interface = interface
 
 
 class IsotropicB(AdpBase):
@@ -202,10 +202,9 @@ class IsotropicB(AdpBase):
         Biso: Optional[Union[Parameter, float]] = None,
         interface: Optional[iF] = None,
     ):
-        super(IsotropicB, self).__init__('Biso', Biso=Parameter('Biso', **_ANIO_DETAILS['Biso']))
+        super(IsotropicB, self).__init__('Biso', interface=interface, Biso=Parameter('Biso', **_ANIO_DETAILS['Biso']))
         if Biso is not None:
             self.Biso = Biso
-        self.interface = interface
 
 
 _AVAILABLE_ISO_TYPES = {
@@ -222,7 +221,7 @@ if TYPE_CHECKING:
     AB = TypeVar('AB', bound=AdpBase)
 
 
-class AtomicDisplacement(BaseObj):
+class AtomicDisplacement(BaseCore):
     adp_type: ClassVar[DescriptorStr]
     adp_class: ClassVar[AB]
 
@@ -247,7 +246,7 @@ class AtomicDisplacement(BaseObj):
             adp = adp_class(**kwargs, interface=interface)
         else:
             raise AttributeError(f'{adp_class_name} is not a valid adp type')
-        super(AtomicDisplacement, self).__init__('adp', adp_type=adp_type, adp_class=adp)
+        super(AtomicDisplacement, self).__init__('adp', interface=interface, adp_type=adp_type, adp_class=adp)
         for par in adp.get_parameters():
             addProp(
                 self,
@@ -255,7 +254,6 @@ class AtomicDisplacement(BaseObj):
                 fget=self.__a_getter(par.name),
                 fset=self.__a_setter(par.name),
             )
-        self.interface = interface
 
     def switch_type(self, adp_string: str, **kwargs):
         # if adp_string in _AVAILABLE_ISO_TYPES.keys():

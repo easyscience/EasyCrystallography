@@ -22,10 +22,10 @@ from typing import TypeVar
 from typing import Union
 
 import numpy as np
-from easyscience import ObjBase as BaseObj
 from easyscience.utils.decorators import memoized
 from easyscience.variable import Parameter
 
+from .base_core import BaseCore
 from .SpaceGroup import SpaceGroup
 
 Vector3Like = Union[List[float], np.ndarray]
@@ -56,7 +56,7 @@ CELL_DETAILS = {
 }
 
 
-class Lattice(BaseObj):
+class Lattice(BaseCore):
     _REDIRECT = {'ang_unit': None}
 
     length_a: ClassVar[Parameter]
@@ -83,6 +83,7 @@ class Lattice(BaseObj):
 
         super().__init__(
             'lattice',
+            interface=interface,
             length_a=Parameter('length_a', **THESE_CELL_DETAILS['length']),
             length_b=Parameter('length_b', **THESE_CELL_DETAILS['length']),
             length_c=Parameter('length_c', **THESE_CELL_DETAILS['length']),
@@ -109,8 +110,6 @@ class Lattice(BaseObj):
             self.angle_alpha.convert_unit(CELL_DETAILS['angle']['unit'])
             self.angle_beta.convert_unit(CELL_DETAILS['angle']['unit'])
             self.angle_gamma.convert_unit(CELL_DETAILS['angle']['unit'])
-
-        self.interface = interface
 
     @classmethod
     def from_matrix(
@@ -746,6 +745,7 @@ class PeriodicLattice(Lattice):
             angle_alpha=angle_alpha,
             angle_beta=angle_beta,
             angle_gamma=angle_gamma,
+            interface=interface,
             spacegroup=SpaceGroup('P1'),
         )
         if spacegroup is not None:
@@ -762,7 +762,6 @@ class PeriodicLattice(Lattice):
             fdel=spacegroup.__class__.space_group_HM_name.fdel,
         )
 
-        self.interface = interface
         self.enforce_sym()
 
     @classmethod

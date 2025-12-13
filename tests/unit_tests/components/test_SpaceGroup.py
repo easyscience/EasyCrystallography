@@ -219,18 +219,19 @@ def test_SpaceGroup_fromIntNumber_HexTest(sg_int: int, setting: bool):
 def test_SpaceGroup_as_dict():
     sg_p = SpaceGroup.from_int_number(146)
     sg_p_dict = sg_p.as_dict()
-    del sg_p_dict['setting']['unique_name']
-    del sg_p_dict['space_group_HM_name']['unique_name']
-    del sg_p_dict['unique_name']
-    del sg_p_dict['space_group_HM_name']['@class']
-    del sg_p_dict['setting']['@class']
-    del sg_p_dict['space_group_HM_name']['@module']
-    del sg_p_dict['setting']['@module']
-    del sg_p_dict['space_group_HM_name']['@version']
-    del sg_p_dict['setting']['@version']
-    del sg_p_dict['@class']
-    del sg_p_dict['@module']
-    del sg_p_dict['@version']
+    sg_p_dict['setting'].pop('unique_name', None)
+    sg_p_dict['space_group_HM_name'].pop('unique_name', None)
+    sg_p_dict.pop('unique_name', None)
+    sg_p_dict.pop('name', None)
+    sg_p_dict['space_group_HM_name'].pop('@class', None)
+    sg_p_dict['setting'].pop('@class', None)
+    sg_p_dict['space_group_HM_name'].pop('@module', None)
+    sg_p_dict['setting'].pop('@module', None)
+    sg_p_dict['space_group_HM_name'].pop('@version', None)
+    sg_p_dict['setting'].pop('@version', None)
+    sg_p_dict.pop('@class', None)
+    sg_p_dict.pop('@module', None)
+    sg_p_dict.pop('@version', None)
 
     assert sg_p_dict == {
                                    'symmetry_ops':        None,

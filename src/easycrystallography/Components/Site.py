@@ -13,12 +13,12 @@ from typing import TypeVar
 from typing import Union
 
 import numpy as np
-from easyscience import ObjBase as BaseObj
-from easyscience.base_classes import CollectionBase
 from easyscience.variable import DescriptorStr
 from easyscience.variable import Parameter
 
 from .AtomicDisplacement import AtomicDisplacement
+from .base_collection import BaseCollection
+from .base_core import BaseCore
 from .Lattice import PeriodicLattice
 from .Specie import Specie
 from .Susceptibility import MagneticSusceptibility
@@ -50,7 +50,7 @@ _SITE_DETAILS = {
 S = TypeVar('S', bound='Site')
 
 
-class Site(BaseObj):
+class Site(BaseCore):
     label: ClassVar[DescriptorStr]
     specie: ClassVar[Specie]
     occupancy: ClassVar[Parameter]
@@ -111,6 +111,7 @@ class Site(BaseObj):
 
         super(Site, self).__init__(
             'site',
+            interface=interface,
             label=DescriptorStr('label', **_SITE_DETAILS['label']),
             specie=Specie(_SITE_DETAILS['label']['value']),
             occupancy=Parameter('occupancy', **_SITE_DETAILS['occupancy']),
@@ -134,7 +135,6 @@ class Site(BaseObj):
             self.fract_y = fract_y
         if fract_z is not None:
             self.fract_z = fract_z
-        self.interface = interface
 
     def __repr__(self) -> str:
         return f'Atom {self.name} ({self.specie.value}) @ ({self.fract_x.value}, {self.fract_y.value}, {self.fract_z.value})'
@@ -225,11 +225,10 @@ class PeriodicSite(Site):
         interface: Optional[iF] = None,
         **kwargs,
     ):
-        super(PeriodicSite, self).__init__(label, specie, occupancy, fract_x, fract_y, fract_z, **kwargs)
+        super(PeriodicSite, self).__init__(label, specie, occupancy, fract_x, fract_y, fract_z, interface=interface, **kwargs)
         if lattice is None:
             lattice = PeriodicLattice()
         self.lattice = lattice
-        self.interface = interface
 
     @staticmethod
     def _from_site_kwargs(lattice: PeriodicLattice, site: S) -> Dict[str, float]:
@@ -271,20 +270,18 @@ class PeriodicSite(Site):
         return self.lattice.get_cartesian_coords(self.fract_coords)
 
 
-class Atoms(CollectionBase):
+class Atoms(BaseCollection):
     _SITE_CLASS = Site
 
     def __init__(self, name: str, *args, interface: Optional[iF] = None, **kwargs):
         if not isinstance(name, str):
             raise TypeError('A `name` for this collection must be given in string form')
-        super(Atoms, self).__init__(name, *args, **kwargs)
-        self.interface = interface
-        self._kwargs._stack_enabled = True
+        super(Atoms, self).__init__(name, *args, interface=interface, **kwargs)
 
     def __repr__(self) -> str:
         return f'Collection of {len(self)} sites.'
 
-    def __getitem__(self, idx: Union[int, slice, str]) -> Union[Parameter, DescriptorStr, BaseObj, 'CollectionBase']:
+    def __getitem__(self, idx: Union[int, slice, str]) -> Union[Parameter, DescriptorStr, BaseCore, 'BaseCollection']:
         if isinstance(idx, str) and idx in self.atom_labels:
             idx = self.atom_labels.index(idx)
         return super(Atoms, self).__getitem__(idx)

@@ -15,10 +15,10 @@ from typing import Union
 
 import gemmi
 import numpy as np
-from easyscience import ObjBase as BaseObj
 from easyscience.variable import DescriptorAnyType
 from easyscience.variable import DescriptorStr
 
+from easycrystallography.Components.base_core import BaseCore
 from easycrystallography.Symmetry.functions import get_default_it_coordinate_system_code_by_it_number
 from easycrystallography.Symmetry.functions import get_spacegroup_by_name_ext
 from easycrystallography.Symmetry.SymOp import SymmOp
@@ -55,14 +55,22 @@ if TYPE_CHECKING:
 
 
 _D_REDIRECT = deepcopy(DescriptorStr._REDIRECT)
-_D_REDIRECT['value'] = lambda obj: ';'.join([r.as_xyz_string() for r in obj.value.tolist()])
+
+
+def _get_symops_value(obj):
+    """Helper function to serialize symmetry operations."""
+    ops = obj.value.tolist() if hasattr(obj.value, 'tolist') else obj.value
+    return ';'.join([r.as_xyz_string() for r in ops])
+
+
+_D_REDIRECT['value'] = _get_symops_value
 
 
 class easyOp(DescriptorAnyType):
     _REDIRECT = _D_REDIRECT
 
 
-class SpaceGroup(BaseObj):
+class SpaceGroup(BaseCore):
     _space_group_HM_name: ClassVar[DescriptorStr]
     _setting: ClassVar[DescriptorStr]
     _symmetry_ops: ClassVar[DescriptorAnyType]
@@ -87,6 +95,7 @@ class SpaceGroup(BaseObj):
 
         super(SpaceGroup, self).__init__(
             'space_group',
+            interface=interface,
             _space_group_HM_name=DescriptorStr(**SG_DETAILS['space_group_HM_name']),
             _setting=DescriptorStr(**SG_DETAILS['setting']),
             _symmetry_ops=easyOp(**SG_DETAILS['symmetry_ops']),
@@ -112,7 +121,6 @@ class SpaceGroup(BaseObj):
         if symmetry_ops is not None:
             kwargs['operations_set'] = symmetry_ops
         self.__on_change(**kwargs)
-        self.interface = interface
         self._cell = None
 
     @classmethod
