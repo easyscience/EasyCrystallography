@@ -24,11 +24,29 @@ class BaseCore(ModelBase):
     """Base class for all EasyCrystallography model objects.
 
     This class bridges the new ModelBase API with the legacy 'name' patterns
-    used throughout EasyCrystallography. The 'name' property maps to 'display_name' in the
-    new architecture.
+    used throughout EasyCrystallography. The 'name' property maps to 'display_name'
+    in the new architecture.
 
-    The 'interface' parameter is kept for downstream compatibility (e.g., EasyDiffraction)
-    but is not actively used within EasyCrystallography itself.
+    Interface Pattern
+    -----------------
+    The 'interface' parameter is a **passthrough for downstream applications**
+    (e.g., EasyDiffraction) and is not actively used within EasyCrystallography itself.
+
+    EasyCrystallography does not have its own calculator implementations. The interface
+    allows downstream applications to:
+
+    - Inject their own calculator/interface that works with these crystallography objects
+    - Call `generate_bindings()` when objects are modified to sync with their calculators
+    - Access the interface via the `interface` property on any model object
+
+    When `interface` is `None` (the default), all binding-related methods are no-ops.
+
+    Example usage in downstream applications::
+
+        # In EasyDiffraction or similar
+        phase = Phase(...)
+        phase.interface = my_diffraction_calculator
+        phase.generate_bindings()  # Syncs with calculator
     """
 
     def __init__(
@@ -42,7 +60,10 @@ class BaseCore(ModelBase):
         Initialize the base core object.
 
         :param name: Display name for the object
-        :param interface: Optional interface for downstream calculator bindings
+        :param interface: Optional interface for downstream calculator bindings.
+            This is a passthrough parameter - EasyCrystallography does not use it
+            internally, but downstream applications (like EasyDiffraction) can set
+            their own calculator interface here.
         :param unique_name: Optional unique identifier
         :param kwargs: Additional keyword arguments (parameters, descriptors, sub-objects)
         """
@@ -102,18 +123,35 @@ class BaseCore(ModelBase):
 
     @property
     def interface(self) -> Optional[InterfaceFactoryTemplate]:
-        """Get the current interface of the object."""
+        """Get the current interface of the object.
+
+        The interface is a passthrough for downstream applications (e.g., EasyDiffraction).
+        EasyCrystallography does not use this internally.
+
+        :return: The current interface, or None if not set.
+        """
         return self._interface
 
     @interface.setter
     def interface(self, new_interface: Optional[InterfaceFactoryTemplate]) -> None:
-        """Set the interface for downstream calculator bindings."""
+        """Set the interface for downstream calculator bindings.
+
+        :param new_interface: The calculator interface from a downstream application,
+            or None to clear the interface.
+        """
         self._interface = new_interface
 
     def generate_bindings(self) -> None:
         """Generate or re-generate bindings to an interface.
 
-        This is kept for downstream compatibility but is a no-op if no interface is set.
+        This method is a passthrough for downstream applications. When called:
+
+        - If interface is None: This is a no-op
+        - If interface is set: Calls interface.generate_bindings(self) to sync
+          the object state with the downstream calculator
+
+        Downstream applications (like EasyDiffraction) should call this after
+        modifying objects to ensure their calculators stay synchronized.
         """
         if self._interface is not None and hasattr(self._interface, 'generate_bindings'):
             self._interface.generate_bindings(self)
