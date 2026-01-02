@@ -35,6 +35,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   'build',        # For building the package
+  'codecov',      # For code coverage
   'pytest',       # For testing
   'pytest-xdist', # For parallel testing
   'pytest-cov',   # For coverage
