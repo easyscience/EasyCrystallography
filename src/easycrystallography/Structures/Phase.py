@@ -12,11 +12,11 @@ from typing import Optional
 from typing import Union
 
 import numpy as np
-from easyscience import ObjBase as BaseObj
-from easyscience.base_classes import CollectionBase
 from easyscience.variable import DescriptorStr
 from easyscience.variable import Parameter
 
+from easycrystallography.Components.base_collection import BaseCollection
+from easycrystallography.Components.base_core import BaseCore
 from easycrystallography.Components.Lattice import Lattice
 from easycrystallography.Components.Lattice import PeriodicLattice
 from easycrystallography.Components.Site import Atoms
@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from easyscience.utils.typing import iF
 
 
-class Phase(BaseObj):
+class Phase(BaseCore):
     _SITE_CLASS = Site
     _ATOMS_CLASS = Atoms
 
@@ -64,11 +64,10 @@ class Phase(BaseObj):
         if scale is None:
             scale = Parameter('scale', 1, min=0)
 
-        super(Phase, self).__init__(name, cell=cell, _spacegroup=space_group, atoms=atoms, scale=scale)
+        super(Phase, self).__init__(name, interface=interface, cell=cell, _spacegroup=space_group, atoms=atoms, scale=scale)
         if not enforce_sym:
             self.cell.clear_sym()
         self._enforce_sym = enforce_sym
-        self.interface = interface
 
         self._extent = np.array([1, 1, 1])
         self._centre = np.array([0, 0, 0])
@@ -279,7 +278,7 @@ class Phase(BaseObj):
         return s
 
 
-class Phases(CollectionBase):
+class Phases(BaseCollection):
     _SITE_CLASS = Site
     _ATOM_CLASS = Atoms
     _PHASE_CLASS = Phase
@@ -296,13 +295,12 @@ class Phases(CollectionBase):
         if not isinstance(name, str):
             raise AttributeError('Name should be a string!')
 
-        super(Phases, self).__init__(name, *args, **kwargs)
-        self.interface = interface
+        super(Phases, self).__init__(name, *args, interface=interface, **kwargs)
 
     def __repr__(self) -> str:
         return f'Collection of {len(self)} phases: {self.phase_names}'
 
-    def __getitem__(self, idx: Union[int, slice]) -> Union[Parameter, DescriptorStr, BaseObj, CollectionBase]:
+    def __getitem__(self, idx: Union[int, slice]) -> Union[Parameter, DescriptorStr, BaseCore, BaseCollection]:
         if isinstance(idx, str) and idx in self.phase_names:
             idx = self.phase_names.index(idx)
         return super(Phases, self).__getitem__(idx)

@@ -12,11 +12,12 @@ from typing import Type
 from typing import Union
 
 import numpy as np
-from easyscience import ObjBase as BaseObj
 from easyscience.utils.classTools import addProp
 from easyscience.utils.classTools import removeProp
 from easyscience.variable import DescriptorStr
 from easyscience.variable import Parameter
+
+from .base_core import BaseCore
 
 if TYPE_CHECKING:
     from easyscience.utils.typing import iF
@@ -46,7 +47,7 @@ _ANIO_DETAILS = {
 }
 
 
-class MSPBase(BaseObj):
+class MSPBase(BaseCore):
     def __init__(self, *args, **kwargs):
         super(MSPBase, self).__init__(*args, **kwargs)
 
@@ -87,6 +88,7 @@ class Cani(MSPBase):
     ):
         super(Cani, self).__init__(
             'Cani',
+            interface=interface,
             chi_11=Parameter('chi_11', **_ANIO_DETAILS['Cani']),
             chi_12=Parameter('chi_12', **_ANIO_DETAILS['Cani']),
             chi_13=Parameter('chi_13', **_ANIO_DETAILS['Cani']),
@@ -113,7 +115,6 @@ class Cani(MSPBase):
             self.chi_22 = msp_values.chi_22
             self.chi_23 = msp_values.chi_23
             self.chi_33 = msp_values.chi_33
-        self.interface = interface
 
 
 class Ciso(MSPBase):
@@ -125,18 +126,17 @@ class Ciso(MSPBase):
         msp_values: Optional[Type[MSPBase]] = None,
         interface: Optional[iF] = None,
     ):
-        super(Ciso, self).__init__('Ciso', chi=Parameter('chi', **_ANIO_DETAILS['Ciso']))
+        super(Ciso, self).__init__('Ciso', interface=interface, chi=Parameter('chi', **_ANIO_DETAILS['Ciso']))
         if chi is not None:
             self.chi = chi
         if msp_values is not None:
             self.chi = msp_values.chi
-        self.interface = interface
 
 
 _AVAILABLE_ISO_TYPES = {'Cani': Cani, 'Ciso': Ciso}
 
 
-class MagneticSusceptibility(BaseObj):
+class MagneticSusceptibility(BaseCore):
     msp_type: ClassVar[DescriptorStr]
     msp_class: ClassVar[Type[MSPBase]]
 
@@ -153,7 +153,7 @@ class MagneticSusceptibility(BaseObj):
             msp = msp_class(**kwargs, interface=interface)
         else:
             raise AttributeError(f'{msp_class_name} is not a valid magnetic susceptibility type')
-        super(MagneticSusceptibility, self).__init__('msp', msp_type=msp_type, msp_class=msp)
+        super(MagneticSusceptibility, self).__init__('msp', interface=interface, msp_type=msp_type, msp_class=msp)
         for par in msp.get_parameters():
             addProp(
                 self,
@@ -161,7 +161,6 @@ class MagneticSusceptibility(BaseObj):
                 fget=self.__a_getter(par.name),
                 fset=self.__a_setter(par.name),
             )
-        self.interface = interface
 
     def switch_type(self, msp_string: str, **kwargs):
         if msp_string in _AVAILABLE_ISO_TYPES.keys():
