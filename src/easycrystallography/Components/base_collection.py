@@ -62,11 +62,29 @@ class BaseCollection(EasyModelCollection):
             extra_items = [item[1] for item in numeric_items]
             args = args + tuple(extra_items)
 
-        super().__init__(name, *args, interface=interface, unique_name=unique_name)
+        super().__init__(*args, interface=interface, unique_name=unique_name, display_name=name)
 
         # Needed to ensure an empty list is created when saving and instantiating the object as_dict -> from_dict
         # Else collisions might occur in global_object.map
         self.populate_if_none = remaining_kwargs.get('populate_if_none', False)
+
+    @property
+    def name(self) -> str:
+        """Get the name of the collection.
+
+        This is an alias for display_name to maintain backwards compatibility.
+
+        :return: Name of the collection.
+        """
+        return self.display_name
+
+    @name.setter
+    def name(self, new_name: str) -> None:
+        """Set the name of the collection.
+
+        :param new_name: New name for the collection.
+        """
+        self.display_name = new_name
 
     def get_parameters(self) -> List[Parameter]:
         """Get all parameter objects as a list.
